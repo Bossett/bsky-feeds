@@ -20,7 +20,7 @@ export default async function udpateFeed(db: Database) {
         await agent.login({ identifier: handle, password })
     } catch {
         console.warn("Failed to log in")
-        return
+        return false
     }
 
     try {
@@ -34,9 +34,9 @@ export default async function udpateFeed(db: Database) {
 
     } catch {
         console.warn("Failed to get list")
-        return
+        return false
     }
     
-    return
+    return true
 
 }
