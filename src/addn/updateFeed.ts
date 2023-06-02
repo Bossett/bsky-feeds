@@ -16,15 +16,27 @@ export default async function udpateFeed(db: Database) {
     // Ex: abcd-1234-efgh-5678
     const password = `${process.env.FEEDGEN_PASSWORD}`
 
-    await agent.login({ identifier: handle, password })
+    try {
+        await agent.login({ identifier: handle, password })
+    } catch {
+        console.warn("Failed to log in")
+        return
+    }
 
+    try {
+        const res = await agent.api.app.bsky.graph.getList({list:`${process.env.FEEDGEN_LIST}`})
+        
+        await db.deleteFrom('list_members').executeTakeFirst()
 
-    const res = await agent.api.app.bsky.graph.getList({list:`${process.env.FEEDGEN_LIST}`})
+        res.data.items.forEach(async item => {
+            await db.replaceInto('list_members').values({did:item.subject.did}).execute()
+        });
 
-    await db.deleteFrom('list_members').executeTakeFirst()
-
-    res.data.items.forEach(async item => {
-        await db.replaceInto('list_members').values({did:item.subject.did}).execute()
-    });
+    } catch {
+        console.warn("Failed to get list")
+        return
+    }
+    
+    return
 
 }

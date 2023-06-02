@@ -65,7 +65,7 @@ export class FeedGenerator {
   async start(): Promise<http.Server> {
     await migrateToLatest(this.db)
 
-    let interval = setInterval(updateFeed, 10000, this.db);
+    let interval = setInterval(updateFeed, 900000, this.db);
 
     this.firehose.run()
     this.server = this.app.listen(this.cfg.port, this.cfg.listenhost)
