@@ -29,6 +29,8 @@ export default function (server: Server, ctx: AppContext) {
      * )
      */
 
+    console.log('got request')
+
     const body = await algo(ctx, params)
     return {
       encoding: 'application/json',

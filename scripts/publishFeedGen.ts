@@ -43,7 +43,7 @@ const run = async () => {
 
   // only update this if in a test environment
   const agent = new AtpAgent({ service: 'https://bsky.social' })
-  await agent.login({ identifier: handle, password })
+  await agent.login({ identifier: handle, password: password })
 
   try {
     await agent.api.app.bsky.feed.describeFeedGenerator()
@@ -70,7 +70,7 @@ const run = async () => {
     avatarRef = blobRes.data.blob
   }
 
-  await agent.api.com.atproto.repo.putRecord({
+  const res = await agent.api.com.atproto.repo.putRecord({
     repo: agent.session?.did ?? '',
     collection: ids.AppBskyFeedGenerator,
     rkey: recordName,
@@ -82,6 +82,8 @@ const run = async () => {
       createdAt: new Date().toISOString(),
     },
   })
+
+  console.log(res)
 
   console.log('All done 🎉')
 }
