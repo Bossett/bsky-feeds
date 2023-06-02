@@ -17,15 +17,15 @@ const run = async () => {
   // A short name for the record that will show in urls
   // Lowercase with no spaces.
   // Ex: whats-hot
-  const recordName = 'whats-alf'
+  const recordName = 'for-science'
 
   // A display name for your feed
   // Ex: What's Hot
-  const displayName = "What's Alf Test Feed"
+  const displayName = "For Science!"
 
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
-  const description = ''
+  const description = 'A simple feed of known Bluesky scientists, speaking with (online) authority.'
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg

@@ -33,7 +33,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         return false
       })
       .map((create) => {
-        // map alf-related posts to a db row
+        // map science-related posts to a db row
         return {
           uri: create.uri,
           cid: create.cid,
