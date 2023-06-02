@@ -17,9 +17,10 @@ export default async function udpateFeed(db: Database) {
     const password = `${process.env.FEEDGEN_PASSWORD}`
 
     try {
-        await agent.login({ identifier: handle, password })
-    } catch {
+        await agent.login({ identifier: handle, password: password })
+    } catch (error) {
         console.warn("Failed to log in")
+        console.warn(error)
         return false
     }
 
@@ -32,8 +33,9 @@ export default async function udpateFeed(db: Database) {
             await db.replaceInto('list_members').values({did:item.subject.did}).execute()
         });
 
-    } catch {
+    } catch (error) {
         console.warn("Failed to get list")
+        console.warn(error)
         return false
     }
     
