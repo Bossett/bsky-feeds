@@ -1,5 +1,6 @@
 import { BskyAgent } from '@atproto/api'
 import { Database } from '../db'
+import { Post } from '../db/schema'
 import dotenv from 'dotenv'
 
 export default async function udpateFeed(db: Database) {
@@ -31,6 +32,31 @@ export default async function udpateFeed(db: Database) {
 
         res.data.items.forEach(async item => {
             await db.replaceInto('list_members').values({did:item.subject.did}).execute()
+            try {
+                const author_feed = await agent.api.app.bsky.feed.getAuthorFeed({actor:item.subject.did})
+                
+                author_feed.data.feed.forEach(async item => {
+                    
+                    if ((<any> item.post)?.record.text.includes(`${process.env.FEEDGEN_SYMBOL}`)) {
+                    
+                        const to_insert: Post = {
+                            uri: item.post?.uri,
+                            cid: item.post?.cid,
+                            replyParent: <string> item.reply?.parent.uri ?? null,
+                            replyRoot: <string> item.reply?.root.uri ?? null,
+                            indexedAt: item.post?.indexedAt ?? new Date().toISOString()
+                        }
+                        await db
+                            .insertInto('post')
+                            .values(to_insert)
+                            .onConflict((oc) => oc.doNothing())
+                            .execute()
+                    }
+                });
+            } catch (error) {
+                console.warn("Failed to get historic posts")
+                console.warn(error)
+            }
         });
 
     } catch (error) {
@@ -38,6 +64,8 @@ export default async function udpateFeed(db: Database) {
         console.warn(error)
         return false
     }
+
+
     
     return true
 
