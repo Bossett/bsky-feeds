@@ -21,15 +21,15 @@ const run = async () => {
 
   // A display name for your feed
   // Ex: What's Hot
-  const displayName = "For Science!"
+  const displayName = "What's Science"
 
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
-  const description = 'A simple feed of known Bluesky scientists, speaking with (online) authority.'
+  const description = 'A simple feed of known Bluesky scientists, science communicators, and related experts; speaking with their expertise. See the list at: https://bsky.app/profile/did:plc:hu2obebw3nhfj667522dahfg/lists/3jxgot6i5m32l and flag @danirabaiotti.bsky.social to be added!'
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg
-  const avatar: string = ''
+  const avatar: string = 'images/testtube.jpg'
 
   // -------------------------------------
   // NO NEED TO TOUCH ANYTHING BELOW HERE

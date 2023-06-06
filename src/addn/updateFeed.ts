@@ -93,8 +93,8 @@ export class UpdateFeed {
 
             await this.db.transaction().execute(
                 async (trx) => {
-                    await trx.deleteFrom('list_members').executeTakeFirst()
-                    await trx.replaceInto('list_members').values(all_members_obj).execute()
+                    await trx.deleteFrom('list_members').executeTakeFirstOrThrow()
+                    await trx.replaceInto('list_members').values(all_members_obj).executeTakeFirstOrThrow()
                 }
             )
 
