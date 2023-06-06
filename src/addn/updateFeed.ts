@@ -44,8 +44,6 @@ export default async function udpateFeed(db: Database) {
             }
         }
 
-        console.log(all_members)
-
         const all_members_obj:{did:string}[] = []
         all_members.forEach((member)=>{
             all_members_obj.push({did:member})
