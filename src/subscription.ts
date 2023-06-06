@@ -26,6 +26,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
             .then(rows => {
               if(rows.length > 0) {
                 include = true
+                console.log(`${create.author} posted: ${create.record.text}`)
               }
             })
 

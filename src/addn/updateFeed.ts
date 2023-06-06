@@ -3,9 +3,11 @@ import { Database } from '../db'
 import { Post } from '../db/schema'
 import dotenv from 'dotenv'
 
-export default async function udpateFeed(db: Database) {
+export default async function udpateFeed(db: Database, reset:Boolean=false) {
 
     dotenv.config()
+
+    if(reset) await db.deleteFrom('list_members').executeTakeFirst()
 
     const agent = new BskyAgent({ service: 'https://bsky.social' })
 
@@ -62,7 +64,6 @@ export default async function udpateFeed(db: Database) {
 
             if(!old_members.includes(member)) {
                 new_members.push(member)
-                console.log(`Got new member: ${member}`)
             }
         })
 
@@ -73,34 +74,49 @@ export default async function udpateFeed(db: Database) {
             }
         )
 
-        new_members.forEach( async author => {
-            try {
-                const author_feed = await agent.api.app.bsky.feed.getAuthorFeed({actor:author})
+        let i = 0
+        let total = new_members.length
 
-                author_feed.data.feed.forEach(async item => {
-                    
-                    if ((<any> item.post)?.record.text.includes(`${process.env.FEEDGEN_SYMBOL}`)) {
-                    
-                        const to_insert: Post = {
-                            uri: item.post?.uri,
-                            cid: item.post?.cid,
-                            replyParent: <string> item.reply?.parent.uri ?? null,
-                            replyRoot: <string> item.reply?.root.uri ?? null,
-                            indexedAt: item.post?.indexedAt ?? new Date().toISOString()
-                        }
-                        await db
-                            .insertInto('post')
+        while(new_members.length !== 0) {
+            
+            const author:string = `${new_members.pop()}`
+
+            i++
+            console.log(`${i} of ${total}...`)
+            
+            try {
+                let author_feed = await agent.api.app.bsky.feed.getAuthorFeed({actor:author,limit:100})
+
+                while (author_feed.data.feed.length !== 0) {
+
+                    const posts = author_feed.data.feed
+
+                    while (posts.length > 0) {
+                        const post = posts.pop()
+
+                        if(post?.post.record['text'].includes(`${process.env.FEEDGEN_SYMBOL}`)) {
+                            const to_insert: Post = {
+                                uri: post.post?.uri,
+                                cid: post.post?.cid,
+                                replyParent: <string> post.reply?.parent.uri ?? null,
+                                replyRoot: <string> post.reply?.root.uri ?? null,
+                                indexedAt: post.post?.indexedAt ?? new Date().toISOString()
+                            }
+                            db.insertInto('post')
                             .values(to_insert)
                             .onConflict((oc) => oc.doNothing())
                             .execute()
+                        }
                     }
-                });
+
+                    author_feed = await agent.api.app.bsky.feed.getAuthorFeed({actor:author,limit:100,cursor:author_feed.data.cursor})
+                }
 
             } catch (error) {
                 console.warn(`Failed to get author ${author}`)
                 console.warn(error)
             }
-        })
+        }
 
     } catch (error) {
         console.warn("Failed to get lists")

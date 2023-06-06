@@ -69,7 +69,7 @@ export class FeedGenerator {
     console.log("Initial startup, waiting for list...")
     let wait = 10
 
-    while(!(await updateFeed(this.db))) {
+    while(!(await updateFeed(this.db, true))) {
       console.warn(`Initial list failed, sleeping ${wait}s...`)
       await timer(wait*1000)
       wait = wait + 10
