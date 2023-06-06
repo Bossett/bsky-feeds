@@ -6,27 +6,40 @@ import { FirehoseSubscriptionBase, getOpsByType } from './util/subscription'
 import dotenv from 'dotenv'
 
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
+
+  public authorList:string[]
+
+  async updateAuthors() {
+    
+    if (this.authorList === undefined) this.authorList = []
+    
+    const authors = await this.db
+                              .selectFrom('list_members')
+                              .selectAll()
+                              .execute()
+    
+    while(authors.length !== 0) {
+      const did = authors.pop()
+      if(!this.authorList.includes(`${did?.did}`)) {
+        this.authorList.push(`${did?.did}`)
+      }
+    }
+  }
+
   async handleEvent(evt: RepoEvent) {
     dotenv.config()
     if (!isCommit(evt)) return
     const ops = await getOpsByType(evt)
 
-    const authors = await this.db
-                              .selectFrom('list_members')
-                              .selectAll()
-                              .execute()
-    const author_list:string[] = []
-    
-    while(authors.length !== 0) {
-      const did = authors.pop()
-      author_list.push(`${did?.did}`)
-    }
+    await this.updateAuthors()
+
+    setInterval(()=>{this.updateAuthors()},15000)
 
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
       .filter((create) => {
         if (create.record.text.toLowerCase().includes(`${process.env.FEEDGEN_SYMBOL}`)){
-          if (author_list.includes(create.author)) {
+          if (this.authorList.includes(create.author)) {
             console.log(`${create.author} posted ${create.uri}`)
             return true
           }
