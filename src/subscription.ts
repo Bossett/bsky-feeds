@@ -11,28 +11,29 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     if (!isCommit(evt)) return
     const ops = await getOpsByType(evt)
 
+    const authors = await this.db
+                              .selectFrom('list_members')
+                              .selectAll()
+                              .execute()
+    const author_list:string[] = []
+    
+    while(authors.length !== 0) {
+      const did = authors.pop()
+      author_list.push(`${did?.did}`)
+    }
+
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
       .filter((create) => {
+        let include = false
         if (create.record.text.toLowerCase().includes(`${process.env.FEEDGEN_SYMBOL}`)){
-
-          let include = false
-
-          this.db
-            .selectFrom('list_members')
-            .selectAll()
-            .where('did','=',create.author)
-            .execute()
-            .then(rows => {
-              if(rows.length > 0) {
-                include = true
-                console.log(`${create.author} posted: ${create.record.text}`)
-              }
-            })
-
-            return include
+          if (author_list.includes(create.author)) {
+            include = true
+            console.log(`${create.author} posted: ${create.record.text}`)
+          }
+          return include
         }
-        return false
+        return include
       })
       .map((create) => {
         // map science-related posts to a db row
