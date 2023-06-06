@@ -27,7 +27,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       .filter((create) => {
         if (create.record.text.toLowerCase().includes(`${process.env.FEEDGEN_SYMBOL}`)){
           if (author_list.includes(create.author)) {
-            console.log(`${create.author} posted: ${create.record.text}`)
+            console.log(`${create.author} posted ${create.uri}`)
             return true
           }
         }

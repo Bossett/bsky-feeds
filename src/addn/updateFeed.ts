@@ -14,24 +14,37 @@ export class UpdateFeed {
     }
 
     async start() {
-        const timer = (ms: number) => new Promise( res => setTimeout(res, ms));
+        dotenv.config()
         console.log("Initial startup, waiting for list...")
-        let wait = 10
-    
-        while(!(await this.updateFeed(true))) {
-          console.warn(`Initial list failed, sleeping ${wait}s...`)
-          await timer(wait*1000)
-          wait = wait + 10
+
+        const save_db:Boolean = (`${process.env.FEEDGEN_CLEAR_DB_ON_STARTUP}` === "false")
+
+        let task_inverval_mins = 15
+
+        if (process.env.FEEDGEN_TASK_INTEVAL_MINS !== undefined && 
+            Number.parseInt(process.env.FEEDGEN_TASK_INTEVAL_MINS) > 0) {
+
+            task_inverval_mins = Number.parseInt(process.env.FEEDGEN_TASK_INTEVAL_MINS)
         }
-    
-        setInterval(this.updateFeed, 900000);
+
+        this.updateFeed(!save_db).then((success) => {
+
+            if (success) {
+                setInterval(() => {
+                    this.updateFeed(false,this.db);
+                }, task_inverval_mins*60*1000);
+            } else {
+                throw new Error("Failed initial data load")
+            }
+
+        })
     }
 
-    async updateFeed(reset:Boolean=false) {
+    async updateFeed(reset:Boolean=false,db:Database=this.db) {
 
         dotenv.config()
 
-        if(reset) await this.db.deleteFrom('list_members').executeTakeFirst()
+        if(reset) await db.deleteFrom('list_members').executeTakeFirst()
 
         const agent = new BskyAgent({ service: 'https://bsky.social' })
 
@@ -54,7 +67,7 @@ export class UpdateFeed {
 
             const lists:string[] = `${process.env.FEEDGEN_LISTS}`.split("|")
         
-            const existing_members_obj = await this.db
+            const existing_members_obj = await db
                                                    .selectFrom('list_members')
                                                    .selectAll()
                                                    .execute()
@@ -91,7 +104,7 @@ export class UpdateFeed {
                 }
             })
 
-            await this.db.transaction().execute(
+            await db.transaction().execute(
                 async (trx) => {
                     await trx.deleteFrom('list_members').executeTakeFirstOrThrow()
                     await trx.replaceInto('list_members').values(all_members_obj).executeTakeFirstOrThrow()
@@ -126,10 +139,10 @@ export class UpdateFeed {
                                     replyRoot: <string> post.reply?.root.uri ?? null,
                                     indexedAt: post.post?.indexedAt ?? new Date().toISOString()
                                 }
-                                this.db.insertInto('post')
+                                db.insertInto('post')
                                        .values(to_insert)
                                        .onConflict((oc) => oc.doNothing())
-                                       .execute()
+                                       .executeTakeFirstOrThrow()
                             }
                         }
 
@@ -139,6 +152,7 @@ export class UpdateFeed {
                 } catch (error) {
                     console.warn(`Failed to get author ${author}`)
                     console.warn(error)
+                    return false
                 }
             }
 
