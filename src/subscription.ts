@@ -25,15 +25,13 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
       .filter((create) => {
-        let include = false
         if (create.record.text.toLowerCase().includes(`${process.env.FEEDGEN_SYMBOL}`)){
           if (author_list.includes(create.author)) {
-            include = true
             console.log(`${create.author} posted: ${create.record.text}`)
+            return true
           }
-          return include
         }
-        return include
+        return false
       })
       .map((create) => {
         // map science-related posts to a db row
