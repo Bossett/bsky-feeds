@@ -11,24 +11,25 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     if (!isCommit(evt)) return
     const ops = await getOpsByType(evt)
 
-    const list_members: string[] = []
-    const list = await this.db.selectFrom('list_members')
-      .selectAll()
-      .execute()
-    
-      list.forEach(list_member => {
-      list_members.push(list_member.did)
-    });
-    
-    //console.log(list_members)
-
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
       .filter((create) => {
         if (create.record.text.toLowerCase().includes(`${process.env.FEEDGEN_SYMBOL}`)){
-        if(list_members.some(i => create.author.includes(i))) {
-            return true
-          }
+
+          let include = false
+
+          this.db
+            .selectFrom('list_members')
+            .selectAll()
+            .where('did','=',create.author)
+            .execute()
+            .then(rows => {
+              if(rows.length > 0) {
+                include = true
+              }
+            })
+
+            return include
         }
         return false
       })

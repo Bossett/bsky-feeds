@@ -23,7 +23,18 @@ export default async function udpateFeed(db: Database) {
     try {
         
         const all_members:string[] = []
+        const old_members:string[] = []
+        const new_members:string[] = []
+
         const lists:string[] = `${process.env.FEEDGEN_LISTS}`.split("|")
+       
+        const existing_members_obj = await db
+                                        .selectFrom('list_members')
+                                        .selectAll()
+                                        .execute()
+        existing_members_obj.forEach((existing_member)=>{
+            old_members.push(existing_member.did)
+        })
 
         while (lists.length > 0) {
 
@@ -45,8 +56,14 @@ export default async function udpateFeed(db: Database) {
         }
 
         const all_members_obj:{did:string}[] = []
+
         all_members.forEach((member)=>{
             all_members_obj.push({did:member})
+
+            if(!old_members.includes(member)) {
+                new_members.push(member)
+                console.log(`Got new member: ${member}`)
+            }
         })
 
         await db.transaction().execute(
@@ -56,7 +73,7 @@ export default async function udpateFeed(db: Database) {
             }
         )
 
-        all_members.forEach( async author => {
+        new_members.forEach( async author => {
             try {
                 const author_feed = await agent.api.app.bsky.feed.getAuthorFeed({actor:author})
 
