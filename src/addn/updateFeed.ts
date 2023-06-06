@@ -1,4 +1,4 @@
-import { BskyAgent } from '@atproto/api'
+import { BskyAgent, ComAtprotoServerListAppPasswords } from '@atproto/api'
 import { Database } from '../db'
 import { Post } from '../db/schema'
 import dotenv from 'dotenv'
@@ -9,12 +9,7 @@ export default async function udpateFeed(db: Database) {
 
     const agent = new BskyAgent({ service: 'https://bsky.social' })
 
-    // YOUR bluesky handle
-    // Ex: user.bsky.social
     const handle = `${process.env.FEEDGEN_HANDLE}`
-
-    // YOUR bluesky password, or preferably an App Password (found in your client settings)
-    // Ex: abcd-1234-efgh-5678
     const password = `${process.env.FEEDGEN_PASSWORD}`
 
     try {
@@ -26,15 +21,34 @@ export default async function udpateFeed(db: Database) {
     }
 
     try {
-        const res = await agent.api.app.bsky.graph.getList({list:`${process.env.FEEDGEN_LIST}`})
         
-        await db.deleteFrom('list_members').executeTakeFirst()
+        const all_members:string[] = []
+        const lists:string[] = `${process.env.FEEDGEN_LISTS}`.split("|")
 
-        res.data.items.forEach(async item => {
-            await db.replaceInto('list_members').values({did:item.subject.did}).execute()
+        while (lists.length > 0) {
+            const list = lists.pop()
+            const list_members = await agent.api.app.bsky.graph.getList({list:`${list}`})
+            list_members.data.items.forEach((member) => {
+                if (!all_members.includes(member.subject.did)) all_members.push(member.subject.did)
+            })
+        }
+
+        const all_members_obj:{did:string}[] = []
+        all_members.forEach((member)=>{
+            all_members_obj.push({did:member})
+        })
+
+        await db.transaction().execute(
+            async (trx) => {
+                await trx.deleteFrom('list_members').executeTakeFirst()
+                await trx.replaceInto('list_members').values(all_members_obj).execute()
+            }
+        )
+
+        all_members.forEach( async author => {
             try {
-                const author_feed = await agent.api.app.bsky.feed.getAuthorFeed({actor:item.subject.did})
-                
+                const author_feed = await agent.api.app.bsky.feed.getAuthorFeed({actor:author})
+
                 author_feed.data.feed.forEach(async item => {
                     
                     if ((<any> item.post)?.record.text.includes(`${process.env.FEEDGEN_SYMBOL}`)) {
@@ -53,19 +67,18 @@ export default async function udpateFeed(db: Database) {
                             .execute()
                     }
                 });
+
             } catch (error) {
-                console.warn("Failed to get historic posts")
+                console.warn(`Failed to get author ${author}`)
                 console.warn(error)
             }
-        });
+        })
 
     } catch (error) {
-        console.warn("Failed to get list")
+        console.warn("Failed to get lists")
         console.warn(error)
         return false
     }
-
-
     
     return true
 
