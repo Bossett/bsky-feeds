@@ -9,7 +9,7 @@ import { createDb, Database, migrateToLatest } from './db'
 import { FirehoseSubscription } from './subscription'
 import { AppContext, Config } from './config'
 import wellKnown from './well-known'
-import updateFeed from './addn/updateFeed'
+import {UpdateFeed} from './addn/updateFeed'
 
 export class FeedGenerator {
   public app: express.Application
@@ -65,20 +65,8 @@ export class FeedGenerator {
   async start(): Promise<http.Server> {
     await migrateToLatest(this.db)
 
-    const timer = (ms: number) => new Promise( res => setTimeout(res, ms));
-    console.log("Initial startup, waiting for list...")
-    let wait = 10
-
-    while(!(await updateFeed(this.db, true))) {
-      console.warn(`Initial list failed, sleeping ${wait}s...`)
-      await timer(wait*1000)
-      wait = wait + 10
-    }
-
-    setInterval(updateFeed, 900000, this.db);
-
-    // TODO - move this interval, etc. into updateFeed
-    // so that it will take care of retries, etc.
+    const updateFeed = new UpdateFeed(this.db)
+    await updateFeed.start()
 
     this.firehose.run()
     this.server = this.app.listen(this.cfg.port, this.cfg.listenhost)
