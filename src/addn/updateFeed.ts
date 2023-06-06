@@ -26,12 +26,25 @@ export default async function udpateFeed(db: Database) {
         const lists:string[] = `${process.env.FEEDGEN_LISTS}`.split("|")
 
         while (lists.length > 0) {
+
             const list = lists.pop()
-            const list_members = await agent.api.app.bsky.graph.getList({list:`${list}`})
-            list_members.data.items.forEach((member) => {
-                if (!all_members.includes(member.subject.did)) all_members.push(member.subject.did)
-            })
+
+            let total_retrieved = 1
+            let current_cursor:string|undefined = undefined
+
+            while (total_retrieved > 0) {
+                
+                const list_members = await agent.api.app.bsky.graph.getList({list:`${list}`,limit:50,cursor:current_cursor})
+                total_retrieved = list_members.data.items.length
+                current_cursor = list_members.data.cursor
+
+                list_members.data.items.forEach((member) => {
+                    if (!all_members.includes(member.subject.did)) all_members.push(member.subject.did)
+                })
+            }
         }
+
+        console.log(all_members)
 
         const all_members_obj:{did:string}[] = []
         all_members.forEach((member)=>{
