@@ -34,7 +34,7 @@ export default async function udpateFeed(db: Database) {
 
             while (total_retrieved > 0) {
                 
-                const list_members = await agent.api.app.bsky.graph.getList({list:`${list}`,limit:50,cursor:current_cursor})
+                const list_members = await agent.api.app.bsky.graph.getList({list:`${list}`,limit:100,cursor:current_cursor})
                 total_retrieved = list_members.data.items.length
                 current_cursor = list_members.data.cursor
 
