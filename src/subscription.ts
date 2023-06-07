@@ -8,11 +8,12 @@ import dotenv from 'dotenv'
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
   public authorList:string[]
+  public intervalId:NodeJS.Timer
 
   async updateAuthors() {
     
     if (this.authorList === undefined) this.authorList = []
-    
+
     const authors = await this.db
                               .selectFrom('list_members')
                               .selectAll()
@@ -33,7 +34,9 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
     await this.updateAuthors()
 
-    setInterval(()=>{this.updateAuthors()},15000)
+    if (!this.intervalId) {
+      this.intervalId = setInterval(()=>{this.updateAuthors()},15000)
+    }
 
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
