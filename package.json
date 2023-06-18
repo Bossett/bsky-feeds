@@ -25,7 +25,7 @@
     "dotenv": "^16.1.4",
     "express": "^4.18.2",
     "kysely": "^0.25.0",
-    "multiformats": "^11.0.2"
+    "multiformats": "^12.0.1"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.4",
