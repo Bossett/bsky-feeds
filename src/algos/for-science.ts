@@ -19,7 +19,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
     if (!indexedAt || !cid) {
       throw new InvalidRequestError('malformed cursor')
     }
-    const timeStr = new Date(parseInt(indexedAt, 10)).toISOString()
+    const timeStr = new Date(parseInt(indexedAt, 10)).getTime()
     builder = await ctx.db.db().collection("post").find({indexedAt:{$gte:timeStr},cid:{$lt:cid}})
     .sort(
       {

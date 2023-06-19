@@ -49,6 +49,7 @@ export class UpdateFeed {
         dotenv.config()
 
         if(reset) await db.db().collection('list_members').deleteMany() // deleteFrom('list_members').executeTakeFirst()
+        if(reset) await db.db().collection('post').deleteMany() // deleteFrom('list_members').executeTakeFirst()
 
         const agent = new BskyAgent({ service: 'https://bsky.social' })
 
@@ -154,7 +155,7 @@ export class UpdateFeed {
                                     cid: post.post?.cid,
                                     replyParent: <string> post.reply?.parent.uri ?? null,
                                     replyRoot: <string> post.reply?.root.uri ?? null,
-                                    indexedAt: post.post?.indexedAt ?? new Date().toISOString()
+                                    indexedAt: new Date(post.post?.indexedAt).getTime() ?? new Date().getTime()
                                 }
                                 
                                 db.db().collection('post').replaceOne({"uri":to_insert.uri},to_insert,{upsert:true}) // insertInto('post').values(to_insert).onConflict((oc) => oc.doNothing()).executeTakeFirstOrThrow()
