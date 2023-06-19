@@ -10,7 +10,7 @@ const run = async () => {
     port: maybeInt(process.env.FEEDGEN_PORT) ?? 3000,
     listenhost: maybeStr(process.env.FEEDGEN_LISTENHOST) ?? 'localhost',
     sqliteLocation: maybeStr(process.env.FEEDGEN_SQLITE_LOCATION) ?? ':memory:',
-    mongoDbConnectionString:maybeStr(process.env.FEEDGEN_MONGODB_CONNECTION_STRING) ?? '',
+    mongoDbConnectionString:maybeStr(process.env.DATABASE_URL) ?? '',
     subscriptionEndpoint:
       maybeStr(process.env.FEEDGEN_SUBSCRIPTION_ENDPOINT) ??
       'wss://bsky.social',
