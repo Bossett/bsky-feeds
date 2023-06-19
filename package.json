@@ -22,7 +22,7 @@
     "@atproto/uri": "^0.0.2",
     "@atproto/xrpc-server": "^0.2.0",
     "better-sqlite3": "^8.3.0",
-    "dotenv": "^16.1.4",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "hashlib": "^1.0.1",
     "kysely": "^0.25.0",
