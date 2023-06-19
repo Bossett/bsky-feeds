@@ -51,19 +51,21 @@ export abstract class FirehoseSubscriptionBase {
   }
 
   async updateCursor(cursor: number) {
-    await this.db
-      .updateTable('sub_state')
+    await this.db.db().collection("sub_state").findOneAndReplace({service:this.service},{service:this.service,cursor:cursor})
+      /*.updateTable('sub_state')
       .set({ cursor })
       .where('service', '=', this.service)
-      .execute()
+      .execute()*/
   }
 
   async getCursor(): Promise<{ cursor?: number }> {
-    const res = await this.db
+    /*const res = await this.db
       .selectFrom('sub_state')
       .selectAll()
       .where('service', '=', this.service)
-      .executeTakeFirst()
+      .executeTakeFirst()*/
+    
+    const res = await this.db.db().collection("sub_state").findOne({service:this.service})
     return res ? { cursor: res.cursor } : {}
   }
 }

@@ -1,3 +1,5 @@
+import {ObjectId} from 'mongodb'
+
 export type DatabaseSchema = {
   post: Post
   sub_state: SubState
@@ -5,6 +7,7 @@ export type DatabaseSchema = {
 }
 
 export type Post = {
+  _id: ObjectId
   uri: string
   cid: string
   replyParent: string | null
@@ -13,10 +16,12 @@ export type Post = {
 }
 
 export type SubState = {
+  _id: ObjectId
   service: string
   cursor: number
 }
 
 export type ListMember = {
+  _id: ObjectId
   did: string
 }

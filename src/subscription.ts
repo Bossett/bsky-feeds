@@ -5,6 +5,10 @@ import {
 import { FirehoseSubscriptionBase, getOpsByType } from './util/subscription'
 import dotenv from 'dotenv'
 
+import {ObjectId} from 'mongodb'
+
+import crypto from 'crypto'
+
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
   public authorList:string[]
@@ -14,10 +18,10 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     
     if (this.authorList === undefined) this.authorList = []
 
-    const authors = await this.db
-                              .selectFrom('list_members')
+    const authors = await this.db.db().collection("list_members").find().toArray()
+                              /*.selectFrom('list_members')
                               .selectAll()
-                              .execute()
+                              .execute()*/
     
     while(authors.length !== 0) {
       const did = authors.pop()
@@ -51,7 +55,10 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       })
       .map((create) => {
         // map science-related posts to a db row
+        const hash = crypto.createHash('shake256',{outputLength:12}).update(create.uri).digest('hex').toString()
+
         return {
+          _id: new ObjectId(hash),
           uri: create.uri,
           cid: create.cid,
           replyParent: create.record?.reply?.parent.uri ?? null,
@@ -61,17 +68,17 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       })
 
     if (postsToDelete.length > 0) {
-      await this.db
-        .deleteFrom('post')
+      await this.db.db().collection("post").deleteMany({uri:{$in:postsToDelete}})
+        /*.deleteFrom('post')
         .where('uri', 'in', postsToDelete)
-        .execute()
+        .execute()*/
     }
     if (postsToCreate.length > 0) {
-      await this.db
-        .insertInto('post')
+      await this.db.db().collection("post").insertMany(postsToCreate,{ordered:false})
+        /*.insertInto('post')
         .values(postsToCreate)
         .onConflict((oc) => oc.doNothing())
-        .execute()
+        .execute()*/
     }
   }
 }

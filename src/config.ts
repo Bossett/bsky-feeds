@@ -12,6 +12,7 @@ export type Config = {
   listenhost: string
   hostname: string
   sqliteLocation: string
+  mongoDbConnectionString: string
   subscriptionEndpoint: string
   serviceDid: string
   publisherDid: string

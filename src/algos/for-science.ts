@@ -6,12 +6,13 @@ import { AppContext } from '../config'
 export const shortname = 'for-science'
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
-  let builder = ctx.db
-    .selectFrom('post')
+  let builder: any[] = []
+
+    /*.selectFrom('post')
     .selectAll()
     .orderBy('indexedAt', 'desc')
     .orderBy('cid', 'desc')
-    .limit(params.limit)
+    .limit(params.limit)*/
 
   if (params.cursor) {
     const [indexedAt, cid] = params.cursor.split('::')
@@ -19,19 +20,35 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
       throw new InvalidRequestError('malformed cursor')
     }
     const timeStr = new Date(parseInt(indexedAt, 10)).toISOString()
-    builder = builder
-      .where('post.indexedAt', '<', timeStr)
+    builder = await ctx.db.db().collection("post").find({indexedAt:{$gte:timeStr},cid:{$lt:cid}})
+    .sort(
+      {
+        indexedAt:-1,
+        cid:-1
+      })
+    .limit(params.limit)
+    .toArray()
+      /*.where('post.indexedAt', '<', timeStr)
       .orWhere((qb) => qb.where('post.indexedAt', '=', timeStr))
-      .where('post.cid', '<', cid)
+      .where('post.cid', '<', cid)*/
+  } else {
+    builder =  await ctx.db.db().collection("post").find()
+                        .sort(
+                          {
+                            indexedAt:-1,
+                            cid:-1
+                          })
+                        .limit(params.limit)
+                        .toArray()
   }
-  const res = await builder.execute()
+  //const res = await builder.execute()
 
-  const feed = res.map((row) => ({
+  const feed = builder.map((row) => ({
     post: row.uri,
   }))
 
   let cursor: string | undefined
-  const last = res.at(-1)
+  const last = builder.at(-1)
   if (last) {
     cursor = `${new Date(last.indexedAt).getTime()}::${last.cid}`
   }
