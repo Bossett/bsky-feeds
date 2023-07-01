@@ -18,6 +18,9 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     
     if (this.authorList === undefined) this.authorList = []
 
+    const authorsCount = await this.db.db().collection("list_members").countDocuments()
+    if (authorsCount === this.authorList.length) return;
+
     const authors = await this.db.db().collection("list_members").find().toArray()
                               /*.selectFrom('list_members')
                               .selectAll()
@@ -74,7 +77,11 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         .execute()*/
     }
     if (postsToCreate.length > 0) {
-      await this.db.db().collection("post").insertMany(postsToCreate,{ordered:false})
+
+      postsToCreate.forEach(async (to_insert) => {
+        await this.db.db().collection("post").replaceOne({"uri":to_insert.uri},to_insert,{upsert:true})
+      })
+      // await this.db.db().collection("post").insertMany(postsToCreate,{ordered:false})
         /*.insertInto('post')
         .values(postsToCreate)
         .onConflict((oc) => oc.doNothing())
