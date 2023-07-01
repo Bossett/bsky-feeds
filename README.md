@@ -10,4 +10,4 @@ Feed at https://bsky.app/profile/did:plc:jfhpnnst6flqway4eaeqzj2a/feed/for-scien
 
 ## Major TODOs
 
-At the moment, there isn't persistent storage - so need to set up something like redis to grab posts and manage the feed. As-is, the feed is wiped with every deployment, and it then re-fetches historic stuff every few minutes which isn't ideal.
+Some level of caching needs to go in - possibly just a cache header in feed-generation.ts - not a huge deal right now, but may be important in the future.
