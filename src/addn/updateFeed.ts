@@ -49,7 +49,7 @@ export class UpdateFeed {
         dotenv.config()
 
         if(reset) await db.db().collection('list_members').deleteMany() // deleteFrom('list_members').executeTakeFirst()
-        if(reset) await db.db().collection('post').deleteMany() // deleteFrom('list_members').executeTakeFirst()
+        // if(reset) await db.db().collection('post').deleteMany() // deleteFrom('post').executeTakeFirst()
 
         const agent = new BskyAgent({ service: 'https://bsky.social' })
 
