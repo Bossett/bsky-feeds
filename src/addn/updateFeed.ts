@@ -48,8 +48,8 @@ export class UpdateFeed {
 
         dotenv.config()
 
-        if(reset) await db.db().collection('list_members').deleteMany() // deleteFrom('list_members').executeTakeFirst()
-        // if(reset) await db.db().collection('post').deleteMany() // deleteFrom('post').executeTakeFirst()
+        if(reset) await db.db().collection('list_members').deleteMany()
+        // if(reset) await db.db().collection('post').deleteMany() // UNCOMMENT FOR FULL RESETS
 
         const agent = new BskyAgent({ service: 'https://bsky.social' })
 
@@ -72,7 +72,7 @@ export class UpdateFeed {
 
             const lists:string[] = `${process.env.FEEDGEN_LISTS}`.split("|")
         
-            const existing_members_obj = await db.db().collection('list_members').find().toArray() //.selectFrom('list_members').selectAll().execute()
+            const existing_members_obj = await db.db().collection('list_members').find().toArray()
             existing_members_obj.forEach((existing_member)=>{
                 old_members.push(existing_member.did)
             })
@@ -117,13 +117,6 @@ export class UpdateFeed {
                 await session.endSession();
             }
             
-
-            /*await db.transaction().execute(
-                async (trx) => {
-                    await trx.deleteFrom('list_members').executeTakeFirstOrThrow()
-                    await trx.replaceInto('list_members').values(all_members_obj).executeTakeFirstOrThrow()
-                }
-            )*/
 
             let i = 0
             let total = new_members.length

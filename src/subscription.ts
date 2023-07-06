@@ -22,9 +22,6 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     if (authorsCount === this.authorList.length) return;
 
     const authors = await this.db.db().collection("list_members").find().toArray()
-                              /*.selectFrom('list_members')
-                              .selectAll()
-                              .execute()*/
     
     while(authors.length !== 0) {
       const did = authors.pop()
@@ -72,20 +69,12 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
     if (postsToDelete.length > 0) {
       await this.db.db().collection("post").deleteMany({uri:{$in:postsToDelete}})
-        /*.deleteFrom('post')
-        .where('uri', 'in', postsToDelete)
-        .execute()*/
     }
     if (postsToCreate.length > 0) {
 
       postsToCreate.forEach(async (to_insert) => {
         await this.db.db().collection("post").replaceOne({"uri":to_insert.uri},to_insert,{upsert:true})
       })
-      // await this.db.db().collection("post").insertMany(postsToCreate,{ordered:false})
-        /*.insertInto('post')
-        .values(postsToCreate)
-        .onConflict((oc) => oc.doNothing())
-        .execute()*/
     }
   }
 }
