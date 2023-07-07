@@ -76,7 +76,7 @@ export class manager extends AlgoManager {
     const new_authors = list_members.filter((member)=>{return !db_authors.includes(member)})
     const del_authors = db_authors.filter((member)=>{return !list_members.includes(member)})
 
-    console.log(`${db_authors.length} + ${new_authors.length} - ${del_authors.length} = ${list_members.length}`)
+    console.log(`${this.name}: Watching ${db_authors.length} + ${new_authors.length} - ${del_authors.length} = ${list_members.length} authors`)
 
     this.authorList = [...list_members]
 
@@ -85,7 +85,7 @@ export class manager extends AlgoManager {
     for (let i = 0;i<new_authors.length;i++) {
       if (this.agent !== null) {
 
-        process.stdout.write(`${i + 1} of ${new_authors.length}: `)
+        process.stdout.write(`${this.name}: ${i + 1} of ${new_authors.length}: `)
         const posts = (await getPostsForUser(new_authors[i],this.agent)).filter((post)=>{return this.filter(post)})
         posts.forEach(async (post) => {
           const existing = await this.db.getPostForURI(post.uri)
@@ -105,7 +105,7 @@ export class manager extends AlgoManager {
     }
 
     del_authors.forEach(async (author)=>{
-      if (this.agent !== null) console.log(`Removing ${await resoveDIDToHandle(author,this.agent)}`)
+      if (this.agent !== null) console.log(`${this.name}: Removing ${await resoveDIDToHandle(author,this.agent)}`)
       await this.db.deleteManyDID(this.author_collection,[author])
     })
 
@@ -115,7 +115,7 @@ export class manager extends AlgoManager {
     
     if (post.text.toLowerCase().includes(`${process.env.FEEDGEN_SYMBOL}`)){
       if (this.authorList.includes(post.author)) {
-        console.log(`${post.author} posted ${post.uri}`)
+        console.log(`${this.name}: ${post.uri.split('/').at(-1)} matched for ${post.author}`)
         return true
       }
     }

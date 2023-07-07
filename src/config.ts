@@ -11,7 +11,6 @@ export type Config = {
   port: number
   listenhost: string
   hostname: string
-  sqliteLocation: string
   mongoDbConnectionString: string
   subscriptionEndpoint: string
   serviceDid: string

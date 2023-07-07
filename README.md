@@ -12,6 +12,4 @@ Feed at https://bsky.app/profile/did:plc:jfhpnnst6flqway4eaeqzj2a/feed/for-scien
 
 TODO: Cache header in feed-generation.ts
 TODO: List for exclusion, header catching
-TODO: Migrate UpdateFeed logic into for-science.ts
-TODO: Move db logic into single location
 TODO: Pin function
