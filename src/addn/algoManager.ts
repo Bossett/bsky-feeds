@@ -3,6 +3,8 @@ import { Database } from '../db'
 import { Post } from '../db/schema'
 
 export class AlgoManager {
+
+    private static _instance: AlgoManager
   
     public db: Database
     public periodicIntervalId: NodeJS.Timer
