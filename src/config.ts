@@ -1,8 +1,8 @@
-import { Database } from './db'
 import { DidResolver } from '@atproto/did-resolver'
+import dbClient from './db/dbClient'
 
 export type AppContext = {
-  db: Database
+  db: typeof dbClient
   didResolver: DidResolver
   cfg: Config
 }

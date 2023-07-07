@@ -8,26 +8,14 @@ import getListMembers from '../addn/getListMembers'
 import getPostsForUser from '../addn/getPostsForUser'
 import resoveDIDToHandle from '../addn/resolveDIDToHandle'
 import { Post } from '../db/schema'
+import dbClient from '../db/dbClient'
 
 // max 15 chars
 export const shortname = 'for-science'
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
 
-  let query:any = {algoTags:shortname}
-
-  if (params.cursor) {
-    const [indexedAt, cid] = params.cursor.split('::')
-    if (!indexedAt || !cid) {
-      throw new InvalidRequestError('malformed cursor')
-    }
-    const timeStr = new Date(parseInt(indexedAt, 10)).getTime()
-    query = {indexedAt:{$lte:timeStr},cid:{$ne:cid},algoTags:shortname}
-  }
-  const builder = await ctx.db.db().collection("post").find(query)
-                      .sort({indexedAt:-1,cid:-1})
-                      .limit(params.limit)
-                      .toArray()
+  const builder = await dbClient.getLatestPostsForTag(shortname,params.limit,params.cursor)
 
   const feed = builder.map((row) => ({
     post: row.uri,
@@ -54,7 +42,7 @@ export class manager extends AlgoManager {
   public agent:BskyAgent|null = null
 
   public async start() {
-    this.authorList = await this.db.db().collection(this.author_collection).distinct("did")
+    this.authorList = await dbClient.getDistinctFromCollection(this.author_collection,"did")
   }
 
   public async periodicTask() {
@@ -84,7 +72,7 @@ export class manager extends AlgoManager {
       }
     }
 
-    const db_authors = await this.db.db().collection(this.author_collection).distinct("did")
+    const db_authors = await dbClient.getDistinctFromCollection(this.author_collection,"did")
 
     const new_authors = list_members.filter((member)=>{return !db_authors.includes(member)})
     const del_authors = db_authors.filter((member)=>{return !list_members.includes(member)})
@@ -93,8 +81,7 @@ export class manager extends AlgoManager {
 
     this.authorList = [...list_members]
 
-    const pullQuery: Record<string, any> = {algoTags:{$in:[this.name]}}
-    await this.db.db().collection("post").updateMany({author:{$in:del_authors}},{$pull: pullQuery})
+    await dbClient.removeTagFromPosts(this.name,del_authors)
     
     for (let i = 0;i<new_authors.length;i++) {
       if (this.agent !== null) {
@@ -102,25 +89,25 @@ export class manager extends AlgoManager {
         process.stdout.write(`${i + 1} of ${new_authors.length}: `)
         const posts = (await getPostsForUser(new_authors[i],this.agent)).filter((post)=>{return this.filter(post)})
         posts.forEach(async (post) => {
-          const existing = await this.db.db().collection("post").findOne({"uri":post.uri})
+          const existing = await this.db.getPostForURI(post.uri)
           if (existing === null) {
             post.algoTags = [this.name]
-            await this.db.db().collection("post").replaceOne({"uri":post.uri},post,{upsert:true})
+            await this.db.replaceOneURI("post",post.uri,post)
           }
           else {
             const tags = [...new Set([...existing.algoTags, this.name])]
             post.algoTags = tags
-            await this.db.db().collection("post").replaceOne({"uri":post.uri},post,{upsert:true})
+            await this.db.replaceOneURI("post",post.uri,post)
           }
         })
       }
 
-      await this.db.db().collection(this.author_collection).replaceOne({did:new_authors[i]},{did:new_authors[i]},{upsert:true})
+      await this.db.replaceOneDID(this.author_collection,new_authors[i],{did:new_authors[i]})
     }
 
     del_authors.forEach(async (author)=>{
       if (this.agent !== null) console.log(`Removing ${await resoveDIDToHandle(author,this.agent)}`)
-      await this.db.db().collection(this.author_collection).deleteMany({did:author})
+      await this.db.deleteManyDID(this.author_collection,[author])
     })
 
   }

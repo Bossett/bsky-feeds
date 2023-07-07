@@ -7,7 +7,8 @@ import dotenv from 'dotenv'
 
 import algos from './algos'
 
-import {MongoClient, ObjectId} from 'mongodb'
+import { ObjectId } from 'mongodb'
+import { Database } from './db'
 
 import crypto from 'crypto'
 import { Post } from './db/schema'
@@ -16,7 +17,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
   public algoManagers:any[]
 
-  constructor(db: MongoClient, subscriptionEndpoint: string) {
+  constructor(db: Database, subscriptionEndpoint: string) {
     super(db, subscriptionEndpoint)
 
     this.algoManagers = []
@@ -80,12 +81,12 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       })
 
     if (postsToDelete.length > 0) {
-      await this.db.db().collection("post").deleteMany({uri:{$in:postsToDelete}})
+      await this.db.deleteManyURI("post", postsToDelete)
     }
 
     if (postsToCreate.length > 0) {
       postsToCreate.forEach(async (to_insert) => {
-        await this.db.db().collection("post").replaceOne({"uri":to_insert.uri},to_insert,{upsert:true})
+        await this.db.replaceOneURI("post",to_insert.uri,to_insert)
       })
     }
   }
