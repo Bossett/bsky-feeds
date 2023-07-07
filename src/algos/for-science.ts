@@ -1,4 +1,3 @@
-import { InvalidRequestError } from '@atproto/xrpc-server'
 import { QueryParams } from '../lexicon/types/app/bsky/feed/getFeedSkeleton'
 import { AppContext } from '../config'
 import { AlgoManager } from '../addn/algoManager'

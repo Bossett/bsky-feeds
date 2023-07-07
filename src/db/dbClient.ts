@@ -22,7 +22,7 @@ class dbSingleton {
     }
 
     async deleteManyDID(collection:string, dids:string[]) {
-      await this.client?.db().collection(collection).deleteMany({uri:{$in:dids}})
+      await this.client?.db().collection(collection).deleteMany({did:{$in:dids}})
     }
 
     async replaceOneURI(collection:string, uri:string, data:any) {
@@ -70,7 +70,7 @@ class dbSingleton {
       else return results
     }
 
-    async removeTagFromPosts (tag, authors) {
+    async removeTagFromPosts (tag: string, authors: string[]) {
       const pullQuery: Record<string, any> = {algoTags:{$in:[tag]}}
       await this.client?.db().collection("post").updateMany({author:{$in:authors}},{$pull: pullQuery})
     }
