@@ -148,7 +148,8 @@ export class UpdateFeed {
                                     cid: post.post?.cid,
                                     replyParent: <string> post.reply?.parent.uri ?? null,
                                     replyRoot: <string> post.reply?.root.uri ?? null,
-                                    indexedAt: new Date(post.post?.indexedAt).getTime() ?? new Date().getTime()
+                                    indexedAt: new Date(post.post?.indexedAt).getTime() ?? new Date().getTime(),
+                                    algoTags:['for-science']
                                 }
                                 
                                 db.db().collection('post').replaceOne({"uri":to_insert.uri},to_insert,{upsert:true}) // insertInto('post').values(to_insert).onConflict((oc) => oc.doNothing()).executeTakeFirstOrThrow()

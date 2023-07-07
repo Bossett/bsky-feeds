@@ -10,4 +10,8 @@ Feed at https://bsky.app/profile/did:plc:jfhpnnst6flqway4eaeqzj2a/feed/for-scien
 
 ## Major TODOs
 
-Some level of caching needs to go in - possibly just a cache header in feed-generation.ts - not a huge deal right now, but may be important in the future.
+TODO: Cache header in feed-generation.ts
+TODO: List for exclusion, header catching
+TODO: Migrate UpdateFeed logic into for-science.ts
+TODO: Move db logic into single location
+TODO: Pin function

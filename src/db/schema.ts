@@ -13,6 +13,7 @@ export type Post = {
   replyParent: string | null
   replyRoot: string | null
   indexedAt: number
+  algoTags: string[] | null
 }
 
 export type SubState = {

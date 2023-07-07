@@ -5,73 +5,73 @@ import {
 import { FirehoseSubscriptionBase, getOpsByType } from './util/subscription'
 import dotenv from 'dotenv'
 
-import {ObjectId} from 'mongodb'
+import algos from './algos'
+
+import {MongoClient, ObjectId} from 'mongodb'
 
 import crypto from 'crypto'
 
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
-  public authorList:string[]
-  public intervalId:NodeJS.Timer
+  public algoManagers:any[]
 
-  async updateAuthors() {
-    
-    if (this.authorList === undefined) this.authorList = []
+  constructor(db: MongoClient, subscriptionEndpoint: string) {
+    super(db, subscriptionEndpoint)
 
-    const authorsCount = await this.db.db().collection("list_members").countDocuments()
-    if (authorsCount === this.authorList.length) return;
+    this.algoManagers = []
 
-    const authors = await this.db.db().collection("list_members").find().toArray()
-    
-    while(authors.length !== 0) {
-      const did = authors.pop()
-      if(!this.authorList.includes(`${did?.did}`)) {
-        this.authorList.push(`${did?.did}`)
-      }
-    }
+    Object.keys(algos).forEach((algo)=>{
+      this.algoManagers.push(new algos[algo].manager(db))
+    })
   }
 
+  public authorList:string[]
+  public intervalId:NodeJS.Timer
+ 
   async handleEvent(evt: RepoEvent) {
+
+    for (let i = 0; i < this.algoManagers.length; i++) {
+      await this.algoManagers[i].ready()
+    }
+
     dotenv.config()
     if (!isCommit(evt)) return
     const ops = await getOpsByType(evt)
 
-    await this.updateAuthors()
-
-    if (!this.intervalId) {
-      this.intervalId = setInterval(()=>{this.updateAuthors()},15000)
-    }
-
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
-      .filter((create) => {
-        if (create.record.text.toLowerCase().includes(`${process.env.FEEDGEN_SYMBOL}`)){
-          if (this.authorList.includes(create.author)) {
-            console.log(`${create.author} posted ${create.uri}`)
-            return true
-          }
+      .flatMap((create) => {
+
+        let include = false
+
+        const algoTags: string[] = [] 
+
+        for (let i = 0; i < this.algoManagers.length; i++) {
+          const includeAlgo = this.algoManagers[i].filter(create)
+          include = include || includeAlgo
+          if (includeAlgo) algoTags.push(`${this.algoManagers[i].name}`)
         }
-        return false
-      })
-      .map((create) => {
-        // map science-related posts to a db row
+
+        if (!include) return []
+
         const hash = crypto.createHash('shake256',{outputLength:12}).update(create.uri).digest('hex').toString()
 
-        return {
+        return [{
           _id: new ObjectId(hash),
           uri: create.uri,
           cid: create.cid,
           replyParent: create.record?.reply?.parent.uri ?? null,
           replyRoot: create.record?.reply?.root.uri ?? null,
           indexedAt: new Date().getTime(),
-        }
+          algoTags: algoTags
+        }]
       })
 
     if (postsToDelete.length > 0) {
       await this.db.db().collection("post").deleteMany({uri:{$in:postsToDelete}})
     }
-    if (postsToCreate.length > 0) {
 
+    if (postsToCreate.length > 0) {
       postsToCreate.forEach(async (to_insert) => {
         await this.db.db().collection("post").replaceOne({"uri":to_insert.uri},to_insert,{upsert:true})
       })
