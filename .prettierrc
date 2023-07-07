@@ -3,6 +3,7 @@
   "tabWidth": 2,
   "semi": false,
   "singleQuote": true,
+  "printWdith": 120,
   "overrides": [
     {
       "files": "*.hbs",

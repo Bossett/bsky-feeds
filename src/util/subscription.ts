@@ -51,11 +51,10 @@ export abstract class FirehoseSubscriptionBase {
   }
 
   async updateCursor(cursor: number) {
-    await this.db.updateSubStateCursor(this.service,cursor)
+    await this.db.updateSubStateCursor(this.service, cursor)
   }
 
   async getCursor(): Promise<{ cursor?: number }> {
-    
     const res = await this.db.getSubStateCursor(this.service)
     return res ? { cursor: res.cursor } : {}
   }

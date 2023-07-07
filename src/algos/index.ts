@@ -7,8 +7,11 @@ import * as forScience from './for-science'
 
 type AlgoHandler = (ctx: AppContext, params: QueryParams) => Promise<AlgoOutput>
 
-const algos  = {
-  [forScience.shortname]: {handler: <AlgoHandler>forScience.handler, manager: forScience.manager},
+const algos = {
+  [forScience.shortname]: {
+    handler: <AlgoHandler>forScience.handler,
+    manager: forScience.manager,
+  },
 }
 
 export default algos

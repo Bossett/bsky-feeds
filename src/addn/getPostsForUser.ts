@@ -6,42 +6,57 @@ import crypto from 'crypto'
 import { ObjectId } from 'mongodb'
 import resolveDIDToHandle from './resolveDIDToHandle'
 
-export const getPostsForUser = async (author: string, agent:BskyAgent) => {
-    dotenv.config()
+export const getPostsForUser = async (author: string, agent: BskyAgent) => {
+  dotenv.config()
 
-    const posts:Post[] = []
+  const posts: Post[] = []
 
-    console.log(`Getting posts for ${await resolveDIDToHandle(author,agent)}... `)
+  console.log(
+    `Getting posts for ${await resolveDIDToHandle(author, agent)}... `,
+  )
 
-    let author_feed = await agent.api.app.bsky.feed.getAuthorFeed({actor:author,limit:100})
+  let author_feed = await agent.api.app.bsky.feed.getAuthorFeed({
+    actor: author,
+    limit: 100,
+  })
 
-    while (author_feed.data.feed.length !== 0) {
-        const author_posts = author_feed.data.feed
-        while (author_posts.length > 0) {
-            const post_create = author_posts.pop()
-            if (post_create === undefined) continue;
+  while (author_feed.data.feed.length !== 0) {
+    const author_posts = author_feed.data.feed
+    while (author_posts.length > 0) {
+      const post_create = author_posts.pop()
+      if (post_create === undefined) continue
 
-            const post:Post = {
-                _id: null,
-                uri: post_create.post?.uri,
-                cid: post_create.post?.cid,
-                author:author,
-                text:post_create.post?.record['text'],
-                replyParent: <string> post_create.reply?.parent.uri ?? null,
-                replyRoot: <string> post_create.reply?.root.uri ?? null,
-                indexedAt: new Date(post_create.post?.indexedAt).getTime() ?? new Date().getTime(),
-                algoTags:null
-            }
+      const post: Post = {
+        _id: null,
+        uri: post_create.post?.uri,
+        cid: post_create.post?.cid,
+        author: author,
+        text: post_create.post?.record['text'],
+        replyParent: <string>post_create.reply?.parent.uri ?? null,
+        replyRoot: <string>post_create.reply?.root.uri ?? null,
+        indexedAt:
+          new Date(post_create.post?.indexedAt).getTime() ??
+          new Date().getTime(),
+        algoTags: null,
+      }
 
-            const hash = crypto.createHash('shake256',{outputLength:12}).update(post.uri).digest('hex').toString()
-            post._id = new ObjectId(hash)
+      const hash = crypto
+        .createHash('shake256', { outputLength: 12 })
+        .update(post.uri)
+        .digest('hex')
+        .toString()
+      post._id = new ObjectId(hash)
 
-            posts.push(post)
-        }
-        author_feed = await agent.api.app.bsky.feed.getAuthorFeed({actor:author,limit:100,cursor:author_feed.data.cursor})
+      posts.push(post)
     }
+    author_feed = await agent.api.app.bsky.feed.getAuthorFeed({
+      actor: author,
+      limit: 100,
+      cursor: author_feed.data.cursor,
+    })
+  }
 
-    return posts
+  return posts
 }
 
 export default getPostsForUser

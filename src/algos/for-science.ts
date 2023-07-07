@@ -13,8 +13,11 @@ import dbClient from '../db/dbClient'
 export const shortname = 'for-science'
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
-
-  const builder = await dbClient.getLatestPostsForTag(shortname,params.limit,params.cursor)
+  const builder = await dbClient.getLatestPostsForTag(
+    shortname,
+    params.limit,
+    params.cursor,
+  )
 
   const feed = builder.map((row) => ({
     post: row.uri,
@@ -33,20 +36,22 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 }
 
 export class manager extends AlgoManager {
+  public name: string = shortname
+  public authorList: string[]
+  public author_collection = 'list_members'
 
-  public name:string = shortname
-  public authorList:string[]
-  public author_collection = "list_members"
-
-  public agent:BskyAgent|null = null
+  public agent: BskyAgent | null = null
 
   public async start() {
-    this.authorList = await dbClient.getDistinctFromCollection(this.author_collection,"did")
+    this.authorList = await dbClient.getDistinctFromCollection(
+      this.author_collection,
+      'did',
+    )
   }
 
   public async periodicTask() {
     dotenv.config()
-    
+
     if (this.agent === null) {
       this.agent = new BskyAgent({ service: 'https://bsky.social' })
 
@@ -56,70 +61,89 @@ export class manager extends AlgoManager {
       await this.agent.login({ identifier: handle, password: password })
     }
 
-    const lists:string[] = `${process.env.FEEDGEN_LISTS}`.split("|")
-    const list_members:string[] = []
+    const lists: string[] = `${process.env.FEEDGEN_LISTS}`.split('|')
+    const list_members: string[] = []
 
-    for(let i=0;i<lists.length;i++){
-
+    for (let i = 0; i < lists.length; i++) {
       if (this.agent !== null) {
-
-        const members = await getListMembers(lists[i],this.agent)
-        members.forEach((member)=>{
+        const members = await getListMembers(lists[i], this.agent)
+        members.forEach((member) => {
           if (!list_members.includes(member)) list_members.push(member)
         })
-
       }
     }
 
-    const db_authors = await dbClient.getDistinctFromCollection(this.author_collection,"did")
+    const db_authors = await dbClient.getDistinctFromCollection(
+      this.author_collection,
+      'did',
+    )
 
-    const new_authors = list_members.filter((member)=>{return !db_authors.includes(member)})
-    const del_authors = db_authors.filter((member)=>{return !list_members.includes(member)})
+    const new_authors = list_members.filter((member) => {
+      return !db_authors.includes(member)
+    })
+    const del_authors = db_authors.filter((member) => {
+      return !list_members.includes(member)
+    })
 
-    console.log(`${this.name}: Watching ${db_authors.length} + ${new_authors.length} - ${del_authors.length} = ${list_members.length} authors`)
+    console.log(
+      `${this.name}: Watching ${db_authors.length} + ${new_authors.length} - ${del_authors.length} = ${list_members.length} authors`,
+    )
 
     this.authorList = [...list_members]
 
-    await dbClient.removeTagFromPosts(this.name,del_authors)
-    
-    for (let i = 0;i<new_authors.length;i++) {
-      if (this.agent !== null) {
+    await dbClient.removeTagFromPosts(this.name, del_authors)
 
-        process.stdout.write(`${this.name}: ${i + 1} of ${new_authors.length}: `)
-        const posts = (await getPostsForUser(new_authors[i],this.agent)).filter((post)=>{return this.filter(post)})
+    for (let i = 0; i < new_authors.length; i++) {
+      if (this.agent !== null) {
+        process.stdout.write(
+          `${this.name}: ${i + 1} of ${new_authors.length}: `,
+        )
+        const posts = (
+          await getPostsForUser(new_authors[i], this.agent)
+        ).filter((post) => {
+          return this.filter(post)
+        })
         posts.forEach(async (post) => {
           const existing = await this.db.getPostForURI(post.uri)
           if (existing === null) {
             post.algoTags = [this.name]
-            await this.db.replaceOneURI("post",post.uri,post)
-          }
-          else {
+            await this.db.replaceOneURI('post', post.uri, post)
+          } else {
             const tags = [...new Set([...existing.algoTags, this.name])]
             post.algoTags = tags
-            await this.db.replaceOneURI("post",post.uri,post)
+            await this.db.replaceOneURI('post', post.uri, post)
           }
         })
       }
 
-      await this.db.replaceOneDID(this.author_collection,new_authors[i],{did:new_authors[i]})
+      await this.db.replaceOneDID(this.author_collection, new_authors[i], {
+        did: new_authors[i],
+      })
     }
 
-    del_authors.forEach(async (author)=>{
-      if (this.agent !== null) console.log(`${this.name}: Removing ${await resoveDIDToHandle(author,this.agent)}`)
-      await this.db.deleteManyDID(this.author_collection,[author])
+    del_authors.forEach(async (author) => {
+      if (this.agent !== null)
+        console.log(
+          `${this.name}: Removing ${await resoveDIDToHandle(
+            author,
+            this.agent,
+          )}`,
+        )
+      await this.db.deleteManyDID(this.author_collection, [author])
     })
-
   }
 
   public filter(post: Post): Boolean {
-    
-    if (post.text.toLowerCase().includes(`${process.env.FEEDGEN_SYMBOL}`)){
+    if (post.text.toLowerCase().includes(`${process.env.FEEDGEN_SYMBOL}`)) {
       if (this.authorList.includes(post.author)) {
-        console.log(`${this.name}: ${post.uri.split('/').at(-1)} matched for ${post.author}`)
+        console.log(
+          `${this.name}: ${post.uri.split('/').at(-1)} matched for ${
+            post.author
+          }`,
+        )
         return true
       }
     }
     return false
   }
-
 }
