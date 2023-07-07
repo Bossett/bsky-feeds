@@ -18,6 +18,8 @@ const run = async () => {
       maybeStr(process.env.FEEDGEN_PUBLISHER_DID) ?? 'did:example:alice',
     hostname,
     serviceDid,
+    subscriptionReconnectDelay:
+      maybeInt(process.env.FEEDGEN_SUBSCRIPTION_RECONNECT_DELAY) ?? 3000,
   })
   await server.start()
   console.log(
