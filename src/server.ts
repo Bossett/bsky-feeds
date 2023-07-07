@@ -9,7 +9,6 @@ import { createDb, Database } from './db'
 import { FirehoseSubscription } from './subscription'
 import { AppContext, Config } from './config'
 import wellKnown from './well-known'
-import {UpdateFeed} from './addn/updateFeed'
 
 export class FeedGenerator {
   public app: express.Application
@@ -65,8 +64,6 @@ export class FeedGenerator {
   async start(): Promise<http.Server> {
 
     await this.db.connect()
-    const updateFeed = new UpdateFeed(this.db)
-    await updateFeed.start()
 
     this.firehose.run()
     this.server = this.app.listen(this.cfg.port, this.cfg.listenhost)

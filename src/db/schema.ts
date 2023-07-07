@@ -7,9 +7,11 @@ export type DatabaseSchema = {
 }
 
 export type Post = {
-  _id: ObjectId
+  _id: ObjectId | null
   uri: string
   cid: string
+  author: string
+  text: string
   replyParent: string | null
   replyRoot: string | null
   indexedAt: number

@@ -10,6 +10,7 @@ import algos from './algos'
 import {MongoClient, ObjectId} from 'mongodb'
 
 import crypto from 'crypto'
+import { Post } from './db/schema'
 
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
@@ -22,6 +23,10 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
     Object.keys(algos).forEach((algo)=>{
       this.algoManagers.push(new algos[algo].manager(db))
+    })
+
+    this.algoManagers.forEach(async (algo) =>{
+      await algo._start()
     })
   }
 
@@ -44,10 +49,22 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
         let include = false
 
-        const algoTags: string[] = [] 
+        const algoTags: string[] = []
+
+        const post:Post = {
+          _id: null,
+          uri: create.uri,
+          cid: create.cid,
+          author: create.author,
+          text:create.record?.text,
+          replyParent: create.record?.reply?.parent.uri ?? null,
+          replyRoot: create.record?.reply?.root.uri ?? null,
+          indexedAt: new Date().getTime(),
+          algoTags: null
+        }
 
         for (let i = 0; i < this.algoManagers.length; i++) {
-          const includeAlgo = this.algoManagers[i].filter(create)
+          const includeAlgo = this.algoManagers[i].filter(post)
           include = include || includeAlgo
           if (includeAlgo) algoTags.push(`${this.algoManagers[i].name}`)
         }
@@ -56,15 +73,10 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
         const hash = crypto.createHash('shake256',{outputLength:12}).update(create.uri).digest('hex').toString()
 
-        return [{
-          _id: new ObjectId(hash),
-          uri: create.uri,
-          cid: create.cid,
-          replyParent: create.record?.reply?.parent.uri ?? null,
-          replyRoot: create.record?.reply?.root.uri ?? null,
-          indexedAt: new Date().getTime(),
-          algoTags: algoTags
-        }]
+        post._id = new ObjectId(hash)
+        post.algoTags = [...algoTags]
+
+        return [post]
       })
 
     if (postsToDelete.length > 0) {

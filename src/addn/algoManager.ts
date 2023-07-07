@@ -10,24 +10,37 @@ export class AlgoManager {
     public name: string = ""
 
     public _isReady: Boolean = false
+    public _isStarting: Boolean = false
   
     constructor(db: Database) {
       this.db = db
       this._isReady = false
+      this._isStarting = false
     }
 
     public async _start() {
-        dotenv.config()
-
-        await this.periodicTask()
-        if (!this.periodicIntervalId) {
-            this.periodicIntervalId = setInterval(()=>{this.periodicTask()},15000)
-        }
         
-        await this.start()
+      if (this._isStarting) return false
+      else this._isStarting = true
 
-        this._isReady = true
-        return this._isReady
+      dotenv.config()
+
+      let task_inverval_mins = 15
+      if (process.env.FEEDGEN_TASK_INTEVAL_MINS !== undefined && 
+        Number.parseInt(process.env.FEEDGEN_TASK_INTEVAL_MINS) > 0) {
+
+        task_inverval_mins = Number.parseInt(process.env.FEEDGEN_TASK_INTEVAL_MINS)
+      }
+
+      await this.periodicTask()
+      if (!this.periodicIntervalId) {
+          this.periodicIntervalId = setInterval(()=>{this.periodicTask()},task_inverval_mins*60*1000)
+      }
+      
+      await this.start()
+
+      this._isReady = true
+      return this._isReady
     }
 
     public async start() {
@@ -43,7 +56,7 @@ export class AlgoManager {
       return
     }
  
-    public filter(post:Post) {
+    public filter(post:Post):Boolean {
       return false
     }
   }
