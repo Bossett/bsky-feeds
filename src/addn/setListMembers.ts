@@ -10,17 +10,23 @@ export const setListMembers = async (
   const members: any[] = []
   const online_list_members: string[] = []
 
+  const list_did = `${list.split('/').at(2)}`
+
   while (total_retrieved > 0) {
-    const list_members = await agent.api.app.bsky.graph.getList({
-      list: `${list}`,
+    const list_members = await agent.com.atproto.repo.listRecords({
+      repo: list_did,
+      collection: 'app.bsky.graph.listitem',
       limit: 100,
       cursor: current_cursor,
     })
-    total_retrieved = list_members.data.items.length
+    total_retrieved = list_members.data.records.length
     current_cursor = list_members.data.cursor
-    list_members.data.items.forEach((member) => {
-      online_list_members.push(member.subject.did)
-      members.push(member)
+
+    list_members.data.records.forEach((member) => {
+      if ((<any>member.value).list === list) {
+        online_list_members.push((<any>member.value).subject.did)
+        members.push(member)
+      }
     })
   }
 
@@ -46,7 +52,7 @@ export const setListMembers = async (
     })
   })
   members.forEach((member) => {
-    if (users_to_remove.includes(member.subject.did)) {
+    if (users_to_remove.includes((<any>member.value).subject.did)) {
       const rkey = `${member.uri}`.substring(
         `${member.uri}`.lastIndexOf('/') + 1,
       )
@@ -63,7 +69,7 @@ export const setListMembers = async (
   for (let i = 0; i < writes.length; i += chunkSize) {
     const chunk = writes.slice(i, i + chunkSize)
     const res = await agent.com.atproto.repo.applyWrites({
-      repo: `${list.split('/').at(2)}`,
+      repo: list_did,
       writes: chunk,
     })
   }
