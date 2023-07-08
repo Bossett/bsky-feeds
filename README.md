@@ -30,7 +30,7 @@ I am deploying with Docker rather than the default Node containers. This was mor
 
 ## Adding Feeds
 
-The tool is built to have each algorithm self-contained within a file in [src/algos](src/algos). Each algorithm should export both a handler function and manager class (that can inherit from algoManager - see the for-science feed). The _manager_ is expected to implement a filter method that will match posts that the algorithm will later deal with.
+The tool is built to have each algorithm self-contained within a file in [src/algos](src/algos). Each algorithm should export both a handler function and manager class (that can inherit from algoManager - see the for-science feed). The _manager_ is expected to implement filter methods (e.g. filter_post) that will match events that the algorithm will later deal with.
 
 Where there's a match, the post will be stored in the database, tagged for the algorithm that matched. This can be used later in the handler function to identify posts that the algorithm should return.
 

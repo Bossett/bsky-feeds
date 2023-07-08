@@ -60,7 +60,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       }
 
       for (let i = 0; i < this.algoManagers.length; i++) {
-        const includeAlgo = this.algoManagers[i].filter(post)
+        const includeAlgo = this.algoManagers[i].filter_post(post)
         include = include || includeAlgo
         if (includeAlgo) algoTags.push(`${this.algoManagers[i].name}`)
       }

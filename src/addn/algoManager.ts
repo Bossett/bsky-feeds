@@ -61,7 +61,9 @@ export class AlgoManager {
     return
   }
 
-  public filter(post: Post): Boolean {
+  public filter_post(post: Post): Boolean {
     return false
   }
+
+  public filter_
 }

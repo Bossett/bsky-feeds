@@ -81,7 +81,7 @@ export class manager extends AlgoManager {
 
       const posts = (await getPostsForUser(new_members[i], this.agent)).filter(
         (post) => {
-          return this.filter(post)
+          return this.filter_post(post)
         },
       )
       posts.forEach(async (post) => {
@@ -100,7 +100,7 @@ export class manager extends AlgoManager {
     await setListMembers(`${process.env.AUSPOL_LIST}`, db_authors, this.agent)
   }
 
-  public filter(post: Post): Boolean {
+  public filter_post(post: Post): Boolean {
     if (post.text.toLowerCase().includes(`${process.env.AUSPOL_MATCH}`)) {
       console.log(
         `${this.name}: ${post.uri.split('/').at(-1)} matched for ${

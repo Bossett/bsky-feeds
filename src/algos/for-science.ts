@@ -101,7 +101,7 @@ export class manager extends AlgoManager {
         const posts = (
           await getPostsForUser(new_authors[i], this.agent)
         ).filter((post) => {
-          return this.filter(post)
+          return this.filter_post(post)
         })
         posts.forEach(async (post) => {
           const existing = await this.db.getPostForURI(post.uri)
@@ -133,7 +133,7 @@ export class manager extends AlgoManager {
     })
   }
 
-  public filter(post: Post): Boolean {
+  public filter_post(post: Post): Boolean {
     if (post.text.toLowerCase().includes(`${process.env.SCIENCE_SYMBOL}`)) {
       if (this.authorList.includes(post.author)) {
         console.log(
