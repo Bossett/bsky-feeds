@@ -47,10 +47,13 @@ export const setListMembers = async (
   })
   members.forEach((member) => {
     if (users_to_remove.includes(member.subject.did)) {
+      const rkey = `${member.uri}`.substring(
+        `${member.uri}`.lastIndexOf('/') + 1,
+      )
       writes.push({
         $type: 'com.atproto.repo.applyWrites#delete',
         collection: 'app.bsky.graph.listitem',
-        rkey: member.rkey,
+        rkey: rkey,
       })
     }
   })
