@@ -93,6 +93,21 @@ class dbSingleton {
     else return results
   }
 
+  async getTaggedPostsBetween(tag: string, start: number, end: number) {
+    const larger = start > end ? start : end
+    const smaller = start > end ? end : start
+
+    const results = this.client
+      ?.db()
+      .collection('post')
+      .find({ indexedAt: { $lt: larger, $gt: smaller }, algoTags: tag })
+      .sort({ indexedAt: -1, cid: -1 })
+      .toArray()
+
+    if (results === undefined) return []
+    else return results
+  }
+
   async getDistinctFromCollection(collection: string, field: string) {
     const results = await this.client
       ?.db()
@@ -108,6 +123,11 @@ class dbSingleton {
       ?.db()
       .collection('post')
       .updateMany({ author: { $in: authors } }, { $pull: pullQuery })
+
+    await this.client
+      ?.db()
+      .collection('post')
+      .deleteMany({ algoTags: { $size: 0 } })
   }
 
   async getPostForURI(uri: string) {

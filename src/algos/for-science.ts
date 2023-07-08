@@ -61,7 +61,7 @@ export class manager extends AlgoManager {
       await this.agent.login({ identifier: handle, password: password })
     }
 
-    const lists: string[] = `${process.env.FEEDGEN_LISTS}`.split('|')
+    const lists: string[] = `${process.env.SCIENCE_LISTS}`.split('|')
     const list_members: string[] = []
 
     for (let i = 0; i < lists.length; i++) {
@@ -134,7 +134,7 @@ export class manager extends AlgoManager {
   }
 
   public filter(post: Post): Boolean {
-    if (post.text.toLowerCase().includes(`${process.env.FEEDGEN_SYMBOL}`)) {
+    if (post.text.toLowerCase().includes(`${process.env.SCIENCE_SYMBOL}`)) {
       if (this.authorList.includes(post.author)) {
         console.log(
           `${this.name}: ${post.uri.split('/').at(-1)} matched for ${
