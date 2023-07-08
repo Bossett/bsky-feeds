@@ -8,6 +8,14 @@ Watches for 🧪 posted by people on a set of watchlists (e.g. https://bsky.app/
 
 Feed at https://bsky.app/profile/did:plc:jfhpnnst6flqway4eaeqzj2a/feed/for-science
 
+## #auspol Feed
+
+Watches for case-insensitive 'auspol', putes them in the feed and adds those posters to a list (e.g. https://bsky.app/profile/did:plc:jfhpnnst6flqway4eaeqzj2a/lists/3jzy2aybxwz2f).
+
+Intended to aid discovery of new auspol posters, as well as provide the feed function.
+
+Feed at https://bsky.app/profile/did:plc:jfhpnnst6flqway4eaeqzj2a/feed/auspol
+
 ## Usage
 
 I run this with Digital Ocean App Platform, with their MongoDB as an attached service.
