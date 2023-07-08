@@ -32,6 +32,11 @@ class dbSingleton {
   }
 
   async replaceOneURI(collection: string, uri: string, data: any) {
+    if (!(typeof data._id === typeof '')) data._id = new ObjectId()
+    else {
+      data._id = new ObjectId(data._id)
+    }
+
     await this.client
       ?.db()
       .collection(collection)
@@ -39,6 +44,11 @@ class dbSingleton {
   }
 
   async replaceOneDID(collection: string, did: string, data: any) {
+    if (!(typeof data._id === typeof '')) data._id = new ObjectId()
+    else {
+      data._id = new ObjectId(data._id)
+    }
+
     await this.client
       ?.db()
       .collection(collection)

@@ -3,7 +3,6 @@ import { BskyAgent } from '@atproto/api'
 import { Post } from '../db/schema'
 
 import crypto from 'crypto'
-import { ObjectId } from 'mongodb'
 import resolveDIDToHandle from './resolveDIDToHandle'
 
 export const getPostsForUser = async (
@@ -48,7 +47,7 @@ export const getPostsForUser = async (
         .update(post.uri)
         .digest('hex')
         .toString()
-      post._id = new ObjectId(hash)
+      post._id = hash
 
       posts.push(post)
     }

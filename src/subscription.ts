@@ -7,7 +7,6 @@ import dotenv from 'dotenv'
 
 import algos from './algos'
 
-import { ObjectId } from 'mongodb'
 import { Database } from './db'
 
 import crypto from 'crypto'
@@ -74,7 +73,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         .digest('hex')
         .toString()
 
-      post._id = new ObjectId(hash)
+      post._id = hash
       post.algoTags = [...algoTags]
 
       return [post]

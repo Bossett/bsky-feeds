@@ -1,5 +1,3 @@
-import { ObjectId } from 'mongodb'
-
 export type DatabaseSchema = {
   post: Post
   sub_state: SubState
@@ -7,7 +5,7 @@ export type DatabaseSchema = {
 }
 
 export type Post = {
-  _id: ObjectId | null
+  _id: string | null
   uri: string
   cid: string
   author: string
@@ -19,12 +17,12 @@ export type Post = {
 }
 
 export type SubState = {
-  _id: ObjectId
+  _id: string | null
   service: string
   cursor: number
 }
 
 export type ListMember = {
-  _id: ObjectId
+  _id: string | null
   did: string
 }
