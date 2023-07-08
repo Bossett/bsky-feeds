@@ -1,6 +1,9 @@
 import { BskyAgent } from '@atproto/api'
 
-export const getListMembers = async (list: string, agent: BskyAgent) => {
+export const getListMembers = async (
+  list: string,
+  agent: BskyAgent,
+): Promise<string[]> => {
   let total_retrieved = 1
   let current_cursor: string | undefined = undefined
   let members: string[] = []

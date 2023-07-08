@@ -6,7 +6,10 @@ import crypto from 'crypto'
 import { ObjectId } from 'mongodb'
 import resolveDIDToHandle from './resolveDIDToHandle'
 
-export const getPostsForUser = async (author: string, agent: BskyAgent) => {
+export const getPostsForUser = async (
+  author: string,
+  agent: BskyAgent,
+): Promise<Post[]> => {
   dotenv.config()
 
   const posts: Post[] = []

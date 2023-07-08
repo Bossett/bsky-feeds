@@ -4,7 +4,7 @@ export const setListMembers = async (
   list: string,
   dids: string[],
   agent: BskyAgent,
-) => {
+): Promise<{ users_added: string[]; users_removed: string[] }> => {
   let total_retrieved = 1
   let current_cursor: string | undefined = undefined
   const members: any[] = []
