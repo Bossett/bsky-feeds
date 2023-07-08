@@ -10,7 +10,8 @@
     "node": "^18.0.0"
   },
   "scripts": {
-    "publishFeed": "ts-node scripts/publishFeedGen.ts",
+    "publishScience": "ts-node scripts/publishFeedGen.ts",
+    "publishAuspol": "ts-node scripts/publishAuspol.ts",
     "start": "ts-node src/index.ts",
     "build": "tsc"
   },

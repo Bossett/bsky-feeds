@@ -26,11 +26,11 @@ const run = async () => {
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
   const description =
-    'A simple feed of known Bluesky scientists, science communicators, and related experts; speaking with their expertise. Flag @danirabaiotti.bsky.social to be added or https://bsky.app/profile/bossett.bsky.social/post/3jxjfswtvil2s for more info!'
+    'The feed of #auspol posters. Also captures posters to a list at https://bsky.app/profile/did:plc:jfhpnnst6flqway4eaeqzj2a/lists/3jzy2aybxwz2f'
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg
-  const avatar: string = 'images/australia.jpg'
+  const avatar: string = 'images/australia.png'
 
   // -------------------------------------
   // NO NEED TO TOUCH ANYTHING BELOW HERE
