@@ -73,6 +73,8 @@ export const setListMembers = async (
       writes: chunk,
     })
   }
+
+  return { users_added: [...users_to_add], users_removed: [...users_to_remove] }
 }
 
 export default setListMembers
