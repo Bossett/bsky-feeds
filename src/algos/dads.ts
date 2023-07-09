@@ -66,8 +66,8 @@ export class manager extends AlgoManager {
     const re = /(?=.*(father))|(?=.*(dad))/
 
     if (
-      `${details.description}`.match(re) !== null ||
-      `${details.displayName}`.match(re) !== null
+      `${details.description}`.toLowerCase().match(re) !== null ||
+      `${details.displayName}`.toLowerCase().match(re) !== null
     ) {
       console.log(
         `${this.name}: ${post.uri.split('/').at(-1)} matched for ${
