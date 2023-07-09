@@ -12,6 +12,7 @@
   "scripts": {
     "publishScience": "ts-node scripts/publishFeedGen.ts",
     "publishAuspol": "ts-node scripts/publishAuspol.ts",
+    "publishDads": "ts-node scripts/publishDads.ts",
     "start": "ts-node src/index.ts",
     "build": "tsc"
   },
