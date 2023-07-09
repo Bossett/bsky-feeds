@@ -68,7 +68,7 @@ export class manager extends AlgoManager {
 
     const details = await getUserDetails(post.author, this.agent)
 
-    const re = /(?=.*(father))|(?=.*(dad))/
+    const re = /(?=.*(father))|(?=.*(dad(dy)?\b))/
 
     if (
       `${details.description}`.toLowerCase().match(re) !== null ||
