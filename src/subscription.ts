@@ -42,11 +42,8 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const ops = await getOpsByType(evt)
 
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
-    const postsToCreate = ops.posts.creates.flatMap((create) => {
-      let include = false
 
-      const algoTags: string[] = []
-
+    const postsCreated: Post[] = ops.posts.creates.flatMap((create) => {
       const post: Post = {
         _id: null,
         uri: create.uri,
@@ -59,25 +56,35 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         algoTags: null,
       }
 
+      return [post]
+    })
+
+    const postsToCreate: Post[] = []
+
+    for (let post_i = 0; post_i < postsCreated.length; post_i++) {
+      const post = postsCreated[post_i]
+      const algoTags: string[] = []
+      let include = false
+
       for (let i = 0; i < this.algoManagers.length; i++) {
-        const includeAlgo = this.algoManagers[i].filter_post(post)
+        const includeAlgo = await this.algoManagers[i].filter_post(post)
         include = include || includeAlgo
         if (includeAlgo) algoTags.push(`${this.algoManagers[i].name}`)
       }
 
-      if (!include) return []
+      if (!include) return
 
       const hash = crypto
         .createHash('shake256', { outputLength: 12 })
-        .update(create.uri)
+        .update(post.uri)
         .digest('hex')
         .toString()
 
       post._id = hash
       post.algoTags = [...algoTags]
 
-      return [post]
-    })
+      postsToCreate.push(post)
+    }
 
     if (postsToDelete.length > 0) {
       await this.db.deleteManyURI('post', postsToDelete)

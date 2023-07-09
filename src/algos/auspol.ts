@@ -79,11 +79,16 @@ export class manager extends AlgoManager {
     for (let i = 0; i < new_members.length; i++) {
       process.stdout.write(`${this.name}: ${i + 1} of ${new_members.length}: `)
 
-      const posts = (await getPostsForUser(new_members[i], this.agent)).filter(
-        (post) => {
-          return this.filter_post(post)
-        },
-      )
+      const all_posts = await getPostsForUser(new_members[i], this.agent)
+
+      const posts: Post[] = []
+
+      for (let i = 0; i < all_posts.length; i++) {
+        if ((await this.filter_post(all_posts[i])) == true) {
+          posts.push(all_posts[i])
+        }
+      }
+
       posts.forEach(async (post) => {
         const existing = await this.db.getPostForURI(post.uri)
         if (existing === null) {
@@ -100,7 +105,7 @@ export class manager extends AlgoManager {
     await setListMembers(`${process.env.AUSPOL_LIST}`, db_authors, this.agent)
   }
 
-  public filter_post(post: Post): Boolean {
+  public async filter_post(post: Post): Promise<Boolean> {
     if (post.text.toLowerCase().includes(`${process.env.AUSPOL_MATCH}`)) {
       console.log(
         `${this.name}: ${post.uri.split('/').at(-1)} matched for ${

@@ -61,9 +61,7 @@ export class AlgoManager {
     return
   }
 
-  public filter_post(post: Post): Boolean {
+  public async filter_post(post: Post): Promise<Boolean> {
     return false
   }
-
-  public filter_
 }
