@@ -91,7 +91,7 @@ export class manager extends AlgoManager {
 
     this.authorList = [...list_members]
 
-    await dbClient.removeTagFromPosts(this.name, del_authors)
+    await dbClient.removeTagFromPostsForAuthor(this.name, del_authors)
 
     for (let i = 0; i < new_authors.length; i++) {
       if (this.agent !== null) {

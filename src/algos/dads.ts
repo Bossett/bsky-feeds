@@ -40,7 +40,12 @@ export class manager extends AlgoManager {
 
   public agent: BskyAgent | null = null
 
-  public async periodicTask() {}
+  public async periodicTask() {
+    await this.db.removeTagFromOldPosts(
+      this.name,
+      new Date().getTime() - 7 * 24 * 60 * 1000,
+    )
+  }
 
   public async start() {
     if (this.agent === null) {

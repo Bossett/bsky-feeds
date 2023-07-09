@@ -127,13 +127,27 @@ class dbSingleton {
     else return results
   }
 
-  async removeTagFromPosts(tag: string, authors: string[]) {
+  async removeTagFromPostsForAuthor(tag: string, authors: string[]) {
     const pullQuery: Record<string, any> = { algoTags: { $in: [tag] } }
     await this.client
       ?.db()
       .collection('post')
       .updateMany({ author: { $in: authors } }, { $pull: pullQuery })
 
+    await this.deleteUntaggedPosts()
+  }
+
+  async removeTagFromOldPosts(tag: string, indexedAt: number) {
+    const pullQuery: Record<string, any> = { algoTags: { $in: [tag] } }
+    await this.client
+      ?.db()
+      .collection('post')
+      .updateMany({ indexedAt: { $lt: indexedAt } }, { $pull: pullQuery })
+
+    await this.deleteUntaggedPosts()
+  }
+
+  async deleteUntaggedPosts() {
     await this.client
       ?.db()
       .collection('post')
