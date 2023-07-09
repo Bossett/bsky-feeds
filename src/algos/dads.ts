@@ -69,6 +69,11 @@ export class manager extends AlgoManager {
       `${details.description}`.match(re) !== null ||
       `${details.displayName}`.match(re) !== null
     ) {
+      console.log(
+        `${this.name}: ${post.uri.split('/').at(-1)} matched for ${
+          post.author
+        }`,
+      )
       return_value = true
     } else {
       return_value = false
