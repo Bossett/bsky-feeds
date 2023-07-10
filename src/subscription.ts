@@ -72,7 +72,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         if (includeAlgo) algoTags.push(`${this.algoManagers[i].name}`)
       }
 
-      if (!include) return
+      if (!include) continue
 
       const hash = crypto
         .createHash('shake256', { outputLength: 12 })

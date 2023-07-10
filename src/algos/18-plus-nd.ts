@@ -69,7 +69,7 @@ export class manager extends AlgoManager {
     const details = await getUserDetails(post.author, this.agent)
 
     const re =
-      /(?=.*(🔞|18\+|nsfw|mdni))(?=.*\b(autistic|autism|nd|neurodivergent|audhd|autigender|bpd)\b)/i
+      /(?=.*(🔞|18\+|nsfw|mdni))(?=.*\b(autistic|autism|nd|neurodivergent|audhd|autigender|bpd)\b)/im
 
     if (
       `${details.description}`.toLowerCase().match(re) !== null ||
