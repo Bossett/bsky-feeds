@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 import { Post } from '../db/schema'
 import dbClient from '../db/dbClient'
 import getUserDetails from '../addn/getUserDetails'
+import moize from 'moize'
 
 dotenv.config()
 
@@ -73,7 +74,11 @@ export class manager extends AlgoManager {
     ) {
       match = true
     } else {
-      const details = await getUserDetails(post.author, this.agent)
+      const memoUserDetails = moize(getUserDetails, {
+        isPromise: true,
+        maxAge: 1000 * 60 * 10,
+      })
+      const details = await memoUserDetails(post.author, this.agent)
 
       const re = RegExp(
         /(?=.*(🔞|18\+|nsfw|mdni))(?=.*\b(autistic|autism|nd|neurodivergent|audhd|autigender|bpd)\b)/,
