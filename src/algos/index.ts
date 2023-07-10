@@ -6,6 +6,7 @@ import {
 import * as forScience from './for-science'
 import * as ausPol from './auspol'
 import * as dads from './dads'
+import * as EighteenPlusND from './18-plus-nd'
 
 type AlgoHandler = (ctx: AppContext, params: QueryParams) => Promise<AlgoOutput>
 
@@ -21,6 +22,10 @@ const algos = {
   [dads.shortname]: {
     handler: <AlgoHandler>dads.handler,
     manager: dads.manager,
+  },
+  [EighteenPlusND.shortname]: {
+    handler: <AlgoHandler>EighteenPlusND.handler,
+    manager: EighteenPlusND.manager,
   },
 }
 
