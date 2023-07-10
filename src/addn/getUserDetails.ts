@@ -1,7 +1,8 @@
 import { BskyAgent } from '@atproto/api'
 import resolveHandleToDID from './resolveHandleToDID'
+import moize from 'moize'
 
-export const getUserDetails = async (user: string, agent: BskyAgent) => {
+export const _getUserDetails = async (user: string, agent: BskyAgent) => {
   let user_did = ''
 
   if (user.slice(0, 4) === 'did:') {
@@ -18,5 +19,10 @@ export const getUserDetails = async (user: string, agent: BskyAgent) => {
 
   return user_details
 }
+
+export const getUserDetails = moize(_getUserDetails, {
+  isPromise: true,
+  maxAge: 1000 * 60 * 10,
+})
 
 export default getUserDetails
