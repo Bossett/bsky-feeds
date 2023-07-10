@@ -13,6 +13,7 @@
     "publishScience": "ts-node scripts/publishFeedGen.ts",
     "publishAuspol": "ts-node scripts/publishAuspol.ts",
     "publishDads": "ts-node scripts/publishDads.ts",
+    "publish18plusND": "ts-node scripts/publish18plusND.ts",
     "start": "ts-node src/index.ts",
     "build": "tsc"
   },
