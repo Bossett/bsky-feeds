@@ -68,11 +68,11 @@ export class manager extends AlgoManager {
 
     const details = await getUserDetails(post.author, this.agent)
 
-    const re = /(?=.*(father))|(?=.*(dad(dy)?\b))/
+    const re = RegExp(/(?=.*(father))|(?=.*(dad(dy)?\b))/, 'i')
 
     if (
-      `${details.description}`.toLowerCase().match(re) !== null ||
-      `${details.displayName}`.toLowerCase().match(re) !== null
+      `${details.description}`.match(re) !== null ||
+      `${details.displayName}`.match(re) !== null
     ) {
       console.log(
         `${this.name}: ${post.uri.split('/').at(-1)} matched for ${

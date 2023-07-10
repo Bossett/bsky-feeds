@@ -68,12 +68,14 @@ export class manager extends AlgoManager {
 
     const details = await getUserDetails(post.author, this.agent)
 
-    const re =
-      /(?=.*(🔞|18\+|nsfw|mdni))(?=.*\b(autistic|autism|nd|neurodivergent|audhd|autigender|bpd)\b)/im
+    const re = RegExp(
+      /(?=.*(🔞|18\+|nsfw|mdni))(?=.*\b(autistic|autism|nd|neurodivergent|audhd|autigender|bpd)\b)/,
+      'im',
+    )
 
     if (
-      `${details.description}`.toLowerCase().match(re) !== null ||
-      `${details.displayName}`.toLowerCase().match(re) !== null
+      `${details.description}`.match(re) !== null ||
+      `${details.displayName}`.match(re) !== null
     ) {
       console.log(
         `${this.name}: ${post.uri.split('/').at(-1)} matched for ${
