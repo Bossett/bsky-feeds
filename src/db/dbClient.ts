@@ -122,7 +122,10 @@ class dbSingleton {
     const results = await this.client
       ?.db()
       .collection('post')
-      .distinct('author', { indexedAt: { $gt: new Date().getTime() - lastMs } })
+      .distinct('author', {
+        indexedAt: { $gt: new Date().getTime() - lastMs },
+        algoTags: tag,
+      })
 
     if (results === undefined) return []
     else return results
