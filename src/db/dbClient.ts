@@ -118,6 +118,16 @@ class dbSingleton {
     else return results
   }
 
+  async getRecentAuthorsForTag(tag: string, lastMs: number = 600000) {
+    const results = await this.client
+      ?.db()
+      .collection('post')
+      .distinct('author', { indexedAt: { $gt: new Date().getTime() - lastMs } })
+
+    if (results === undefined) return []
+    else return results
+  }
+
   async getDistinctFromCollection(collection: string, field: string) {
     const results = await this.client
       ?.db()

@@ -66,17 +66,29 @@ export class manager extends AlgoManager {
 
     let return_value: Boolean | undefined = undefined
 
-    const details = await getUserDetails(post.author, this.agent)
-
-    const re = RegExp(
-      /(?=.*(🔞|18\+|nsfw|mdni))(?=.*\b(autistic|autism|nd|neurodivergent|audhd|autigender|bpd)\b)/,
-      'im',
-    )
+    let match = false
 
     if (
-      `${details.description}`.match(re) !== null ||
-      `${details.displayName}`.match(re) !== null
+      (await this.db.getRecentAuthorsForTag(this.name)).includes(post.author)
     ) {
+      match = true
+    } else {
+      const details = await getUserDetails(post.author, this.agent)
+
+      const re = RegExp(
+        /(?=.*(🔞|18\+|nsfw|mdni))(?=.*\b(autistic|autism|nd|neurodivergent|audhd|autigender|bpd)\b)/,
+        'im',
+      )
+
+      if (
+        `${details.description}`.match(re) !== null ||
+        `${details.displayName}`.match(re) !== null
+      ) {
+        match = true
+      }
+    }
+
+    if (match) {
       console.log(
         `${this.name}: ${post.uri.split('/').at(-1)} matched for ${
           post.author
