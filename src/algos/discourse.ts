@@ -16,13 +16,9 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
     params.cursor,
   )
 
-  const feed = builder
-    .sort((a, b) => {
-      return b.count - a.count
-    })
-    .map((row) => ({
-      post: row._id,
-    }))
+  const feed = builder.map((row) => ({
+    post: row._id,
+  }))
 
   let cursor: string | undefined
   let last = builder.length

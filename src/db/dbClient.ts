@@ -75,13 +75,16 @@ class dbSingleton {
         { $match: { algoTags: [tag], replyRoot: { $ne: null } } },
         { $group: { _id: '$replyRoot', count: { $sum: 1 } } },
         { $match: { count: { $gt: threshold } } },
-        { $sort: { count: -1, _id: -1 } },
+        { $sort: { count: -1 } },
       ])
       .toArray()
 
-    if (posts?.length !== undefined && posts.length > 0)
-      return posts.slice(start, limit + start)
-    else return []
+    if (posts?.length !== undefined && posts.length > 0) {
+      const returned_posts = posts.sort((a, b) => {
+        return b.count - a.count
+      })
+      return returned_posts.slice(start, limit + start)
+    } else return []
   }
 
   async updateSubStateCursor(service: string, cursor: number) {
