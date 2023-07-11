@@ -40,7 +40,7 @@ export abstract class FirehoseSubscriptionBase {
     try {
       for await (const evt of this.sub) {
         try {
-          await this.handleEvent(evt)
+          this.handleEvent(evt) // no longer awaiting this
         } catch (err) {
           console.error('repo subscription could not handle message', err)
         }
