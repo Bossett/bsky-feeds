@@ -55,6 +55,35 @@ class dbSingleton {
       .replaceOne({ did: did }, data, { upsert: true })
   }
 
+  async aggregatePostsByReplies(
+    collection: string,
+    tag: string,
+    threshold: number,
+    limit = 50,
+    cursor: string | undefined = undefined,
+  ) {
+    let start = 0
+
+    if (cursor !== undefined) {
+      start = Number.parseInt(cursor)
+    }
+
+    const posts = await this.client
+      ?.db()
+      .collection(collection)
+      .aggregate([
+        { $match: { algoTags: [tag], replyRoot: { $ne: null } } },
+        { $group: { _id: '$replyRoot', count: { $sum: 1 } } },
+        { $match: { count: { $gt: threshold } } },
+        { $sort: { count: -1, _id: -1 } },
+      ])
+      .toArray()
+
+    if (posts?.length !== undefined && posts.length > 0)
+      return posts.slice(start, limit + start)
+    else return []
+  }
+
   async updateSubStateCursor(service: string, cursor: number) {
     await this.client
       ?.db()
