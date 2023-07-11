@@ -81,7 +81,7 @@ class dbSingleton {
 
     if (posts?.length !== undefined && posts.length > 0) {
       const returned_posts = posts.sort((a, b) => {
-        return b.count - a.count
+        return Number.parseFloat(b.count) - Number.parseFloat(a.count)
       })
       return returned_posts.slice(start, limit + start)
     } else return []
