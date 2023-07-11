@@ -96,11 +96,6 @@ export class manager extends AlgoManager {
 
   public async filter_post(post: Post): Promise<Boolean> {
     if (post.text.toLowerCase().includes(`${process.env.AUSPOL_MATCH}`)) {
-      console.log(
-        `${this.name}: ${post.uri.split('/').at(-1)} matched for ${
-          post.author
-        }`,
-      )
       return true
     }
     return false

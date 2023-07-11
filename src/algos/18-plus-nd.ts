@@ -73,11 +73,6 @@ export class manager extends AlgoManager {
     }
 
     if (match) {
-      console.log(
-        `${this.name}: ${post.uri.split('/').at(-1)} matched for ${
-          post.author
-        }`,
-      )
       return_value = true
     } else {
       return_value = false

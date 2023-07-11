@@ -124,11 +124,6 @@ export class manager extends AlgoManager {
   public async filter_post(post: Post): Promise<Boolean> {
     if (post.text.toLowerCase().includes(`${process.env.SCIENCE_SYMBOL}`)) {
       if (this.authorList.includes(post.author)) {
-        console.log(
-          `${this.name}: ${post.uri.split('/').at(-1)} matched for ${
-            post.author
-          }`,
-        )
         return true
       }
     }
