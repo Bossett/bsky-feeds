@@ -65,8 +65,7 @@ export class manager extends AlgoManager {
       const details = await getUserDetails(post.author, this.agent)
 
       if (
-        `${details.description}`.match(this.re) !== null ||
-        `${details.displayName}`.match(this.re) !== null
+        `${details.displayName} ${details.description}`.match(this.re) !== null
       ) {
         match = true
       }
