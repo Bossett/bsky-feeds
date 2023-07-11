@@ -76,15 +76,13 @@ class dbSingleton {
         { $group: { _id: '$replyRoot', count: { $sum: 1 } } },
         { $match: { count: { $gt: threshold } } },
         { $sort: { count: -1 } },
+        { $skip: start },
+        { $limit: limit },
       ])
       .toArray()
 
-    if (posts?.length !== undefined && posts.length > 0) {
-      const returned_posts = posts.sort((a, b) => {
-        return Number.parseFloat(b.count) - Number.parseFloat(a.count)
-      })
-      return returned_posts.slice(start, limit + start)
-    } else return []
+    if (posts?.length !== undefined && posts.length > 0) return posts
+    else return []
   }
 
   async updateSubStateCursor(service: string, cursor: number) {
