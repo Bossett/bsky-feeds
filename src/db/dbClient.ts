@@ -72,7 +72,7 @@ class dbSingleton {
       ?.db()
       .collection(collection)
       .aggregate([
-        { $match: { algoTags: [tag], replyRoot: { $ne: null } } },
+        { $match: { algoTags: tag, replyRoot: { $ne: null } } },
         { $group: { _id: '$replyRoot', count: { $sum: 1 } } },
         { $match: { count: { $gt: threshold } } },
         { $sort: { count: -1 } },
