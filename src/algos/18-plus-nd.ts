@@ -37,6 +37,8 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 
 export class manager extends AlgoManager {
   public name: string = shortname
+  public re =
+    /(?=.*(🔞|18\+|nsfw|mdni))(?=.*\b(autistic|autism|nd|neurodivergent|adhd|audhd|autigender|bpd)\b)/im
 
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
@@ -62,14 +64,9 @@ export class manager extends AlgoManager {
     } else {
       const details = await getUserDetails(post.author, this.agent)
 
-      const re = RegExp(
-        /(?=.*(🔞|18\+|nsfw|mdni))(?=.*\b(autistic|autism|nd|neurodivergent|adhd|audhd|autigender|bpd)\b)/,
-        'im',
-      )
-
       if (
-        `${details.description}`.match(re) !== null ||
-        `${details.displayName}`.match(re) !== null
+        `${details.description}`.match(this.re) !== null ||
+        `${details.displayName}`.match(this.re) !== null
       ) {
         match = true
       }

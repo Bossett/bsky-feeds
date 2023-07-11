@@ -22,7 +22,7 @@ export const _getUserDetails = async (user: string, agent: BskyAgent) => {
 
 export const getUserDetails = moize(_getUserDetails, {
   isPromise: true,
-  maxAge: 1000 * 60 * 10,
+  maxAge: 1000 * 60 * 60, // an hour
 })
 
 export default getUserDetails
