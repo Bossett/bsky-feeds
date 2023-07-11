@@ -40,8 +40,6 @@ export class manager extends AlgoManager {
   public authorList: string[]
   public author_collection = 'list_members'
 
-  public agent: BskyAgent | null = null
-
   public async start() {
     this.authorList = await dbClient.getDistinctFromCollection(
       this.author_collection,
@@ -52,25 +50,14 @@ export class manager extends AlgoManager {
   public async periodicTask() {
     dotenv.config()
 
-    if (this.agent === null) {
-      this.agent = new BskyAgent({ service: 'https://bsky.social' })
-
-      const handle = `${process.env.FEEDGEN_HANDLE}`
-      const password = `${process.env.FEEDGEN_PASSWORD}`
-
-      await this.agent.login({ identifier: handle, password: password })
-    }
-
     const lists: string[] = `${process.env.SCIENCE_LISTS}`.split('|')
     const list_members: string[] = []
 
     for (let i = 0; i < lists.length; i++) {
-      if (this.agent !== null) {
-        const members = await getListMembers(lists[i], this.agent)
-        members.forEach((member) => {
-          if (!list_members.includes(member)) list_members.push(member)
-        })
-      }
+      const members = await getListMembers(lists[i], this.agent)
+      members.forEach((member) => {
+        if (!list_members.includes(member)) list_members.push(member)
+      })
     }
 
     const db_authors = await dbClient.getDistinctFromCollection(
@@ -94,32 +81,28 @@ export class manager extends AlgoManager {
     await dbClient.removeTagFromPostsForAuthor(this.name, del_authors)
 
     for (let i = 0; i < new_authors.length; i++) {
-      if (this.agent !== null) {
-        process.stdout.write(
-          `${this.name}: ${i + 1} of ${new_authors.length}: `,
-        )
-        const all_posts = await getPostsForUser(new_authors[i], this.agent)
+      process.stdout.write(`${this.name}: ${i + 1} of ${new_authors.length}: `)
+      const all_posts = await getPostsForUser(new_authors[i], this.agent)
 
-        const posts: Post[] = []
+      const posts: Post[] = []
 
-        for (let i = 0; i < all_posts.length; i++) {
-          if ((await this.filter_post(all_posts[i])) == true) {
-            posts.push(all_posts[i])
-          }
+      for (let i = 0; i < all_posts.length; i++) {
+        if ((await this.filter_post(all_posts[i])) == true) {
+          posts.push(all_posts[i])
         }
-
-        posts.forEach(async (post) => {
-          const existing = await this.db.getPostForURI(post.uri)
-          if (existing === null) {
-            post.algoTags = [this.name]
-            await this.db.replaceOneURI('post', post.uri, post)
-          } else {
-            const tags = [...new Set([...existing.algoTags, this.name])]
-            post.algoTags = tags
-            await this.db.replaceOneURI('post', post.uri, post)
-          }
-        })
       }
+
+      posts.forEach(async (post) => {
+        const existing = await this.db.getPostForURI(post.uri)
+        if (existing === null) {
+          post.algoTags = [this.name]
+          await this.db.replaceOneURI('post', post.uri, post)
+        } else {
+          const tags = [...new Set([...existing.algoTags, this.name])]
+          post.algoTags = tags
+          await this.db.replaceOneURI('post', post.uri, post)
+        }
+      })
 
       await this.db.replaceOneDID(this.author_collection, new_authors[i], {
         did: new_authors[i],

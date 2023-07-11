@@ -11,6 +11,7 @@ import { Database } from './db'
 
 import crypto from 'crypto'
 import { Post } from './db/schema'
+import { BskyAgent } from '@atproto/api'
 
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
   public algoManagers: any[]
@@ -20,12 +21,20 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
     this.algoManagers = []
 
-    Object.keys(algos).forEach((algo) => {
-      this.algoManagers.push(new algos[algo].manager(db))
-    })
+    const agent = new BskyAgent({ service: 'https://bsky.social' })
 
-    this.algoManagers.forEach(async (algo) => {
-      await algo._start()
+    dotenv.config()
+    const handle = `${process.env.FEEDGEN_HANDLE}`
+    const password = `${process.env.FEEDGEN_PASSWORD}`
+
+    agent.login({ identifier: handle, password: password }).then(() => {
+      Object.keys(algos).forEach((algo) => {
+        this.algoManagers.push(new algos[algo].manager(db, agent))
+      })
+
+      this.algoManagers.forEach(async (algo) => {
+        await algo._start()
+      })
     })
   }
 

@@ -38,8 +38,6 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 export class manager extends AlgoManager {
   public name: string = shortname
 
-  public agent: BskyAgent | null = null
-
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
       this.name,
@@ -47,23 +45,7 @@ export class manager extends AlgoManager {
     )
   }
 
-  public async start() {
-    if (this.agent === null) {
-      this.agent = new BskyAgent({ service: 'https://bsky.social' })
-
-      const handle = `${process.env.FEEDGEN_HANDLE}`
-      const password = `${process.env.FEEDGEN_PASSWORD}`
-
-      await this.agent.login({ identifier: handle, password: password })
-    }
-  }
-
   public async filter_post(post: Post): Promise<Boolean> {
-    if (this.agent === null) {
-      await this.start()
-    }
-    if (this.agent === null) return false
-
     let return_value: Boolean | undefined = undefined
 
     let match = false

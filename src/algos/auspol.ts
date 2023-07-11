@@ -42,19 +42,8 @@ export class manager extends AlgoManager {
   public name: string = shortname
   public author_collection = 'auspol_members'
 
-  public agent: BskyAgent | null = null
-
   public async periodicTask() {
     dotenv.config()
-
-    if (this.agent === null) {
-      this.agent = new BskyAgent({ service: 'https://bsky.social' })
-
-      const handle = `${process.env.FEEDGEN_HANDLE}`
-      const password = `${process.env.FEEDGEN_PASSWORD}`
-
-      await this.agent.login({ identifier: handle, password: password })
-    }
 
     const recentPosters = await this.db.getTaggedPostsBetween(
       this.name,
