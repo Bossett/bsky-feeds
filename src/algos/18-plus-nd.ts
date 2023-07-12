@@ -57,18 +57,12 @@ export class manager extends AlgoManager {
 
     let match = false
 
+    const details = await getUserDetails(post.author, this.agent)
+
     if (
-      (await this.db.getRecentAuthorsForTag(this.name)).includes(post.author)
+      `${details.displayName} ${details.description}`.match(this.re) !== null
     ) {
       match = true
-    } else {
-      const details = await getUserDetails(post.author, this.agent)
-
-      if (
-        `${details.displayName} ${details.description}`.match(this.re) !== null
-      ) {
-        match = true
-      }
     }
 
     if (match) {

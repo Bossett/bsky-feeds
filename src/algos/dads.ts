@@ -50,21 +50,15 @@ export class manager extends AlgoManager {
 
     let match = false
 
+    const details = await getUserDetails(post.author, this.agent)
+
+    const re = RegExp(/(?=.*(father))|(?=.*(dad(dy)?\b))/, 'i')
+
     if (
-      (await this.db.getRecentAuthorsForTag(this.name)).includes(post.author)
+      `${details.description}`.match(re) !== null ||
+      `${details.displayName}`.match(re) !== null
     ) {
       match = true
-    } else {
-      const details = await getUserDetails(post.author, this.agent)
-
-      const re = RegExp(/(?=.*(father))|(?=.*(dad(dy)?\b))/, 'i')
-
-      if (
-        `${details.description}`.match(re) !== null ||
-        `${details.displayName}`.match(re) !== null
-      ) {
-        match = true
-      }
     }
 
     if (match) {
