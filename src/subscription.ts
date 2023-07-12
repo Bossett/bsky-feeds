@@ -76,9 +76,14 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       let include = false
 
       for (let i = 0; i < this.algoManagers.length; i++) {
-        const includeAlgo = await this.algoManagers[i].filter_post(post)
+        let includeAlgo = false
+        try {
+          includeAlgo = await this.algoManagers[i].filter_post(post)
+          if (includeAlgo) algoTags.push(`${this.algoManagers[i].name}`)
+        } catch (err) {
+          console.error(`filter ${this.algoManagers[i]} failed`, err)
+        }
         include = include || includeAlgo
-        if (includeAlgo) algoTags.push(`${this.algoManagers[i].name}`)
       }
 
       if (!include) continue
