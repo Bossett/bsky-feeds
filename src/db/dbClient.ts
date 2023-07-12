@@ -37,10 +37,14 @@ class dbSingleton {
       data._id = new ObjectId(data._id)
     }
 
-    await this.client
-      ?.db()
-      .collection(collection)
-      .replaceOne({ uri: uri }, data, { upsert: true })
+    try {
+      await this.client?.db().collection(collection).insertOne(data)
+    } catch (err) {
+      await this.client
+        ?.db()
+        .collection(collection)
+        .replaceOne({ uri: uri }, data)
+    }
   }
 
   async replaceOneDID(collection: string, did: string, data: any) {
@@ -49,10 +53,14 @@ class dbSingleton {
       data._id = new ObjectId(data._id)
     }
 
-    await this.client
-      ?.db()
-      .collection(collection)
-      .replaceOne({ did: did }, data, { upsert: true })
+    try {
+      await this.client?.db().collection(collection).insertOne(data)
+    } catch (err) {
+      await this.client
+        ?.db()
+        .collection(collection)
+        .replaceOne({ did: did }, data)
+    }
   }
 
   async aggregatePostsByReplies(
