@@ -80,7 +80,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         try {
           includeAlgo = await this.algoManagers[i].filter_post(post)
         } catch (err) {
-          console.error(`filter ${this.algoManagers[i]} failed`, err)
+          console.error(`filter ${this.algoManagers[i].name} failed`, err)
           includeAlgo = false
         }
         if (includeAlgo) algoTags.push(`${this.algoManagers[i].name}`)
