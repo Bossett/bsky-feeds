@@ -33,7 +33,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       })
 
       this.algoManagers.forEach(async (algo) => {
-        await algo._start()
+        if (await algo._start()) console.log(`${algo.name}: Started`)
       })
     })
   }
@@ -80,7 +80,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         try {
           includeAlgo = await this.algoManagers[i].filter_post(post)
         } catch (err) {
-          console.error(`filter ${this.algoManagers[i].name} failed`, err)
+          console.error(`${this.algoManagers[i].name}: filter failed`, err)
           includeAlgo = false
         }
         if (includeAlgo) algoTags.push(`${this.algoManagers[i].name}`)
