@@ -26,7 +26,7 @@ const run = async () => {
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
   const description =
-    'Posts with 20 or more replies in the last 7 days, ordered by number of replies. (Credit to @xed.bsky.social for the idea.)'
+    'Posts with 20 or more replies (by people not the OP) in the last 3 days, ordered by number of replies. (Credit to @xed.bsky.social for the idea.)'
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg

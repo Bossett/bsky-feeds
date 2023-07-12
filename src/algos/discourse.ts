@@ -39,13 +39,14 @@ export class manager extends AlgoManager {
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
       this.name,
-      new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
+      new Date().getTime() - 3 * 24 * 60 * 60 * 1000,
     )
   }
 
   public async filter_post(post: Post): Promise<Boolean> {
     if (post.replyRoot !== null) {
-      return true
+      if (post.replyRoot.split('/')[2] != post.author) return true
+      else return false
     } else {
       return false
     }
