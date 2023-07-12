@@ -42,11 +42,11 @@ The one that may get me in trouble. Suggested by [@xed.bsky.social](https://bsky
 
 I run this with Digital Ocean App Platform, with their MongoDB as an attached service.
 
-### Database
+## Database
 
 You probably don't need Mongo if you're just doing something simple - and I've put all the DB work in [src/db/dbClient.ts](src/db/dbClient.ts) to make that easy to change.
 
-### Docker
+## Docker
 
 I am deploying with Docker rather than the default Node containers. This was more important early on for control over the exact Node version, as certain dependencies were linked tightly to Node 18.
 
