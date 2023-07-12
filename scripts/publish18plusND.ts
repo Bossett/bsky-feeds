@@ -26,7 +26,7 @@ const run = async () => {
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
   const description =
-    'A feed of people with 18+ and neurodivergent terms in bio'
+    'A feed of people with 18+ and neurodivergent terms in bio. (Credit to @frecksandframes.bsky.social for the idea)'
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg
