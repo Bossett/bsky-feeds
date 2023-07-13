@@ -57,14 +57,13 @@ export class manager extends AlgoManager {
     for (let i = 0; i < discourse_posts.length; i++) {
       let cursor: string | undefined = ''
 
-      let likes = 0
+      let likes: number = Number.isInteger(discourse_posts[i].likes)
+        ? discourse_posts[i].likes
+        : 0
 
       // only check when previous likes are less than current count
-      // or when likes is not an int
-      if (
-        !Number.isInteger(discourse_posts[i].likes) ||
-        discourse_posts[i].likes < discourse_posts[i].count
-      ) {
+      if (likes < discourse_posts[i].count) {
+        likes = 0 // reset to count
         updated++
 
         while (cursor !== undefined) {
