@@ -1,4 +1,4 @@
-import { MongoClient, ObjectId } from 'mongodb'
+import { Document, Filter, MongoClient, ObjectId, WithoutId } from 'mongodb'
 import dotenv from 'dotenv'
 import { InvalidRequestError } from '@atproto/xrpc-server'
 
@@ -63,10 +63,8 @@ class dbSingleton {
     }
   }
 
-  async aggregatePostsByReplies(
+  async getPostBySortWeight(
     collection: string,
-    tag: string,
-    threshold: number,
     limit = 50,
     cursor: string | undefined = undefined,
   ) {
@@ -79,18 +77,68 @@ class dbSingleton {
     const posts = await this.client
       ?.db()
       .collection(collection)
-      .aggregate([
-        { $match: { algoTags: tag, replyRoot: { $ne: null } } },
-        { $group: { _id: '$replyRoot', count: { $sum: 1 } } },
-        { $match: { count: { $gt: threshold } } },
-        { $sort: { count: -1 } },
-        { $skip: start },
-        { $limit: limit },
-      ])
+      .find({})
+      .sort({ sort_weight: -1 })
+      .skip(start)
+      .limit(limit)
       .toArray()
 
     if (posts?.length !== undefined && posts.length > 0) return posts
     else return []
+  }
+
+  async aggregatePostsByRepliesToCollection(
+    collection: string,
+    tag: string,
+    threshold: number,
+    out: string,
+  ) {
+    const indexedAt = new Date().getTime()
+
+    await this.client
+      ?.db()
+      .collection(collection)
+      .aggregate([
+        { $match: { algoTags: tag, replyRoot: { $ne: null } } },
+        {
+          $group: {
+            _id: '$replyRoot',
+            count: { $sum: 1 },
+          },
+        },
+        { $match: { count: { $gt: threshold } } },
+        { $sort: { count: -1 } },
+        { $addFields: { indexedAt: indexedAt } },
+        { $merge: { into: out, on: '_id' } },
+      ])
+      .toArray()
+
+    await this.client
+      ?.db()
+      .collection(out)
+      .deleteMany({ indexedAt: { $ne: indexedAt } })
+  }
+
+  async getCollection(collection: string) {
+    const ret = await this.client
+      ?.db()
+      .collection(collection)
+      .find({})
+      .toArray()
+    if (ret) return ret
+    else return []
+  }
+
+  async insertOrReplaceRecord(
+    query: Filter<Document>,
+    data: WithoutId<Document>,
+    collection: string,
+  ) {
+    try {
+      await this.client?.db().collection(collection).insertOne(data)
+    } catch (err) {
+      await this.client?.db().collection(collection).replaceOne(query, data)
+    }
   }
 
   async updateSubStateCursor(service: string, cursor: number) {

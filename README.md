@@ -32,7 +32,9 @@ A feed idea from [@frecksandframes.bsky.social](https://bsky.app/profile/did:plc
 
 ## Discourse
 
-The one that may get me in trouble. Suggested by [@xed.bsky.social](https://bsky.app/profile/did:plc:wi4iwszo4q5536vhkaso5cvv), this ranks posts from the last few days by number of replies (and replies-of-replies). Strongly considering how this will evolve over time, but adjustments to:
+The one that may get me in trouble. Suggested by [@xed.bsky.social](https://bsky.app/profile/did:plc:wi4iwszo4q5536vhkaso5cvv), this ranks posts from the last few days by number of replies (and replies-of-replies). Does not count self-replies, and does not count posts past the # of likes.
+
+Strongly considering how this will evolve over time, but adjustments to:
 
 1. Let people opt-out (by following a specific account)
 2. Use the likes:replies ratio to 'discount' replies by a % to keep dogpiles out

@@ -8,16 +8,14 @@ import dbClient from '../db/dbClient'
 export const shortname = 'discourse'
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
-  const builder = await dbClient.aggregatePostsByReplies(
-    'post',
-    shortname,
-    19,
+  const builder = await dbClient.getPostBySortWeight(
+    'discourse_posts',
     params.limit,
     params.cursor,
   )
 
   const feed = builder.map((row) => ({
-    post: row._id,
+    post: row._id.toString(),
   }))
 
   let cursor: string | undefined
@@ -36,10 +34,65 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 export class manager extends AlgoManager {
   public name: string = shortname
 
+  public threshold = 19
+
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
       this.name,
       new Date().getTime() - 3 * 24 * 60 * 60 * 1000,
+    )
+    await dbClient.aggregatePostsByRepliesToCollection(
+      'post',
+      shortname,
+      this.threshold,
+      'discourse_posts',
+    )
+
+    const discourse_posts = await dbClient.getCollection('discourse_posts')
+
+    let updated = 0
+
+    console.log(`${this.name}: ${discourse_posts.length} post updating...`)
+
+    for (let i = 0; i < discourse_posts.length; i++) {
+      let cursor: string | undefined = ''
+
+      let likes: number = Number.isInteger(discourse_posts[i].likes)
+        ? discourse_posts[i].likes
+        : 0
+
+      // only check when previous likes are less than current count
+      if (likes < discourse_posts[i].count) {
+        updated++
+
+        while (cursor !== undefined) {
+          const likes_query = await this.agent.app.bsky.feed.getLikes({
+            uri: discourse_posts[i]._id.toString(),
+            cursor: cursor,
+          })
+          cursor = likes_query.data.cursor
+          likes += likes_query.data.likes.length
+        }
+      }
+
+      const record = {
+        _id: discourse_posts[i]._id,
+        count: discourse_posts[i].count,
+        indexedAt: discourse_posts[i].indexedAt,
+        likes: likes,
+        sort_weight:
+          likes > discourse_posts[i].count ? discourse_posts[i].count : likes,
+      }
+
+      await dbClient.insertOrReplaceRecord(
+        { _id: record._id },
+        record,
+        'discourse_posts',
+      )
+    }
+
+    console.log(
+      `${this.name}: ${discourse_posts.length} updated (${updated} from server)`,
     )
   }
 
