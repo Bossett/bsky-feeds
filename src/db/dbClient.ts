@@ -92,6 +92,7 @@ class dbSingleton {
     tag: string,
     threshold: number,
     out: string,
+    limit: number = 10000,
   ) {
     const indexedAt = new Date().getTime()
 
@@ -108,6 +109,7 @@ class dbSingleton {
         },
         { $match: { count: { $gt: threshold } } },
         { $sort: { count: -1 } },
+        { $limit: limit },
         { $addFields: { indexedAt: indexedAt } },
         { $merge: { into: out, on: '_id' } },
       ])
