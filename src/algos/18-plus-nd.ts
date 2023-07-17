@@ -38,7 +38,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 export class manager extends AlgoManager {
   public name: string = shortname
   public re =
-    /(?=.*(🔞|18\+|nsfw|mdni|minors dni))(?=.*\b(autistic|autism|nd|neurodivergent|adhd|audhd|autigender|bpd)\b)/ims
+    /(?=.*(🔞|18\+|nsfw|mdni|minors dni))(?=.*\b(autistic|autism|nd|neurodivergent|adhd|audhd|autigender|bpd|neurodistinct)\b)/ims
 
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
