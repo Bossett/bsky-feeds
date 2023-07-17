@@ -61,10 +61,10 @@
   dependencies:
     "@atproto/common-web" "*"
 
-"@atproto/lexicon@*", "@atproto/lexicon@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/@atproto/lexicon/-/lexicon-0.1.0.tgz"
-  integrity sha512-Iy+gV9w42xLhrZrmcbZh7VFoHjXuzWvecGHIfz44owNjjv7aE/d2P5BbOX/XicSkmQ8Qkpg0BqwYDD1XBVS+DQ==
+"@atproto/lexicon@*", "@atproto/lexicon@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@atproto/lexicon/-/lexicon-0.2.0.tgz#e18590f248fa2795a67d7440adba73ab5a48dd1e"
+  integrity sha512-0OpLZ4o4pbRj2e19h2fO69781wPmL0S8WJaXey3y9FLjV19lj18IEbnlE/OQG8qZNDyGmgezs00L/o7qNCJorw==
   dependencies:
     "@atproto/common-web" "*"
     "@atproto/identifier" "*"
@@ -72,7 +72,7 @@
     "@atproto/uri" "*"
     iso-datestring-validator "^2.2.2"
     multiformats "^9.6.4"
-    zod "^3.14.2"
+    zod "^3.21.4"
 
 "@atproto/nsid@*":
   version "0.0.1"
@@ -95,15 +95,7 @@
     uint8arrays "3.0.0"
     zod "^3.14.2"
 
-"@atproto/uri@*":
-  version "0.0.2"
-  resolved "https://registry.npmjs.org/@atproto/uri/-/uri-0.0.2.tgz"
-  integrity sha512-/6otLZF7BLpT9suSdHuXLbL12nINcWPsLmcOI+dctqovWUjH+XIRVNXDQgBYSrPVetxMiknuEwWelmnA33AEXg==
-  dependencies:
-    "@atproto/identifier" "*"
-    "@atproto/nsid" "*"
-
-"@atproto/uri@^0.1.0":
+"@atproto/uri@*", "@atproto/uri@^0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@atproto/uri/-/uri-0.1.0.tgz#1cb4695d2f1766ec8d542af6a495a416f6f6c214"
   integrity sha512-ZaiOYHsakB98HrXfqiF6m7xgahSn9yXxKnPm0EaN0Breax6jtTl+lblWtduonAmyWVLJJAQJbvF+ud0i/3+wBw==
@@ -1187,7 +1179,7 @@ yn@3.1.1:
   resolved "https://registry.npmjs.org/yn/-/yn-3.1.1.tgz"
   integrity sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==
 
-zod@^3.14.2:
+zod@^3.14.2, zod@^3.21.4:
   version "3.21.4"
   resolved "https://registry.npmjs.org/zod/-/zod-3.21.4.tgz"
   integrity sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==
