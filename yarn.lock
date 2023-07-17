@@ -111,10 +111,10 @@
     "@atproto/identifier" "*"
     "@atproto/nsid" "*"
 
-"@atproto/xrpc-server@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@atproto/xrpc-server/-/xrpc-server-0.2.0.tgz#a36616c2ac70339cd79cda83ede0a0b305c74f9b"
-  integrity sha512-sCJuVUIb1tDIlKCFwHPRHbAgEy0HYGlQ7XhpNqMRKXECh8Z+DRICEne3gLDVaXhyNaC/N7OjHcsyuofDDbuGFQ==
+"@atproto/xrpc-server@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@atproto/xrpc-server/-/xrpc-server-0.3.0.tgz#c0f9ece515f7e03fc51a02bcee5695a77ffc255f"
+  integrity sha512-dAoVmwtl0V5JusP/i5YGt0sjUomEqxLjeN4Q7bRSs9su0s/PUpSucImYI/XsP52zgaGVFYg7ufvq9ZghFteUKw==
   dependencies:
     "@atproto/common" "*"
     "@atproto/crypto" "*"
@@ -125,7 +125,7 @@
     mime-types "^2.1.35"
     uint8arrays "3.0.0"
     ws "^8.12.0"
-    zod "^3.14.2"
+    zod "^3.21.4"
 
 "@atproto/xrpc@*":
   version "0.1.0"
@@ -1187,7 +1187,7 @@ yn@3.1.1:
   resolved "https://registry.npmjs.org/yn/-/yn-3.1.1.tgz"
   integrity sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==
 
-zod@^3.14.2:
+zod@^3.14.2, zod@^3.21.4:
   version "3.21.4"
   resolved "https://registry.npmjs.org/zod/-/zod-3.21.4.tgz"
   integrity sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==
