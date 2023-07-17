@@ -44,7 +44,7 @@
     one-webcrypto "^1.0.3"
     uint8arrays "3.0.0"
 
-"@atproto/did-resolver@*", "@atproto/did-resolver@^0.1.0":
+"@atproto/did-resolver@^0.1.0":
   version "0.1.0"
   resolved "https://registry.npmjs.org/@atproto/did-resolver/-/did-resolver-0.1.0.tgz"
   integrity sha512-ztljyMMCqXvJSi/Qqa2zEQFvOm1AUUR7Bybr3cM1BCddbhW46gk6/g8BgdZeDt2sMBdye37qTctR9O/FjhigvQ==
@@ -60,6 +60,16 @@
   integrity sha512-3LV7+4E6S0k8Rru7NBkyDF6Zf6NHVUXVS9d4l9fiXWMC49ghZMjq0vPmz80xjG1rRuFdJFbpRf4ApFciGxLIyQ==
   dependencies:
     "@atproto/common-web" "*"
+
+"@atproto/identity@*":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@atproto/identity/-/identity-0.1.0.tgz#735f62e66a661da79ce58f13303d259cb8999c4e"
+  integrity sha512-AsR7s5DwvMDkrDvWleYbK9ZD8vaSfpsfkNORgnNPlE603lP/lDZDO6mykeBVA/K4D272XO+DyBM0ruh/uWKOoQ==
+  dependencies:
+    "@atproto/common-web" "*"
+    "@atproto/crypto" "*"
+    axios "^0.27.2"
+    zod "^3.21.4"
 
 "@atproto/lexicon@*", "@atproto/lexicon@^0.1.0":
   version "0.1.0"
@@ -79,21 +89,21 @@
   resolved "https://registry.npmjs.org/@atproto/nsid/-/nsid-0.0.1.tgz"
   integrity sha512-t5M6/CzWBVYoBbIvfKDpqPj/+ZmyoK9ydZSStcTXosJ27XXwOPhz0VDUGKK2SM9G5Y7TPes8S5KTAU0UdVYFCw==
 
-"@atproto/repo@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@atproto/repo/-/repo-0.1.0.tgz#8c546af16c30fe5ba4c883ac73b68be9d7eca273"
-  integrity sha512-O4qs5WfSjEFvUtpOTB4n9cLcK6YP/w/ly6Qxc3S8IFevLGYX58NPPr5zlg3dxs64uLKbWWjzhQM7JAqO44MEKw==
+"@atproto/repo@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@atproto/repo/-/repo-0.2.0.tgz#e2aa5dcffb082dc15d2eb84f7f213d033ce4463a"
+  integrity sha512-F6nPzzw6o4LIfaswJ0T8q2GaiWCQpCGTWgC1tW4S4OBCi+aEIKiW7PuWy0z6/oW5W/UWgWp2yWGFcy1+aaau9A==
   dependencies:
     "@atproto/common" "*"
     "@atproto/crypto" "*"
-    "@atproto/did-resolver" "*"
+    "@atproto/identity" "*"
     "@atproto/lexicon" "*"
     "@atproto/nsid" "*"
     "@ipld/car" "^3.2.3"
     "@ipld/dag-cbor" "^7.0.0"
     multiformats "^9.6.4"
     uint8arrays "3.0.0"
-    zod "^3.14.2"
+    zod "^3.21.4"
 
 "@atproto/uri@*":
   version "0.0.2"
@@ -1187,7 +1197,7 @@ yn@3.1.1:
   resolved "https://registry.npmjs.org/yn/-/yn-3.1.1.tgz"
   integrity sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==
 
-zod@^3.14.2:
+zod@^3.14.2, zod@^3.21.4:
   version "3.21.4"
   resolved "https://registry.npmjs.org/zod/-/zod-3.21.4.tgz"
   integrity sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==
