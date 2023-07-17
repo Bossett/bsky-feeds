@@ -8,6 +8,7 @@ import * as ausPol from './auspol'
 import * as dads from './dads'
 import * as EighteenPlusND from './18-plus-nd'
 import * as discourse from './discourse'
+import * as elusive from './elusive'
 
 type AlgoHandler = (ctx: AppContext, params: QueryParams) => Promise<AlgoOutput>
 
@@ -31,6 +32,10 @@ const algos = {
   [discourse.shortname]: {
     handler: <AlgoHandler>discourse.handler,
     manager: discourse.manager,
+  },
+  [elusive.shortname]: {
+    handler: <AlgoHandler>elusive.handler,
+    manager: elusive.manager,
   },
 }
 

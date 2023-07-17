@@ -15,6 +15,7 @@
     "publishDads": "ts-node scripts/publishDads.ts",
     "publish18plusND": "ts-node scripts/publish18plusND.ts",
     "publishDiscourse": "ts-node scripts/publishDiscourse.ts",
+    "publishElusive": "ts-node scripts/publishElusive.ts",
     "start": "ts-node src/index.ts",
     "build": "tsc"
   },
