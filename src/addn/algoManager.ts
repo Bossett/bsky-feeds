@@ -22,6 +22,10 @@ export class AlgoManager {
     this._isStarting = false
   }
 
+  public static cacheAge(): Number {
+    return 30
+  }
+
   public async _start() {
     if (this._isStarting) return false
     else this._isStarting = true

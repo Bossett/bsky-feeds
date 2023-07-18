@@ -6,7 +6,7 @@ import { validateAuth } from '../auth'
 import { AtUri } from '@atproto/uri'
 
 export default function (server: Server, ctx: AppContext) {
-  server.app.bsky.feed.getFeedSkeleton(async ({ params, req }) => {
+  server.app.bsky.feed.getFeedSkeleton(async ({ params, req, res }) => {
     const feedUri = new AtUri(params.feed)
     const algo = algos[feedUri.rkey].handler
     if (
@@ -19,6 +19,10 @@ export default function (server: Server, ctx: AppContext) {
         'UnsupportedAlgorithm',
       )
     }
+
+    const cacheAge = algos[feedUri.rkey].manager.cacheAge()
+    res.setHeader('Cache-Control', `public, max-age=${cacheAge}`)
+
     /**
      * Example of how to check auth if giving user-specific results:
      *
