@@ -21,7 +21,11 @@ export default function (server: Server, ctx: AppContext) {
     }
 
     const cacheAge = algos[feedUri.rkey].manager.cacheAge()
-    res.setHeader('Cache-Control', `public, max-age=${cacheAge}`)
+    if (cacheAge > 0) {
+      res.setHeader('Cache-Control', `public, max-age=${cacheAge}`)
+    } else {
+      res.setHeader('Cache-Control', `no-cache`)
+    }
 
     /**
      * Example of how to check auth if giving user-specific results:
