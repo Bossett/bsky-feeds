@@ -7,6 +7,7 @@ import * as forScience from './for-science'
 import * as ausPol from './auspol'
 import * as dads from './dads'
 import * as EighteenPlusND from './18-plus-nd'
+import * as ND from './nd'
 import * as discourse from './discourse'
 import * as elusive from './elusive'
 
@@ -28,6 +29,10 @@ const algos = {
   [EighteenPlusND.shortname]: {
     handler: <AlgoHandler>EighteenPlusND.handler,
     manager: EighteenPlusND.manager,
+  },
+  [ND.shortname]: {
+    handler: <AlgoHandler>ND.handler,
+    manager: ND.manager,
   },
   [discourse.shortname]: {
     handler: <AlgoHandler>discourse.handler,
