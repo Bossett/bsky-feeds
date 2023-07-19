@@ -8,7 +8,7 @@ export const resolveDIDToHandle = async (
     return (await agent.app.bsky.actor.getProfile({ actor: author })).data
       .handle
   } catch {
-    return 'unknown'
+    return author
   }
 }
 
