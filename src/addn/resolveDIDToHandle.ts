@@ -4,7 +4,12 @@ export const resolveDIDToHandle = async (
   author: string,
   agent: BskyAgent,
 ): Promise<string> => {
-  return (await agent.app.bsky.actor.getProfile({ actor: author })).data.handle
+  try {
+    return (await agent.app.bsky.actor.getProfile({ actor: author })).data
+      .handle
+  } catch {
+    return 'unknown'
+  }
 }
 
 export default resolveDIDToHandle
