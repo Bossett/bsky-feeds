@@ -67,18 +67,19 @@ export class manager extends AlgoManager {
         : 0
 
       // only check when previous likes are less than current count
+
       if (likes < discourse_posts[i].count) {
-        likes = 0 // reset to count
         updated++
 
-        while (cursor !== undefined) {
-          const likes_query = await this.agent.app.bsky.feed.getLikes({
-            uri: discourse_posts[i]._id.toString(),
-            cursor: cursor,
-          })
-          cursor = likes_query.data.cursor
-          likes += likes_query.data.likes.length
-        }
+        const post = await this.agent.getPostThread({
+          uri: 'at://did:plc:vwzwgnygau7ed7b7wt5ux7y2/app.bsky.feed.post/3k2vgp6zxme2k',
+          depth: 1,
+        })
+
+        const likeCount = Number.parseInt(
+          (<any>post.data.thread.post)?.likeCount,
+        )
+        likes = likeCount
       }
 
       const record = {
