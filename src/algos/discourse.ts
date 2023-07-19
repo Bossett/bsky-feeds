@@ -71,15 +71,22 @@ export class manager extends AlgoManager {
       if (likes < discourse_posts[i].count) {
         updated++
 
-        const post = await this.agent.getPostThread({
-          uri: discourse_posts[i]._id.toString(),
-          depth: 1,
-        })
-
-        const likeCount = Number.parseInt(
-          (<any>post.data.thread.post)?.likeCount,
-        )
-        likes = likeCount
+        try {
+          const post = await this.agent.getPostThread({
+            uri: discourse_posts[i]._id.toString(),
+            depth: 1,
+          })
+          const likeCount = Number.parseInt(
+            (<any>post.data.thread.post)?.likeCount,
+          )
+          likes = likeCount
+        } catch (err) {
+          console.log(
+            `${this.name}: (${discourse_posts[i]._id.toString()})`,
+            err,
+          )
+          likes = 0
+        }
 
         await new Promise((resolve) => setTimeout(resolve, 1000)) // Wait 1s
       }
