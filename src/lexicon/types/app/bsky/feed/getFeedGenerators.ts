@@ -7,20 +7,16 @@ import { lexicons } from '../../../../lexicons'
 import { isObj, hasProp } from '../../../../util'
 import { CID } from 'multiformats/cid'
 import { HandlerAuth } from '@atproto/xrpc-server'
+import * as AppBskyFeedDefs from './defs'
 
 export interface QueryParams {
-  /** The DID of the repo. */
-  did: string
-  /** The most recent commit */
-  latest?: string
-  /** The earliest commit to start from */
-  earliest?: string
+  feeds: string[]
 }
 
 export type InputSchema = undefined
 
 export interface OutputSchema {
-  cids: string[]
+  feeds: AppBskyFeedDefs.GeneratorView[]
   [k: string]: unknown
 }
 

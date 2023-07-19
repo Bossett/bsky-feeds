@@ -8,23 +8,24 @@ import { isObj, hasProp } from '../../../../util'
 import { CID } from 'multiformats/cid'
 import { HandlerAuth } from '@atproto/xrpc-server'
 
-export interface QueryParams {
-  /** The DID of the repo. */
-  did: string
-  /** The most recent commit */
-  latest?: string
-  /** The earliest commit to start from */
-  earliest?: string
-}
+export interface QueryParams {}
 
-export type InputSchema = undefined
-
-export interface OutputSchema {
-  cids: string[]
+export interface InputSchema {
+  recipientDid: string
+  content: string
+  subject?: string
   [k: string]: unknown
 }
 
-export type HandlerInput = undefined
+export interface OutputSchema {
+  sent: boolean
+  [k: string]: unknown
+}
+
+export interface HandlerInput {
+  encoding: 'application/json'
+  body: InputSchema
+}
 
 export interface HandlerSuccess {
   encoding: 'application/json'
