@@ -36,6 +36,10 @@ export class manager extends AlgoManager {
 
   public threshold = 19
 
+  public static cacheAge(params): Number {
+    return 600 // feed does not move fast
+  }
+
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
       this.name,

@@ -22,7 +22,8 @@ export class AlgoManager {
     this._isStarting = false
   }
 
-  public static cacheAge(): Number {
+  public static cacheAge(params): Number {
+    if (params.cursor) return 600
     return 30
   }
 
