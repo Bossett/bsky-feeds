@@ -48,6 +48,7 @@ export class manager extends AlgoManager {
   }
 
   public async filter_post(post: Post): Promise<Boolean> {
+    if (post.replyRoot !== null) return false
     if (this.agent === null) {
       await this.start()
     }

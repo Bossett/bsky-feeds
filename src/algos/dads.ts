@@ -46,6 +46,8 @@ export class manager extends AlgoManager {
   }
 
   public async filter_post(post: Post): Promise<Boolean> {
+    if (post.replyRoot !== null) return false
+
     let return_value: Boolean | undefined = undefined
 
     let match = false

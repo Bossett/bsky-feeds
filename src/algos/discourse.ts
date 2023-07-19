@@ -57,7 +57,7 @@ export class manager extends AlgoManager {
 
     let updated = 0
 
-    console.log(`${this.name}: ${discourse_posts.length} post updating...`)
+    console.log(`${this.name}: ${discourse_posts.length} posts updating...`)
 
     for (let i = 0; i < discourse_posts.length; i++) {
       let cursor: string | undefined = ''
