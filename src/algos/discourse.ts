@@ -82,8 +82,9 @@ export class manager extends AlgoManager {
           likes = likeCount
         } catch (err) {
           console.log(
-            `${this.name}: (${discourse_posts[i]._id.toString()})`,
-            err,
+            `${this.name}: Cannot retrieve ${discourse_posts[
+              i
+            ]._id.toString()}`,
           )
           likes = 0
         }
