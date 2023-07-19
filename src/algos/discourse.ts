@@ -72,7 +72,7 @@ export class manager extends AlgoManager {
         updated++
 
         const post = await this.agent.getPostThread({
-          uri: 'at://did:plc:vwzwgnygau7ed7b7wt5ux7y2/app.bsky.feed.post/3k2vgp6zxme2k',
+          uri: discourse_posts[i]._id.toString(),
           depth: 1,
         })
 
@@ -80,6 +80,8 @@ export class manager extends AlgoManager {
           (<any>post.data.thread.post)?.likeCount,
         )
         likes = likeCount
+
+        await new Promise((resolve) => setTimeout(resolve, 1000)) // Wait 1s
       }
 
       const record = {
