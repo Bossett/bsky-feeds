@@ -176,10 +176,16 @@ class dbSingleton {
       query['embed.images'] = { $ne: null }
     }
     if (nsfwOnly) {
-      query['labels'] = { $in: ['porn', 'nudity', 'sexual', 'underwear'] }
+      query['labels'] = {
+        $in: ['porn', 'nudity', 'sexual', 'underwear'],
+        $ne: null,
+      }
     }
     if (excludeNSFW) {
-      query['labels'] = { $nin: ['porn', 'nudity', 'sexual', 'underwear'] }
+      query['labels'] = {
+        $nin: ['porn', 'nudity', 'sexual', 'underwear'],
+        $ne: null,
+      }
     }
 
     if (cursor !== undefined) {
