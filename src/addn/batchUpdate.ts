@@ -6,7 +6,7 @@ export default async function batchUpdate(agent, interval) {
     if (!firstRun) await new Promise((resolve) => setTimeout(resolve, interval))
     else firstRun = false
 
-    console.log('core: updating...')
+    console.log('core: Updating Labels...')
 
     const unlabelledPosts = await dbClient.getUnlabelledPostsWithImages(
       300,
