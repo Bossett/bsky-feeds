@@ -18,6 +18,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
     params.limit,
     params.cursor,
     true,
+    true,
   )
 
   const feed = builder.map((row) => ({

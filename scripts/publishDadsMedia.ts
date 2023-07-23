@@ -21,12 +21,12 @@ const run = async () => {
 
   // A display name for your feed
   // Ex: What's Hot
-  const displayName = "What's Dad (Media)"
+  const displayName = "What's Dad (NSFW)"
 
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
   const description =
-    "A feed of images from people with 'father' and 'dad' in bio. (For @clarabelle.xyz's birthday & 1k followers)"
+    "A feed of nsfw-flagged images from people with 'father' and 'dad' in bio. (For @clarabelle.xyz's birthday & 1k followers)"
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg

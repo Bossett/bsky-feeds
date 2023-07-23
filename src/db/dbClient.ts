@@ -165,6 +165,7 @@ class dbSingleton {
     limit = 50,
     cursor: string | undefined = undefined,
     imagesOnly: Boolean = false,
+    nsfwOnly: Boolean = false,
   ) {
     let query: { indexedAt?: any; cid?: any; algoTags: string } = {
       algoTags: tag,
@@ -172,6 +173,9 @@ class dbSingleton {
 
     if (imagesOnly) {
       query['embed.images'] = { $ne: null }
+    }
+    if (nsfwOnly) {
+      query['labels'] = { $in: ['porn', 'nudity', 'sexual'] }
     }
 
     if (cursor !== undefined) {
@@ -212,20 +216,32 @@ class dbSingleton {
     else return results
   }
 
-  async getUnlabelledPostsWithImages(limit = 100) {
+  async getUnlabelledPostsWithImages(limit = 100, lagTime = 5 * 60 * 1000) {
     const results = this.client
       ?.db()
       .collection('post')
       .find({
         'embed.images': { $ne: null },
         labels: null,
-        indexedAt: { $lt: new Date().getTime() - 5 * 60 * 1000 },
+        indexedAt: { $lt: new Date().getTime() - lagTime },
       })
       .sort({ indexedAt: -1, cid: -1 })
       .limit(limit)
       .toArray()
 
     return results || []
+  }
+
+  async updateLabelsForURIs(postEntries: { uri: string; labels: string[] }[]) {
+    for (let i = 0; i < postEntries.length; i++) {
+      this.client
+        ?.db()
+        .collection('post')
+        .findOneAndUpdate(
+          { uri: { $eq: postEntries[i].uri } },
+          { $set: { labels: postEntries[i].labels } },
+        )
+    }
   }
 
   async getRecentAuthorsForTag(tag: string, lastMs: number = 600000) {

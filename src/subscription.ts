@@ -29,7 +29,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const password = `${process.env.FEEDGEN_PASSWORD}`
 
     agent.login({ identifier: handle, password: password }).then(() => {
-      batchUpdate(agent, 15 * 60 * 1000)
+      batchUpdate(agent, 5 * 60 * 1000)
 
       Object.keys(algos).forEach((algo) => {
         this.algoManagers.push(new algos[algo].manager(db, agent))
