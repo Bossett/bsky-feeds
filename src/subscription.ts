@@ -6,6 +6,7 @@ import { FirehoseSubscriptionBase, getOpsByType } from './util/subscription'
 import dotenv from 'dotenv'
 
 import algos from './algos'
+import batchUpdate from './addn/batchUpdate'
 
 import { Database } from './db'
 
@@ -28,6 +29,8 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const password = `${process.env.FEEDGEN_PASSWORD}`
 
     agent.login({ identifier: handle, password: password }).then(() => {
+      batchUpdate(agent, 15 * 60 * 1000)
+
       Object.keys(algos).forEach((algo) => {
         this.algoManagers.push(new algos[algo].manager(db, agent))
       })

@@ -212,6 +212,22 @@ class dbSingleton {
     else return results
   }
 
+  async getUnlabelledPostsWithImages(limit = 100) {
+    const results = this.client
+      ?.db()
+      .collection('post')
+      .find({
+        'embed.images': { $ne: null },
+        labels: null,
+        indexedAt: { $lt: new Date().getTime() - 5 * 60 * 1000 },
+      })
+      .sort({ indexedAt: -1, cid: -1 })
+      .limit(limit)
+      .toArray()
+
+    return results || []
+  }
+
   async getRecentAuthorsForTag(tag: string, lastMs: number = 600000) {
     const results = await this.client
       ?.db()

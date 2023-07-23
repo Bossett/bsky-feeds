@@ -23,7 +23,7 @@ const run = async () => {
   })
   await server.start()
   console.log(
-    `🤖 running feed generator at http://${server.cfg.listenhost}:${server.cfg.port}`,
+    `core: running feed generator at http://${server.cfg.listenhost}:${server.cfg.port}`,
   )
 }
 
