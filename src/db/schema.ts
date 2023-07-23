@@ -14,6 +14,7 @@ export type Post = {
   replyRoot: string | null
   indexedAt: number
   algoTags: string[] | null
+  embed?: any | null
 }
 
 export type SubState = {

@@ -63,6 +63,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         replyRoot: create.record?.reply?.root.uri ?? null,
         indexedAt: new Date().getTime(),
         algoTags: null,
+        embed: create.record?.embed,
       }
 
       return [post]
