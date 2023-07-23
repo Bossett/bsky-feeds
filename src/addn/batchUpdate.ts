@@ -1,13 +1,15 @@
 import dbClient from '../db/dbClient'
 
 export default async function batchUpdate(agent, interval) {
+  let firstRun = true
   while (true) {
+    if (!firstRun) await new Promise((resolve) => setTimeout(resolve, interval))
+    else firstRun = false
+
     console.log('core: updating...')
 
-    await new Promise((resolve) => setTimeout(resolve, interval))
-
     const unlabelledPosts = await dbClient.getUnlabelledPostsWithImages(
-      100,
+      300,
       interval,
     )
 
