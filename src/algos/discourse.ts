@@ -7,7 +7,7 @@ import dbClient from '../db/dbClient'
 // max 15 chars
 export const shortname = 'discourse'
 
-export const handler = async (ctx: AppContext, params: QueryParams) => {
+/*export const handler = async (ctx: AppContext, params: QueryParams) => {
   const builder = await dbClient.getPostBySortWeight(
     'discourse_posts',
     params.limit,
@@ -23,6 +23,39 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
   if (params.cursor) last += Number.parseInt(params.cursor)
   if (builder.length > 0) {
     cursor = `${last}`
+  }
+
+  return {
+    cursor,
+    feed,
+  }
+}*/
+
+export const handler = async (ctx: AppContext, params: QueryParams) => {
+  const builder = await dbClient.getLatestPostsForTag(
+    'cats',
+    params.limit,
+    params.cursor,
+    true,
+  )
+
+  let feed = builder.map((row) => ({
+    post: row.uri,
+  }))
+
+  feed = [
+    {
+      post: 'at://did:plc:jfhpnnst6flqway4eaeqzj2a/app.bsky.feed.post/3k2e4e2n2522s',
+    },
+    ...feed,
+  ]
+
+  feed.pop()
+
+  let cursor: string | undefined
+  const last = builder.at(-1)
+  if (last) {
+    cursor = `${new Date(last.indexedAt).getTime()}::${last.cid}`
   }
 
   return {

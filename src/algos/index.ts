@@ -10,6 +10,7 @@ import * as dadsMedia from './dads-media'
 import * as EighteenPlusND from './18-plus-nd'
 import * as ND from './nd'
 import * as discourse from './discourse'
+import * as cats from './cats'
 import * as elusive from './elusive'
 
 type AlgoHandler = (ctx: AppContext, params: QueryParams) => Promise<AlgoOutput>
@@ -46,6 +47,10 @@ const algos = {
   [elusive.shortname]: {
     handler: <AlgoHandler>elusive.handler,
     manager: elusive.manager,
+  },
+  [cats.shortname]: {
+    handler: <AlgoHandler>cats.handler,
+    manager: cats.manager,
   },
 }
 
