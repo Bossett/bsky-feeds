@@ -27,10 +27,10 @@ const algos = {
     handler: <AlgoHandler>dads.handler,
     manager: dads.manager,
   },
-  /*[dadsMedia.shortname]: {
+  [dadsMedia.shortname]: {
     handler: <AlgoHandler>dadsMedia.handler,
     manager: dadsMedia.manager,
-  },*/
+  },
   [EighteenPlusND.shortname]: {
     handler: <AlgoHandler>EighteenPlusND.handler,
     manager: EighteenPlusND.manager,
