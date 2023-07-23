@@ -164,9 +164,14 @@ class dbSingleton {
     tag: string,
     limit = 50,
     cursor: string | undefined = undefined,
+    imagesOnly: Boolean = false,
   ) {
     let query: { indexedAt?: any; cid?: any; algoTags: string } = {
       algoTags: tag,
+    }
+
+    if (imagesOnly) {
+      query['embed.images'] = { $ne: null }
     }
 
     if (cursor !== undefined) {
@@ -176,7 +181,8 @@ class dbSingleton {
       }
       const timeStr = new Date(parseInt(indexedAt, 10)).getTime()
 
-      query = { indexedAt: { $lte: timeStr }, cid: { $ne: cid }, algoTags: tag }
+      query['indexedAt'] = { $lte: timeStr }
+      query['cid'] = { $ne: cid }
     }
 
     const results = this.client

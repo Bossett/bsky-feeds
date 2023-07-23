@@ -13,6 +13,7 @@
     "publishScience": "ts-node scripts/publishFeedGen.ts",
     "publishAuspol": "ts-node scripts/publishAuspol.ts",
     "publishDads": "ts-node scripts/publishDads.ts",
+    "publishDadsMedia": "ts-node scripts/publishDadsMedia.ts",
     "publish18plusND": "ts-node scripts/publish18plusND.ts",
     "publishND": "ts-node scripts/publishND.ts",
     "publishDiscourse": "ts-node scripts/publishDiscourse.ts",

@@ -6,6 +6,7 @@ import {
 import * as forScience from './for-science'
 import * as ausPol from './auspol'
 import * as dads from './dads'
+import * as dadsMedia from './dads-media'
 import * as EighteenPlusND from './18-plus-nd'
 import * as ND from './nd'
 import * as discourse from './discourse'
@@ -26,6 +27,10 @@ const algos = {
     handler: <AlgoHandler>dads.handler,
     manager: dads.manager,
   },
+  /*[dadsMedia.shortname]: {
+    handler: <AlgoHandler>dadsMedia.handler,
+    manager: dadsMedia.manager,
+  },*/
   [EighteenPlusND.shortname]: {
     handler: <AlgoHandler>EighteenPlusND.handler,
     manager: EighteenPlusND.manager,
