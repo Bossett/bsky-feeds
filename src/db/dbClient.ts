@@ -166,6 +166,7 @@ class dbSingleton {
     cursor: string | undefined = undefined,
     imagesOnly: Boolean = false,
     nsfwOnly: Boolean = false,
+    excludeNSFW: Boolean = false,
   ) {
     let query: { indexedAt?: any; cid?: any; algoTags: string } = {
       algoTags: tag,
@@ -176,6 +177,9 @@ class dbSingleton {
     }
     if (nsfwOnly) {
       query['labels'] = { $in: ['porn', 'nudity', 'sexual', 'underwear'] }
+    }
+    if (excludeNSFW) {
+      query['labels'] = { $nin: ['porn', 'nudity', 'sexual', 'underwear'] }
     }
 
     if (cursor !== undefined) {
