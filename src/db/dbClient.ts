@@ -175,7 +175,7 @@ class dbSingleton {
       query['embed.images'] = { $ne: null }
     }
     if (nsfwOnly) {
-      query['labels'] = { $in: ['porn', 'nudity', 'sexual'] }
+      query['labels'] = { $in: ['porn', 'nudity', 'sexual', 'underwear'] }
     }
 
     if (cursor !== undefined) {
