@@ -47,7 +47,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 
   feed = [
     {
-      post: 'at://did:plc:jfhpnnst6flqway4eaeqzj2a/app.bsky.feed.post/3k2e4e2n2522s',
+      post: 'at://did:plc:jfhpnnst6flqway4eaeqzj2a/app.bsky.feed.post/3k3c4keajv32l',
     },
     ...feed,
   ]
