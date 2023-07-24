@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@atproto/api@^0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.4.1.tgz#daeda4ba5c70e27120f90ae5a5bf1a8961c4632e"
-  integrity sha512-aQ+yLFk1PF9FQKB0yCwdTwXaPIwZuvfPbvB1fZlHHv2+3o8ryeCTrMrrw7T9gZ7gyRqI27J9EYcimJbks7SHgw==
+"@atproto/api@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.4.3.tgz#d7e478bf7009df2adaf1ac6051eb3e3fea185c90"
+  integrity sha512-8LdREwmoA58YQDrLS0rohd7cHokhoiXfyYEeNtNlkdO0w/2QpkUCQ1PgPBP2kIRM9PhOEkKp7W3Sn8Te9Qq8jg==
   dependencies:
     "@atproto/common-web" "*"
     "@atproto/uri" "*"
@@ -118,15 +118,7 @@
     uint8arrays "3.0.0"
     zod "^3.21.4"
 
-"@atproto/uri@*":
-  version "0.0.2"
-  resolved "https://registry.npmjs.org/@atproto/uri/-/uri-0.0.2.tgz"
-  integrity sha512-/6otLZF7BLpT9suSdHuXLbL12nINcWPsLmcOI+dctqovWUjH+XIRVNXDQgBYSrPVetxMiknuEwWelmnA33AEXg==
-  dependencies:
-    "@atproto/identifier" "*"
-    "@atproto/nsid" "*"
-
-"@atproto/uri@^0.1.0":
+"@atproto/uri@*", "@atproto/uri@^0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@atproto/uri/-/uri-0.1.0.tgz#1cb4695d2f1766ec8d542af6a495a416f6f6c214"
   integrity sha512-ZaiOYHsakB98HrXfqiF6m7xgahSn9yXxKnPm0EaN0Breax6jtTl+lblWtduonAmyWVLJJAQJbvF+ud0i/3+wBw==
