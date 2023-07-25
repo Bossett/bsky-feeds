@@ -43,7 +43,7 @@ export class manager extends AlgoManager {
     this.follows = await getUserFollows(this.did, this.agent)
     await this.db.removeTagFromOldPosts(
       this.name,
-      new Date().getTime() - 3 * 24 * 60 * 1000, //3 days
+      new Date().getTime() - 3 * 24 * 60 * 60 * 1000, //3 days
     )
   }
 
