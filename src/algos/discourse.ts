@@ -7,7 +7,7 @@ import dbClient from '../db/dbClient'
 // max 15 chars
 export const shortname = 'discourse'
 
-/*export const handler = async (ctx: AppContext, params: QueryParams) => {
+export const handler = async (ctx: AppContext, params: QueryParams) => {
   const builder = await dbClient.getPostBySortWeight(
     'discourse_posts',
     params.limit,
@@ -29,9 +29,9 @@ export const shortname = 'discourse'
     cursor,
     feed,
   }
-}*/
+}
 
-export const handler = async (ctx: AppContext, params: QueryParams) => {
+/* export const handler = async (ctx: AppContext, params: QueryParams) => {
   const builder = await dbClient.getLatestPostsForTag(
     'cats',
     params.limit,
@@ -64,7 +64,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
     cursor,
     feed,
   }
-}
+} */
 
 export class manager extends AlgoManager {
   public name: string = shortname
@@ -149,6 +149,7 @@ export class manager extends AlgoManager {
   }
 
   public async filter_post(post: Post): Promise<Boolean> {
+    if (post.text.length <= 100) return false
     if (post.replyRoot !== null) {
       if (post.replyRoot.split('/')[2] != post.author) return true
       else return false
