@@ -10,6 +10,7 @@
     "node": "^18.0.0"
   },
   "scripts": {
+    "publishCats": "ts-node scripts/publishCats.ts",
     "publishScience": "ts-node scripts/publishFeedGen.ts",
     "publishAuspol": "ts-node scripts/publishAuspol.ts",
     "publishDads": "ts-node scripts/publishDads.ts",

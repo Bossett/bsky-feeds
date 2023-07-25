@@ -60,6 +60,15 @@ export class manager extends AlgoManager {
 
     let match = false
 
+    if (post.embed?.images) {
+      const imagesArr = post.embed.images
+      imagesArr.forEach((image) => {
+        if (`${image.alt}`.match(this.re) !== null) {
+          match = true
+        }
+      })
+    }
+
     if (`${post.text}`.match(this.re) !== null) {
       match = true
     }
