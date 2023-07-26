@@ -40,7 +40,8 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 
 export class manager extends AlgoManager {
   public name: string = shortname
-  public re = /(?!.*\bcat\s+girl\b)\b(cat|catsofbluesky|kitten|kitty)\b/ims
+  public re =
+    /(?!.*\b(cat\s+girl|fursuit)\b)\b(cat|catsofbluesky|kitten|kitty)\b/ims
 
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
