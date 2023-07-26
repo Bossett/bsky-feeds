@@ -41,7 +41,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 export class manager extends AlgoManager {
   public name: string = shortname
   public re =
-    /(?!.*\b(cat\s+girl|fursuit)\b)\b(cat|catsofbluesky|kitten|kitty)\b/ims
+    /^(?!.*\b(cat girl|fursuit)\b).*\b(cat|catsofbluesky|kitty|kitten)\b.*$/ims
 
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
@@ -65,13 +65,13 @@ export class manager extends AlgoManager {
     if (post.embed?.images) {
       const imagesArr = post.embed.images
       imagesArr.forEach((image) => {
-        if (`${image.alt}`.match(this.re) !== null) {
+        if (`${image.alt}`.replace('\n', ' ').match(this.re) !== null) {
           match = true
         }
       })
     }
 
-    if (`${post.text}`.match(this.re) !== null) {
+    if (`${post.text}`.replace('\n', ' ').match(this.re) !== null) {
       match = true
     }
 
