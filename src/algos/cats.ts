@@ -41,7 +41,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 export class manager extends AlgoManager {
   public name: string = shortname
   public re =
-    /^(?!.*(\b(cat girl|fursuit|fursona|nsfw|cat-like|furryart|doja|dojacat|anthro|anthropomorphic)\b|#furry(art)?)).*\b(cat|catsofbluesky|kitty|kitten|kitties)\b.*$/ims
+    /^(?!.*((\b(cat girl|fursuit|fursona|nsfw|cat-like|furryart|doja|dojacat|anthro|anthropomorphic)\b)|#furry|#furryart)).*\b(cat|catsofbluesky|kitty|kitten|kitties)\b.*$/ims
 
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
@@ -62,25 +62,21 @@ export class manager extends AlgoManager {
 
     let match = false
 
+    let matchString = ''
+
     if (post.embed?.images) {
       const imagesArr = post.embed.images
       imagesArr.forEach((image) => {
-        if (`${image.alt}`.replace('\n', ' ').match(this.re) !== null) {
-          match = true
-        }
+        matchString = `${matchString} ${image.alt}`.replace('\n', ' ')
       })
     }
 
-    if (`${post.text}`.replace('\n', ' ').match(this.re) !== null) {
+    matchString = `${post.text} ${matchString}`.replace('\n', ' ')
+
+    if (matchString.match(this.re) !== null) {
       match = true
     }
 
-    if (match) {
-      return_value = true
-    } else {
-      return_value = false
-    }
-
-    return return_value
+    return match
   }
 }
