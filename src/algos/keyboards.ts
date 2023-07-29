@@ -36,7 +36,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 export class manager extends AlgoManager {
   public name: string = shortname
   public re =
-    /\b(clacky|mechanical keyboard|brown switch|tenkeyless|red switch|microsoft natural key|solderless|thock(y)?|gateron|kailh|kaihua|theremingoat|cherry mx|tactile switch|linear switch|clicky switch|zealpc|alps|holy panda|durock|outemu|ajazz|keycaps|gmk|novelkeys|clickbar|split (kb|keyboard)|olkb|ortholinear (kb|keyboard)|ergonomic (kb|keyboard)|foam mod|switch mod|switch plate|switch film|switch lube|switch opener|switch pads|kailh|gasket mod|hand wired (kb|keyboard)|tent(ing)? angle|staggered layout|split staggered|QMK|QWERTY|colemak|colemak dh|hhkb|topre)(es|s)?\b/ims
+    /\b(clacky|mechanical keyboard|brown switch|tenkeyless|red switch|microsoft natural key|solderless|thock(y)?|gateron|kailh|kaihua|theremingoat|cherry mx|tactile switch|linear switch|clicky switch|zealpc|alps|holy panda|durock|outemu|ajazz|keycaps|gmk|novelkeys|clickbar|split (kb|keyboard)|olkb|ortholinear (kb|keyboard)|ergonomic (kb|keyboard)|foam mod|switch mod|switch plate|switch film|switch lube|switch opener|switch pads|kailh|gasket mod|hand wired (kb|keyboard)|tent(ing)? angle|staggered layout|split staggered|QMK|QWERTY|colemak|colemak dh|hhkb|topre|cepstrum|⌨️)(es|s)?\b/ims
 
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
