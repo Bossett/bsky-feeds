@@ -20,7 +20,7 @@ export const getPostAsWebhookPayload = async (
     imagesArr.forEach((image) => {
       imageFields.push({
         title: image.alt,
-        color: 16777062,
+        color: 14914598,
         image: { url: image.fullsize },
       })
     })
@@ -33,7 +33,7 @@ export const getPostAsWebhookPayload = async (
     embeds: [
       {
         title: 'Fields',
-        color: 6750054,
+        color: 14886454,
         thumbnail: {
           url: `${post.author.avatar}`,
         },

@@ -42,7 +42,7 @@ export class manager extends AlgoManager {
       const additional_fields = [
         {
           title: 'Additional',
-          color: 16738047,
+          color: 9709283,
           fields: [
             {
               name: 'Parent Author',
