@@ -36,7 +36,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 export class manager extends AlgoManager {
   public name: string = shortname
   public re =
-    /\b(clacky|mechanical|brown switch|tenkeyless|red switch|microsoft natural key|solderless|thock|thocky|gateron|kailh|kaihua|theremingoat|cherry mx|tactile switch(es)|linear switch(es)?|clicky switch(es)?|zealpc|alps|holy panda|durock|outemu|ajazz|keycaps|gmk|novelkeys|clickbar|)\b/ims
+    /\b(clacky|mechanical|brown switch|tenkeyless|red switch|microsoft natural key|solderless|thock|thocky|gateron|kailh|kaihua|theremingoat|cherry mx|tactile switch(es)?|linear switch(es)?|clicky switch(es)?|zealpc|alps|holy panda|durock|outemu|ajazz|keycaps|gmk|novelkeys|clickbar|)\b/ims
 
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
