@@ -51,7 +51,13 @@ export class manager extends AlgoManager {
   }
 
   public async filter_post(post: Post): Promise<Boolean> {
-    if (post.author === 'did:plc:mcb6n67plnrlx4lg35natk2b') return false // sorry nowbreezing.ntw.app
+    if (
+      [
+        'did:plc:mcb6n67plnrlx4lg35natk2b',
+        'did:plc:2rhj4c7tzussdmfcrtlerr7b',
+      ].includes(post.author)
+    )
+      return false
     if (post.replyRoot !== null) return false
     if (this.agent === null) {
       await this.start()
