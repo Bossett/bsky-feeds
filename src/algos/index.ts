@@ -12,6 +12,7 @@ import * as ND from './nd'
 import * as discourse from './discourse'
 import * as cats from './cats'
 import * as elusive from './elusive'
+import * as keyboards from './keyboards'
 import * as webhook from './webhook'
 
 type AlgoHandler = (ctx: AppContext, params: QueryParams) => Promise<AlgoOutput>
@@ -52,6 +53,10 @@ const algos = {
   [cats.shortname]: {
     handler: <AlgoHandler>cats.handler,
     manager: cats.manager,
+  },
+  [keyboards.shortname]: {
+    handler: <AlgoHandler>keyboards.handler,
+    manager: keyboards.manager,
   },
   [webhook.shortname]: {
     handler: <AlgoHandler>webhook.handler,
