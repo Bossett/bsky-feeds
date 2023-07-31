@@ -36,7 +36,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 export class manager extends AlgoManager {
   public name: string = shortname
   public re =
-    /^(?!.*\b(swiss alps|dice)\b).*\b(dolch|clacky|mechanical keyboard|brown switch|tenkeyless|red switch|microsoft natural key|solderless|thock(y)?|gateron|kailh|kaihua|theremingoat|cherry mx|tactile switch|linear switch|clicky switch|zealpc|alps|holy panda|durock|outemu|ajazz|keycaps|gmk|novelkeys|clickbar|split (kb|keyboard)|olkb|ortholinear (kb|keyboard)|ergonomic (kb|keyboard)|foam mod|switch mod|switch plate|switch film|switch lube|switch opener|switch pads|kailh|gasket mod|hand wired (kb|keyboard)|tent(ing)? angle|staggered layout|split staggered|QMK|QWERTY|colemak|colemak dh|hhkb|topre|cepstrum|⌨️|ibm model m|ibm model f|unicomp|model m|model f|beamspring|buckling spring|hall effect switch|keeb)(es|s)?\b.*$/ims
+    /^(?!.*\b(swiss alps|dice)\b).*\b(dolch|clacky|mechanical keyboard|brown switch|tenkeyless|red switch|microsoft natural key|solderless|thock(y)?|gateron|kailh|kaihua|theremingoat|cherry mx|tactile switch|linear switch|clicky switch|zealpc|alps|holy panda|durock|outemu|ajazz|keycaps|gmk|novelkeys|clickbar|split (kb|keyboard)|olkb|ortholinear (kb|keyboard)|ergonomic (kb|keyboard)|foam mod|switch mod|switch plate|switch film|switch lube|switch opener|switch pads|kailh|gasket mod|hand wired (kb|keyboard)|tent(ing)? angle|staggered layout|split staggered|QMK|QWERTY|colemak|colemak dh|hhkb|topre|cepstrum|⌨️|ibm model m|ibm model f|unicomp|model m|model f|beamspring|buckling spring|hall effect switch|keeb|tangentbord|näppäimistö)(es|s)?\b.*$/ims
 
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
