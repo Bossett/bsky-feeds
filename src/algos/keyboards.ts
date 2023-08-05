@@ -158,9 +158,9 @@ export class manager extends AlgoManager {
   ]
 
   public re = new RegExp(
-    `^(?!.*\b((swiss|french|italian|austrian) alps|mountain(s)?|dice)\b).*\b(${this.matchTerms.join(
+    `^(?!.*\\b((swiss|french|italian|austrian) alps|mountain(s)?|dice)\\b).*\\b(${this.matchTerms.join(
       '|',
-    )})(es|s)?\b.*$`,
+    )})(es|s)?\\b.*$`,
     'ims',
   )
 
