@@ -78,7 +78,7 @@ export class manager extends AlgoManager {
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
       this.name,
-      new Date().getTime() - 2 * 24 * 60 * 60 * 1000,
+      new Date().getTime() - 1.5 * 24 * 60 * 60 * 1000,
     )
     await dbClient.aggregatePostsByRepliesToCollection(
       'post',
