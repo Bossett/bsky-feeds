@@ -59,7 +59,7 @@ export class manager extends AlgoManager {
     '(cherry|mx) brown',
     'cherry mx',
     '(cherry|mx) reds',
-    'choc switch'
+    'choc switch',
     'clacky',
     'clickbar',
     'clicky switch',
