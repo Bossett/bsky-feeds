@@ -2,13 +2,13 @@
 # yarn lockfile v1
 
 
-"@atproto/api@^0.5.2":
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.5.5.tgz#50cd4eaa29b8d116034297fbdccf8d253e86562b"
-  integrity sha512-b4msuaDYODwdk+ZHYv7ZQuDJoOMkQnHHiA3TPeX1mLBrpK+wE+7KuKJK4QSFa1DwZQ2lzxTybvXku3mUIxzJIQ==
+"@atproto/api@^0.6.10":
+  version "0.6.10"
+  resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.6.10.tgz#0b0e623d2ede431b722aace506062c20579b8af9"
+  integrity sha512-IPlZwgueVyQmdx+t6XQN43/So3j2orf5ZkM59PGX3OydzlXIPiEIjaLRj7wKiRk/TeIgradoPBbw0tGR0aPwRg==
   dependencies:
     "@atproto/common-web" "*"
-    "@atproto/uri" "*"
+    "@atproto/syntax" "*"
     "@atproto/xrpc" "*"
     tlds "^1.234.0"
     typed-emitter "^2.1.0"
@@ -117,6 +117,13 @@
     multiformats "^9.6.4"
     uint8arrays "3.0.0"
     zod "^3.21.4"
+
+"@atproto/syntax@*":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@atproto/syntax/-/syntax-0.1.0.tgz#f13b9dad8d13342cc54295ecd702ea13c82c9bf0"
+  integrity sha512-Ktui0qvIXt1o1Px1KKC0eqn69MfRHQ9ok5EwjcxIEPbJ8OY5XqkeyJneFDIWRJZiR6vqPHfjFYRUpTB+jNPfRQ==
+  dependencies:
+    "@atproto/common-web" "*"
 
 "@atproto/uri@*":
   version "0.0.2"
