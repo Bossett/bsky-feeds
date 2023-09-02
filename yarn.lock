@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@atproto/api@^0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.4.1.tgz#daeda4ba5c70e27120f90ae5a5bf1a8961c4632e"
-  integrity sha512-aQ+yLFk1PF9FQKB0yCwdTwXaPIwZuvfPbvB1fZlHHv2+3o8ryeCTrMrrw7T9gZ7gyRqI27J9EYcimJbks7SHgw==
+"@atproto/api@^0.5.2":
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.5.5.tgz#50cd4eaa29b8d116034297fbdccf8d253e86562b"
+  integrity sha512-b4msuaDYODwdk+ZHYv7ZQuDJoOMkQnHHiA3TPeX1mLBrpK+wE+7KuKJK4QSFa1DwZQ2lzxTybvXku3mUIxzJIQ==
   dependencies:
     "@atproto/common-web" "*"
     "@atproto/uri" "*"
@@ -307,10 +307,10 @@
   resolved "https://registry.npmjs.org/@types/node/-/node-20.1.2.tgz"
   integrity sha512-CTO/wa8x+rZU626cL2BlbCDzydgnFNgc19h4YvizpTO88MFQxab8wqisxaofQJ/9bLGugRdWIuX/TbIs6VVF6g==
 
-"@types/node@^20.3.3":
-  version "20.4.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.4.2.tgz#129cc9ae69f93824f92fac653eebfb4812ab4af9"
-  integrity sha512-Dd0BYtWgnWJKwO1jkmTrzofjK2QXXcai0dmtzvIBhcA+RsG5h8R3xlyta0kGOZRNfL9GuRtb1knmPEhQrePCEw==
+"@types/node@^20.4.8":
+  version "20.5.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.5.0.tgz#7fc8636d5f1aaa3b21e6245e97d56b7f56702313"
+  integrity sha512-Mgq7eCtoTjT89FqNoTzzXg2XvCi5VMhRV6+I2aYanc6kQCBImeNaAYRs/DyoVqk1YEUJK5gN9VO7HRIdz4Wo3Q==
 
 "@types/qs@*":
   version "6.9.7"
