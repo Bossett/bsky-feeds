@@ -95,6 +95,7 @@ export class manager extends AlgoManager {
   }
 
   public async filter_post(post: Post): Promise<Boolean> {
+    if (['did:plc:ddwwm2jzyq47vvo3tscsozxr'].includes(post.author)) return false
     if (post.text.toLowerCase().includes(`${process.env.AUSPOL_MATCH}`)) {
       return true
     }
