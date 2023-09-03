@@ -14,6 +14,7 @@ import * as cats from './cats'
 import * as elusive from './elusive'
 import * as keyboards from './keyboards'
 import * as webhook from './webhook'
+import * as overheard from './overheard'
 
 type AlgoHandler = (ctx: AppContext, params: QueryParams) => Promise<AlgoOutput>
 
@@ -61,6 +62,10 @@ const algos = {
   [webhook.shortname]: {
     handler: <AlgoHandler>webhook.handler,
     manager: webhook.manager,
+  },
+  [overheard.shortname]: {
+    handler: <AlgoHandler>overheard.handler,
+    manager: overheard.manager,
   },
 }
 

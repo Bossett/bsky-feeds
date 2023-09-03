@@ -20,6 +20,7 @@
     "publishND": "ts-node scripts/publishND.ts",
     "publishDiscourse": "ts-node scripts/publishDiscourse.ts",
     "publishElusive": "ts-node scripts/publishElusive.ts",
+    "publishOverheard": "ts-node scripts/publishOverheard.ts",
     "start": "ts-node src/index.ts",
     "build": "tsc"
   },
