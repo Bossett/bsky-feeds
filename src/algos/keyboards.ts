@@ -37,7 +37,6 @@ export class manager extends AlgoManager {
   public name: string = shortname
 
   public matchTerms: string[] = [
-    '⌨️',
     'ajazz',
     // 'akko',
     'alexotos',
@@ -156,7 +155,7 @@ export class manager extends AlgoManager {
     'WKL',
     'zealpc',
     'zfrontier',
-    'ZMK'
+    'ZMK',
   ]
 
   public re = new RegExp(
@@ -194,7 +193,10 @@ export class manager extends AlgoManager {
 
     matchString = `${post.text} ${matchString}`.replace('\n', ' ')
 
-    if (matchString.match(this.re) !== null) {
+    if (
+      matchString.match(this.re) !== null ||
+      matchString.match('⌨️') !== null
+    ) {
       match = true
     }
 
