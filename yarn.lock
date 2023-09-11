@@ -2,25 +2,28 @@
 # yarn lockfile v1
 
 
-"@atproto/api@^0.5.2":
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.5.5.tgz#50cd4eaa29b8d116034297fbdccf8d253e86562b"
-  integrity sha512-b4msuaDYODwdk+ZHYv7ZQuDJoOMkQnHHiA3TPeX1mLBrpK+wE+7KuKJK4QSFa1DwZQ2lzxTybvXku3mUIxzJIQ==
+"@atproto/api@^0.6.11":
+  version "0.6.11"
+  resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.6.11.tgz#672e4a23e4534222030fd1f296d6100231f52ea9"
+  integrity sha512-Nupk6l6UTxpcDKKRUW4HhZqOwvovNSOmuQHjhD9NQlU6ukVjwSF4LNtVhtzRrnBzUj/DPiLCl32aO0bw6dbnSA==
   dependencies:
-    "@atproto/common-web" "*"
-    "@atproto/uri" "*"
-    "@atproto/xrpc" "*"
+    "@atproto/common-web" "^0.2.0"
+    "@atproto/lexicon" "^0.2.0"
+    "@atproto/syntax" "^0.1.0"
+    "@atproto/xrpc" "^0.3.0"
+    multiformats "^9.9.0"
     tlds "^1.234.0"
     typed-emitter "^2.1.0"
 
-"@atproto/common-web@*":
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/@atproto/common-web/-/common-web-0.1.0.tgz"
-  integrity sha512-qD6xF60hvH+cP++fk/mt+0S9cxs94KsK+rNWypNlgnlp7r9By4ltXwtDSR/DNTA8mwDeularUno4VbTd2IWIzA==
+"@atproto/common-web@*", "@atproto/common-web@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@atproto/common-web/-/common-web-0.2.0.tgz#8420da28e89dac64ad2a11b6ff10a4023c67151f"
+  integrity sha512-ugKrT8CWf6PDsZ29VOhOCs5K4z9BAFIV7SxPXA+MHC7pINqQ+wyjIq+DtUI8kmUSce1dTqc/lMN1akf/W5whVQ==
   dependencies:
+    graphemer "^1.4.0"
     multiformats "^9.6.4"
     uint8arrays "3.0.0"
-    zod "^3.14.2"
+    zod "^3.21.4"
 
 "@atproto/common@*":
   version "0.2.0"
@@ -71,20 +74,7 @@
     axios "^0.27.2"
     zod "^3.21.4"
 
-"@atproto/lexicon@*":
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/@atproto/lexicon/-/lexicon-0.1.0.tgz"
-  integrity sha512-Iy+gV9w42xLhrZrmcbZh7VFoHjXuzWvecGHIfz44owNjjv7aE/d2P5BbOX/XicSkmQ8Qkpg0BqwYDD1XBVS+DQ==
-  dependencies:
-    "@atproto/common-web" "*"
-    "@atproto/identifier" "*"
-    "@atproto/nsid" "*"
-    "@atproto/uri" "*"
-    iso-datestring-validator "^2.2.2"
-    multiformats "^9.6.4"
-    zod "^3.14.2"
-
-"@atproto/lexicon@^0.2.0":
+"@atproto/lexicon@*", "@atproto/lexicon@^0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@atproto/lexicon/-/lexicon-0.2.0.tgz#e18590f248fa2795a67d7440adba73ab5a48dd1e"
   integrity sha512-0OpLZ4o4pbRj2e19h2fO69781wPmL0S8WJaXey3y9FLjV19lj18IEbnlE/OQG8qZNDyGmgezs00L/o7qNCJorw==
@@ -118,6 +108,13 @@
     uint8arrays "3.0.0"
     zod "^3.21.4"
 
+"@atproto/syntax@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@atproto/syntax/-/syntax-0.1.0.tgz#f13b9dad8d13342cc54295ecd702ea13c82c9bf0"
+  integrity sha512-Ktui0qvIXt1o1Px1KKC0eqn69MfRHQ9ok5EwjcxIEPbJ8OY5XqkeyJneFDIWRJZiR6vqPHfjFYRUpTB+jNPfRQ==
+  dependencies:
+    "@atproto/common-web" "*"
+
 "@atproto/uri@*":
   version "0.0.2"
   resolved "https://registry.npmjs.org/@atproto/uri/-/uri-0.0.2.tgz"
@@ -150,13 +147,13 @@
     ws "^8.12.0"
     zod "^3.21.4"
 
-"@atproto/xrpc@*":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@atproto/xrpc/-/xrpc-0.1.0.tgz#798569095538ac060475ae51f1b4c071ff8776d6"
-  integrity sha512-LhBeZkQwPezjEtricGYnG62udFglOqlnmMSS0KyWgEAPi4KMp4H2F4jNoXcf5NPtZ9S4N4hJaErHX4PJYv2lfA==
+"@atproto/xrpc@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@atproto/xrpc/-/xrpc-0.3.0.tgz#32dd3a15fedad401b94fdf38313aebff1c0b9d0d"
+  integrity sha512-PYE/4GT/sS4s/FxR5QO2YBaLU6GdhraYVfMOtfj+AN8YgZw1QoMHXkAv4v+BVH4T5HWU2XwZEBZvwfsr7YcewA==
   dependencies:
     "@atproto/lexicon" "*"
-    zod "^3.14.2"
+    zod "^3.21.4"
 
 "@cbor-extract/cbor-extract-darwin-arm64@2.1.1":
   version "2.1.1"
@@ -678,6 +675,11 @@ get-intrinsic@^1.0.2:
     has "^1.0.3"
     has-symbols "^1.0.3"
 
+graphemer@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/graphemer/-/graphemer-1.4.0.tgz#fb2f1d55e0e3a1849aeffc90c4fa0dd53a0e66c6"
+  integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
+
 has-symbols@^1.0.3:
   version "1.0.3"
   resolved "https://registry.npmjs.org/has-symbols/-/has-symbols-1.0.3.tgz"
@@ -824,7 +826,7 @@ ms@2.1.3:
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-multiformats@9.9.0, multiformats@^9.4.2, multiformats@^9.5.4, multiformats@^9.6.4:
+multiformats@9.9.0, multiformats@^9.4.2, multiformats@^9.5.4, multiformats@^9.6.4, multiformats@^9.9.0:
   version "9.9.0"
   resolved "https://registry.npmjs.org/multiformats/-/multiformats-9.9.0.tgz"
   integrity sha512-HoMUjhH9T8DDBNT+6xzkrd9ga/XiBI4xLr58LJACwK6G3HTOPeMz4nB4KJs33L2BelrIJa7P0VuNaVF3hMYfjg==
