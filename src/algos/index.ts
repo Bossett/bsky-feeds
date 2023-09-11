@@ -27,10 +27,6 @@ const algos = {
     handler: <AlgoHandler>salesforce.handler,
     manager: salesforce.manager,
   },
-  [overheard.shortname]: {
-    handler: <AlgoHandler>overheard.handler,
-    manager: overheard.manager,
-  },
 }
 
 export default algos
