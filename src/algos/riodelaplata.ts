@@ -145,8 +145,9 @@ export class manager extends AlgoManager {
       }
     })
 
-    const details = await getUserDetails(post.author, this.agent)
-    matchDescription = `${details.description} ${details.displayName}`.replace('\n', ' ')
+    // commenting it because of rate limits
+    // const details = await getUserDetails(post.author, this.agent)
+    // matchDescription = `${details.description} ${details.displayName}`.replace('\n', ' ')
 
     this.matchTerms.forEach((term) => {
       if (matchDescription.match(term) !== null) {
