@@ -4,6 +4,7 @@ import { AlgoManager } from '../addn/algoManager'
 import dotenv from 'dotenv'
 import { Post } from '../db/schema'
 import dbClient from '../db/dbClient'
+import getUserDetails from '../addn/getUserDetails'
 
 dotenv.config()
 
@@ -58,6 +59,8 @@ export class manager extends AlgoManager {
     'Peron',
     'Kirchner',
     'Milei',
+    'Gilda',
+    'Cyberciruja',
     '🇺🇾',
     '#Uruguay',
     'Uruguay',
@@ -73,16 +76,17 @@ export class manager extends AlgoManager {
     'Paysandu',
     'Paysandú',
     'Artigas',
+    'Ansina',
     'Rio de la Plata',
-    'tango',
     'dulce de leche',
+    'carpincho',
+    'capybara',
+    '🧉',
   ]
 
   public matchPatterns: RegExp[] = [
     /(^|[\s\W])Uruguay($|[\W\s])/im,
     /(^|[\s\W])Argentina($|[\W\s])/im,
-    /(^|[\s\W])Montevideo($|[\W\s])/im,
-    /(^|[\s\W])Buenos Aires($|[\W\s])/im,
   ]
 
   // Include Argentinian users here to always include their posts
@@ -104,7 +108,6 @@ export class manager extends AlgoManager {
 
   public async filter_post(post: Post): Promise<Boolean> {
     if (post.author === 'did:plc:mcb6n67plnrlx4lg35natk2b') return false // sorry nowbreezing.ntw.app
-    if (post.replyRoot !== null) return false
     if (this.agent === null) {
       await this.start()
     }
@@ -113,6 +116,7 @@ export class manager extends AlgoManager {
     let match = false
 
     let matchString = ''
+    let matchDescription = ''
 
     if (post.embed?.images) {
       const imagesArr = post.embed.images
@@ -137,6 +141,15 @@ export class manager extends AlgoManager {
 
     this.matchUsers.forEach((user) => {
       if (matchString.match(user) !== null) {
+        match = true
+      }
+    })
+
+    const details = await getUserDetails(post.author, this.agent)
+    matchDescription = `${details.description} ${details.displayName}`.replace('\n', ' ')
+
+    this.matchTerms.forEach((term) => {
+      if (matchDescription.match(term) !== null) {
         match = true
       }
     })
