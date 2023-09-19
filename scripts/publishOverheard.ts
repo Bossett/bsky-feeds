@@ -26,7 +26,7 @@ const run = async () => {
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
   const description =
-    "A feed of posts that people have replied to, or quoted with just the text 'overheard'."
+    "A feed of posts that people have replied to, or quoted with 'overheard' as the only text (e.g. includes 'Overheard!' but not 'overheard this'). Inspired by @jakei.bsky.social's feed."
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg
