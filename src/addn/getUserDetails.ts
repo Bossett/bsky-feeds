@@ -23,6 +23,7 @@ let timer: NodeJS.Timeout | null = null
 let resolvers: Resolver[] = []
 
 let isBatchExecutionInProgress = false
+let maxRequestChunk = 25
 
 const executeBatch = async (agent: BskyAgent) => {
   const currentBatch = batch
@@ -35,10 +36,8 @@ const executeBatch = async (agent: BskyAgent) => {
     let res: any
     let resultsMap: { [k: string]: any } = {}
 
-    const chunkSize = 25
-
-    for (let i = 0; i < currentBatch.length; i += chunkSize) {
-      const chunk = currentBatch.slice(i, i + chunkSize)
+    for (let i = 0; i < currentBatch.length; i += maxRequestChunk) {
+      const chunk = currentBatch.slice(i, i + maxRequestChunk)
 
       try {
         res = await limit(() =>
@@ -89,7 +88,7 @@ export const _getUserDetails = async (
     batch.push(user_did)
     resolvers.push({ resolve, reject, user_did })
 
-    if (batch.length >= 25 && !isBatchExecutionInProgress) {
+    if (batch.length >= maxRequestChunk && !isBatchExecutionInProgress) {
       clearTimeout(timer!)
       isBatchExecutionInProgress = true
       executeBatch(agent)
