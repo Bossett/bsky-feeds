@@ -31,41 +31,6 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
   }
 }
 
-/* export const handler = async (ctx: AppContext, params: QueryParams) => {
-  const builder = await dbClient.getLatestPostsForTag(
-    'cats',
-    params.limit,
-    params.cursor,
-    true,
-    false,
-    true,
-  )
-
-  let feed = builder.map((row) => ({
-    post: row.uri,
-  }))
-
-  feed = [
-    {
-      post: 'at://did:plc:jfhpnnst6flqway4eaeqzj2a/app.bsky.feed.post/3k3c4keajv32l',
-    },
-    ...feed,
-  ]
-
-  feed.pop()
-
-  let cursor: string | undefined
-  const last = builder.at(-1)
-  if (last) {
-    cursor = `${new Date(last.indexedAt).getTime()}::${last.cid}`
-  }
-
-  return {
-    cursor,
-    feed,
-  }
-} */
-
 export class manager extends AlgoManager {
   public name: string = shortname
 
