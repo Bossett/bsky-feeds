@@ -1,13 +1,13 @@
 import { BskyAgent } from '@atproto/api'
 import resolveHandleToDID from './resolveHandleToDID'
-import moize from 'moize'
+import moize, { Cache } from 'moize'
 import { pRateLimit } from 'p-ratelimit'
 
 const limit = pRateLimit({
   interval: 300 * 1000,
   rate: 2000, // limit is ~3000
   concurrency: 10,
-  maxDelay: 2000,
+  maxDelay: 30 * 1000,
 })
 
 export const _getUserDetails = async (user: string, agent: BskyAgent) => {
@@ -30,9 +30,6 @@ export const _getUserDetails = async (user: string, agent: BskyAgent) => {
 
     return user_details
   } catch (error) {
-    console.log(
-      `core: error retrieving details ${`${error.message}`.replace('\n', ' ')}`,
-    )
     return { details: '', displayName: '' }
   }
 }
@@ -42,6 +39,9 @@ const getUserDetails = moize(_getUserDetails, {
   maxAge: 1000 * 60 * 60, // an hour
   updateExpire: true,
   isShallowEqual: true,
+  onCacheHit: (cache: Cache, options: any, moized: any) => {
+    console.log('core: cache hit', cache.keys)
+  },
 })
 
 export default getUserDetails
