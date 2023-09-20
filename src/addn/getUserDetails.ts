@@ -30,7 +30,9 @@ export const _getUserDetails = async (user: string, agent: BskyAgent) => {
 
     return user_details
   } catch (error) {
-    console.log(`core: error retrieving details ${error.name}`)
+    console.log(
+      `core: error retrieving details ${`${error.message}`.replace('\n', ' ')}`,
+    )
     return { details: '', displayName: '' }
   }
 }
