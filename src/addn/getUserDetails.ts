@@ -42,9 +42,6 @@ const getUserDetails = moize(_getUserDetails, {
   maxAge: 1000 * 60 * 60, // an hour
   updateExpire: true,
   isShallowEqual: true,
-  onCacheHit: (cache: Cache, options: any, moized: any) => {
-    console.log('core: cache hit', cache.keys)
-  },
 })
 
 export default getUserDetails
