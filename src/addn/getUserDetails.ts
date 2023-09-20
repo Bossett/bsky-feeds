@@ -94,7 +94,7 @@ export const _getUserDetails = async (
 
 const getUserDetails = moize(_getUserDetails, {
   isPromise: true,
-  maxAge: 1000 * 60 * 60, // an hour
+  maxAge: 1000 * 60 * 60 * 3, // three hour
   updateExpire: true,
   isShallowEqual: true,
 })
