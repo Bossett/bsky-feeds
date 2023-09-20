@@ -42,6 +42,7 @@ const executeBatch = async (agent: BskyAgent) => {
       )
     } catch (error) {
       console.log(`core: error during getProfiles ${error.message}`)
+      throw error
     }
 
     const resultsMap = Object.fromEntries(
@@ -51,9 +52,10 @@ const executeBatch = async (agent: BskyAgent) => {
       ]),
     )
     currentResolvers.forEach(({ resolve, user_did }) => {
-      resolve(resultsMap[user_did] || { details: '', displayName: '' })
+      resolve(resultsMap[user_did])
     })
   } catch (error) {
+    console.log(`core: error during getProfiles ${error.message}`)
     currentResolvers.forEach(({ reject }) => reject(error))
   } finally {
     timer = null
@@ -94,7 +96,7 @@ export const _getUserDetails = async (
 
 const getUserDetails = moize(_getUserDetails, {
   isPromise: true,
-  maxAge: 1000 * 60 * 60 * 3, // three hour
+  maxAge: 1000 * 60 * 60 * 3, // three hours
   updateExpire: true,
   isShallowEqual: true,
 })
