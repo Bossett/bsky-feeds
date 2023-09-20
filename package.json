@@ -37,6 +37,7 @@
     "mongodb": "^6.1.0",
     "multiformats": "9.9.0",
     "node-fetch-native": "^1.2.0",
+    "p-ratelimit": "^1.0.1",
     "semver": "^7.5.4"
   },
   "devDependencies": {

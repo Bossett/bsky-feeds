@@ -1,6 +1,14 @@
 import { BskyAgent } from '@atproto/api'
 import resolveHandleToDID from './resolveHandleToDID'
 import moize from 'moize'
+import { pRateLimit } from 'p-ratelimit'
+
+const limit = pRateLimit({
+  interval: 300 * 1000,
+  rate: 2000, // limit is ~3000
+  concurrency: 10,
+  maxDelay: 2000,
+})
 
 export const _getUserDetails = async (user: string, agent: BskyAgent) => {
   let user_did = ''
@@ -11,13 +19,19 @@ export const _getUserDetails = async (user: string, agent: BskyAgent) => {
     user_did = await resolveHandleToDID(user, agent)
   }
 
-  const res: any = await agent.api.app.bsky.actor.getProfile({
-    actor: user_did,
-  })
+  try {
+    const res: any = await limit(() =>
+      agent.api.app.bsky.actor.getProfile({
+        actor: user_did,
+      }),
+    )
 
-  const user_details = res.data
+    const user_details = res.data
 
-  return user_details
+    return user_details
+  } catch (error) {
+    return { details: '', displayName: '' }
+  }
 }
 
 export const getUserDetails = moize(_getUserDetails, {

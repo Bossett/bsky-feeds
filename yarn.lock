@@ -874,11 +874,6 @@ node-fetch-native@^1.2.0:
   resolved "https://registry.yarnpkg.com/node-fetch-native/-/node-fetch-native-1.2.0.tgz#13ec6df98f33168958dbfb6945f10aedf42e7ea8"
   integrity sha512-5IAMBTl9p6PaAjYCnMv5FmqIF6GcZnawAVnzaCG0rX2aYZJ4CxEkZNtVPuTRug7fL7wyM5BQYTlAzcyMPi6oTQ==
 
-"node-fetch@npm:node-fetch-native@latest":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/node-fetch-native/-/node-fetch-native-1.4.0.tgz#fbe8ac033cb6aa44bd106b5e4fd2b6277ba70fa1"
-  integrity sha512-F5kfEj95kX8tkDhUCYdV8dg3/8Olx/94zB8+ZNthFs6Bz31UpUi8Xh40TN3thLwXgrwXry1pEg9lJ++tLWTcqA==
-
 node-gyp-build-optional-packages@5.0.3:
   version "5.0.3"
   resolved "https://registry.npmjs.org/node-gyp-build-optional-packages/-/node-gyp-build-optional-packages-5.0.3.tgz"
@@ -905,6 +900,11 @@ one-webcrypto@^1.0.3:
   version "1.0.3"
   resolved "https://registry.npmjs.org/one-webcrypto/-/one-webcrypto-1.0.3.tgz"
   integrity sha512-fu9ywBVBPx0gS9K0etIROTiCkvI5S1TDjFsYFb3rC1ewFxeOqsbzq7aIMBHsYfrTHBcGXJaONXXjTl8B01cW1Q==
+
+p-ratelimit@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/p-ratelimit/-/p-ratelimit-1.0.1.tgz#a07fb2419f9811feb99fb687f97e00aa0244ac3e"
+  integrity sha512-tKBGoow6aWRH68K2eQx+qc1gSegjd5VLirZYc1Yms9pPFsYQ9TFI6aMn0vJH2vmvzjNpjlWZOFft4aPUen2w0A==
 
 parseurl@~1.3.3:
   version "1.3.3"
