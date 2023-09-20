@@ -29,6 +29,8 @@ export const _getUserDetails = async (user: string, agent: BskyAgent) => {
 
     const user_details = res.data
 
+    console.log(user_details.records[0].value)
+
     return user_details.records[0].value
   } catch (error) {
     return { details: '', displayName: '' }
