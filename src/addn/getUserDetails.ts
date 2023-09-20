@@ -21,14 +21,15 @@ export const _getUserDetails = async (user: string, agent: BskyAgent) => {
 
   try {
     const res: any = await limit(() =>
-      agent.api.app.bsky.actor.getProfile({
-        actor: user_did,
+      agent.com.atproto.repo.listRecords({
+        repo: user_did,
+        collection: 'app.bsky.actor.profile',
       }),
     )
 
     const user_details = res.data
 
-    return user_details
+    return user_details.records[0].value
   } catch (error) {
     return { details: '', displayName: '' }
   }
