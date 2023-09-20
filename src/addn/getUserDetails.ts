@@ -33,24 +33,34 @@ const executeBatch = async (agent: BskyAgent) => {
 
   try {
     let res: any
+    let resultsMap: { [k: string]: any } = {}
 
-    try {
-      res = await limit(() =>
-        agent.app.bsky.actor.getProfiles({
-          actors: currentBatch,
-        }),
-      )
-    } catch (error) {
-      console.log(`core: error during getProfiles ${error.message}`)
-      throw error
+    const chunkSize = 25
+
+    for (let i = 0; i < currentBatch.length; i += chunkSize) {
+      const chunk = currentBatch.slice(i, i + chunkSize)
+
+      try {
+        res = await limit(() =>
+          agent.app.bsky.actor.getProfiles({
+            actors: chunk,
+          }),
+        )
+      } catch (error) {
+        console.log(`core: error during getProfiles ${error.message}`)
+        throw error
+      }
+
+      resultsMap = {
+        ...Object.fromEntries(
+          res.data.profiles.map((record: ProfileViewDetailed) => [
+            record.did,
+            record,
+          ]),
+        ),
+        ...resultsMap,
+      }
     }
-
-    const resultsMap = Object.fromEntries(
-      res.data.profiles.map((record: ProfileViewDetailed) => [
-        record.did,
-        record,
-      ]),
-    )
     currentResolvers.forEach(({ resolve, user_did }) => {
       resolve(resultsMap[user_did])
     })
