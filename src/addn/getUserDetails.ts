@@ -37,12 +37,11 @@ export const _getUserDetails = async (user: string, agent: BskyAgent) => {
   }
 }
 
-export const getUserDetails = moize(_getUserDetails, {
+const getUserDetails = moize(_getUserDetails, {
   isPromise: true,
   maxAge: 1000 * 60 * 60, // an hour
   updateExpire: true,
-  equals: (newArgs: any[], lastArgs: any[]) =>
-    JSON.stringify(newArgs[0]) === JSON.stringify(lastArgs[0]),
+  isShallowEqual: true,
 })
 
 export default getUserDetails
