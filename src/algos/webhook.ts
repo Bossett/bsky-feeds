@@ -5,7 +5,7 @@ import { getPostAsWebhookPayload } from '../addn/getPostAsWebhookPayload'
 import dotenv from 'dotenv'
 import { Post } from '../db/schema'
 import dbClient from '../db/dbClient'
-import fetch from 'node-fetch-native'
+// import fetch from 'node-fetch-native'
 import resolveDIDToHandle from '../addn/resolveDIDToHandle'
 
 dotenv.config()
@@ -73,6 +73,7 @@ export class manager extends AlgoManager {
       )
 
       if (params) {
+        const { default: fetch } = await import('node-fetch-native')
         const res = await fetch(hook_uri, {
           method: 'POST',
           headers: {

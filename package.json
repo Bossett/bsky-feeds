@@ -1,13 +1,13 @@
 {
   "name": "bossett-bsky-feeds",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "basic bsky feedgen",
   "main": "index.js",
   "repository": "git@github.com:bossett/bsky-feeds.git",
   "author": "Bossett <bossettg@bossett.io>",
   "license": "MIT",
   "engines": {
-    "node": "^18.0.0"
+    "node": "^18.16.0"
   },
   "scripts": {
     "publishKeyboards": "ts-node scripts/publishKeyboards.ts",
