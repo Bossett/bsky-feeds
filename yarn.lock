@@ -148,21 +148,12 @@
   dependencies:
     "@atproto/common-web" "^0.2.0"
 
-"@atproto/uri@*":
-  version "0.0.2"
-  resolved "https://registry.npmjs.org/@atproto/uri/-/uri-0.0.2.tgz"
-  integrity sha512-/6otLZF7BLpT9suSdHuXLbL12nINcWPsLmcOI+dctqovWUjH+XIRVNXDQgBYSrPVetxMiknuEwWelmnA33AEXg==
+"@atproto/uri@*", "@atproto/uri@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@atproto/uri/-/uri-0.1.1.tgz#5d67621d08ae82ef10963c11c24c9f343d0efacf"
+  integrity sha512-6l5Q0ajGHnecOd2ACuvXVpvZGK7gE+Y78y/oq29WdjWPvTeg7fBzcXlDXcZMOvBqhDJIigmAO2YCKmxqc4wJ1g==
   dependencies:
-    "@atproto/identifier" "*"
-    "@atproto/nsid" "*"
-
-"@atproto/uri@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@atproto/uri/-/uri-0.1.0.tgz#1cb4695d2f1766ec8d542af6a495a416f6f6c214"
-  integrity sha512-ZaiOYHsakB98HrXfqiF6m7xgahSn9yXxKnPm0EaN0Breax6jtTl+lblWtduonAmyWVLJJAQJbvF+ud0i/3+wBw==
-  dependencies:
-    "@atproto/identifier" "*"
-    "@atproto/nsid" "*"
+    "@atproto/syntax" "^0.1.1"
 
 "@atproto/xrpc-server@^0.3.0":
   version "0.3.0"
