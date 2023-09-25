@@ -27,7 +27,7 @@
   "dependencies": {
     "@atproto/api": "^0.6.14",
     "@atproto/did-resolver": "^0.1.0",
-    "@atproto/lexicon": "^0.2.0",
+    "@atproto/lexicon": "^0.2.1",
     "@atproto/repo": "^0.2.0",
     "@atproto/uri": "^0.1.0",
     "@atproto/xrpc-server": "^0.3.0",
