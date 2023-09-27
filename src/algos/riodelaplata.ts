@@ -48,7 +48,6 @@ export class manager extends AlgoManager {
     'Argentinian',
     'Argentinians',
     'Buenos Aires',
-    'Cordoba',
     'Malvinas',
     'Maradona',
     'Maradonian',
@@ -56,10 +55,8 @@ export class manager extends AlgoManager {
     'el10',
     'd10s',
     'Puerto Madero',
-    'Peron',
     'Kirchner',
     'Milei',
-    'Gilda',
     'Cyberciruja',
     '🇺🇾',
     '#Uruguay',
@@ -80,7 +77,6 @@ export class manager extends AlgoManager {
     'Rio de la Plata',
     'dulce de leche',
     'carpincho',
-    'capybara',
     '🧉',
   ]
 
