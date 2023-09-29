@@ -49,7 +49,7 @@ const run = async () => {
     await agent.api.app.bsky.feed.describeFeedGenerator()
   } catch (err) {
     throw new Error(
-      'The bluesky server is not ready to accept published custom feeds yet',
+      'The bluesky server is not ready to accept published custom feeds yet: ' + err,
     )
   }
 
