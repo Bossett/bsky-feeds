@@ -1,13 +1,13 @@
 {
   "name": "bossett-bsky-feeds",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "basic bsky feedgen",
   "main": "index.js",
   "repository": "git@github.com:bossett/bsky-feeds.git",
   "author": "Bossett <bossettg@bossett.io>",
   "license": "MIT",
   "engines": {
-    "node": "^18.0.0"
+    "node": "^18.16.0"
   },
   "scripts": {
     "publishKeyboards": "ts-node scripts/publishKeyboards.ts",
@@ -30,7 +30,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@atproto/api": "^0.5.2",
+    "@atproto/api": "^0.6.14",
     "@atproto/did-resolver": "^0.1.0",
     "@atproto/lexicon": "^0.2.0",
     "@atproto/repo": "^0.2.0",
@@ -39,16 +39,17 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "moize": "^6.1.6",
-    "mongodb": "^5.7.0",
+    "mongodb": "^6.1.0",
     "multiformats": "9.9.0",
     "node-fetch-native": "^1.2.0",
+    "p-ratelimit": "^1.0.1",
     "semver": "^7.5.4"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.4",
     "@types/express": "^4.17.17",
-    "@types/node": "^20.4.8",
+    "@types/node": "^20.6.2",
     "ts-node": "^10.9.1",
-    "typescript": "^5.1.3"
+    "typescript": "^5.2.2"
   }
 }
