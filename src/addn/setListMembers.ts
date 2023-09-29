@@ -64,7 +64,7 @@ export const setListMembers = async (
     }
   })
 
-  const chunkSize = 50
+  const chunkSize = 10
 
   for (let i = 0; i < writes.length; i += chunkSize) {
     const chunk = writes.slice(i, i + chunkSize)
