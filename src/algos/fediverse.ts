@@ -9,7 +9,7 @@ import getUserDetails from '../addn/getUserDetails'
 dotenv.config()
 
 // max 15 chars
-export const shortname = 'uruguay'
+export const shortname = 'fediverse'
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
   const builder = await dbClient.getLatestPostsForTag(
@@ -38,32 +38,31 @@ export class manager extends AlgoManager {
   public name: string = shortname
 
   public matchTerms: string[] = [
-    '🇺🇾',
-    '#Uruguay',
-    'Uruguay',
-    'Uruguai',
-    'Uruguaya',
-    'Uruguayo',
-    'Uruguayas',
-    'Uruguayos',
-    'Uruguayan',
-    'Uruguayans',
-    'Montevideo',
-    'Montevideano',
-    'Montevideana',
-    'Charrua',
-    'Charrúa',
-    'Punta del Este',
-    'Paysandú',
-    'Artigas',
+    'fediverse',
+    'fediverso',
+    'mastodon',
+    'pixelfed',
+    'activitypub',
+    'ActivityPub',
+    'misskey',
+    'pleroma',
+    'friendica',
+    'funkwhale',
+    'gnu social',
+    'peertube',
+    'diaspora',
+    'hubzilla',
+    'firefish',
   ]
 
   public matchPatterns: RegExp[] = [
-    /(^|[\s\W])Uruguay($|[\W\s])/im,
-    /(^|[\s\W])Montevideo($|[\W\s])/im,
+    /(^|[\s\W])mastodon($|[\W\s])/im,
+    /(^|[\s\W])fediverse($|[\W\s])/im,
+    /(^|[\s\W])fediverso($|[\W\s])/im,
+    /(^|[\s\W])pixelfed($|[\W\s])/im,
   ]
 
-  // Include Uruguayan users here to always include their posts
+  // Include Argentinian users here to always include their posts
   public matchUsers: string[] = [
     //
   ]
@@ -81,6 +80,7 @@ export class manager extends AlgoManager {
   }
 
   public async filter_post(post: Post): Promise<Boolean> {
+    if (post.author === 'did:plc:mcb6n67plnrlx4lg35natk2b') return false // sorry nowbreezing.ntw.app
     if (this.agent === null) {
       await this.start()
     }
