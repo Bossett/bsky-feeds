@@ -21,12 +21,13 @@
     "publishDiscourse": "ts-node scripts/publishDiscourse.ts",
     "publishElusive": "ts-node scripts/publishElusive.ts",
     "publishOverheard": "ts-node scripts/publishOverheard.ts",
+    "publishPAXAus": "ts-node scripts/publishPAXAus.ts",
     "start": "ts-node src/index.ts",
     "build": "tsc"
   },
   "dependencies": {
     "@atproto/api": "^0.6.14",
-    "@atproto/did-resolver": "^0.1.0",
+    "@atproto/identity": "^0.2.1",
     "@atproto/lexicon": "^0.2.1",
     "@atproto/repo": "^0.2.0",
     "@atproto/syntax": "^0.1.1",
