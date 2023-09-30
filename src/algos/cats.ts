@@ -55,6 +55,7 @@ export class manager extends AlgoManager {
       [
         'did:plc:mcb6n67plnrlx4lg35natk2b',
         'did:plc:2rhj4c7tzussdmfcrtlerr7b',
+        'did:plc:hw7t2navoastix67wjzrmvof',
       ].includes(post.author)
     )
       return false
