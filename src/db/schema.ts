@@ -15,6 +15,7 @@ export type Post = {
   indexedAt: number
   algoTags: string[] | null
   embed?: any | null
+  tags?: string[] | null
 }
 
 export type SubState = {
