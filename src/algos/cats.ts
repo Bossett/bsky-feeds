@@ -78,6 +78,10 @@ export class manager extends AlgoManager {
       })
     }
 
+    if (post.tags) {
+      matchString = `${post.tags.join(' ')} ${matchString}`
+    }
+
     matchString = `${post.text} ${matchString}`.replace('\n', ' ')
 
     if (matchString.match(this.re) !== null) {
