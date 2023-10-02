@@ -67,6 +67,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         indexedAt: new Date().getTime(),
         algoTags: null,
         embed: create.record?.embed,
+        tags: Array.isArray(create.record?.tags) ? create.record?.tags : [],
       }
 
       return [post]
