@@ -45,13 +45,13 @@ const run = async () => {
   const agent = new AtpAgent({ service: 'https://bsky.social' })
   await agent.login({ identifier: handle, password })
 
-  try {
-    await agent.api.app.bsky.feed.describeFeedGenerator()
-  } catch (err) {
-    throw new Error(
-      'The bluesky server is not ready to accept published custom feeds yet',
-    )
-  }
+  // try {
+  //   await agent.api.app.bsky.feed.describeFeedGenerator()
+  // } catch (err) {
+  //   throw new Error(
+  //     'The bluesky server is not ready to accept published custom feeds yet',
+  //   )
+  // }
 
   let avatarRef: BlobRef | undefined
   if (avatar) {
