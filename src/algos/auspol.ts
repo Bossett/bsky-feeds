@@ -91,7 +91,7 @@ export class manager extends AlgoManager {
       })
     }
 
-    await setListMembers(`${process.env.AUSPOL_LIST}`, db_authors, this.agent)
+    // await setListMembers(`${process.env.AUSPOL_LIST}`, db_authors, this.agent)
   }
 
   public async filter_post(post: Post): Promise<Boolean> {
