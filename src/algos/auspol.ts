@@ -43,6 +43,7 @@ export class manager extends AlgoManager {
   public author_collection = 'auspol_members'
 
   public async periodicTask() {
+    /*
     dotenv.config()
 
     const recentPosters = await this.db.getTaggedPostsBetween(
@@ -92,6 +93,7 @@ export class manager extends AlgoManager {
     }
 
     // await setListMembers(`${process.env.AUSPOL_LIST}`, db_authors, this.agent)
+    */
   }
 
   public async filter_post(post: Post): Promise<Boolean> {
