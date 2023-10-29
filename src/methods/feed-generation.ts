@@ -4,6 +4,7 @@ import { AppContext } from '../config'
 import algos from '../algos'
 import { validateAuth } from '../auth'
 import { AtUri } from '@atproto/syntax'
+import moize from 'moize'
 
 export default function (server: Server, ctx: AppContext) {
   server.app.bsky.feed.getFeedSkeleton(async ({ params, req, res }) => {
@@ -37,7 +38,14 @@ export default function (server: Server, ctx: AppContext) {
      * )
      */
 
-    const body = await algo(ctx, params)
+    const algoHandlerMoized = moize(algo, {
+      isPromise: true,
+      maxAge: 30, // 30 seconds
+      updateExpire: true,
+      isShallowEqual: true,
+    })
+
+    const body = await algoHandlerMoized(ctx, params)
     return {
       encoding: 'application/json',
       body: body,
