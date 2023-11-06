@@ -54,7 +54,7 @@ export class manager extends AlgoManager {
 
     await this.db.removeTagFromOldPosts(
       this.name,
-      new Date().getTime() - 3 * 24 * 60 * 60 * 1000, //3 days
+      new Date().getTime() - 7 * 24 * 60 * 60 * 1000, //7 days
     )
   }
 
