@@ -26,7 +26,7 @@ const run = async () => {
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
   const description =
-    'A curated feed from Bluesky scientists, science communicators, and related experts; speaking from their expertise. Flag @danirabaiotti.bsky.social to be added or https://bsky.app/profile/bossett.bsky.social/post/3jxjfswtvil2s for more info! 🧪'
+    'The Science Feed. A curated feed from Bluesky scientists, science communicators, and related experts; speaking from their expertise. Flag @danirabaiotti.bsky.social to be added or https://bsky.app/profile/bossett.bsky.social/post/3jxjfswtvil2s for more info! 🧪'
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg
