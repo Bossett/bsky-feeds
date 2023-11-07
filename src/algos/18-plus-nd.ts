@@ -60,6 +60,8 @@ export class manager extends AlgoManager {
 
     const details = await getUserDetails(post.author, this.agent)
 
+    if (!details.displayName || !details.description) return false
+
     if (
       `${details.displayName} ${details.description}`.match(this.re) !== null
     ) {
