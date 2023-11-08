@@ -9,7 +9,7 @@ dotenv.config()
 
 // max 15 chars
 let name = 'external'
-if (process.env.SECRET_LIST) name = process.env.SECRET_LIST
+if (process.env.SECRET_NAME) name = process.env.SECRET_NAME
 
 export const shortname = name
 
