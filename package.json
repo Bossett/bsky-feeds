@@ -22,6 +22,7 @@
     "publishElusive": "ts-node scripts/publishElusive.ts",
     "publishOverheard": "ts-node scripts/publishOverheard.ts",
     "publishPAXAus": "ts-node scripts/publishPAXAus.ts",
+    "publishExternal": "ts-node scripts/publishExternal.ts",
     "addSelfToList": "ts-node scripts/addSelfToList.ts",
     "start": "ts-node src/index.ts",
     "build": "tsc"
