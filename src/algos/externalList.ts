@@ -8,7 +8,10 @@ import dbClient from '../db/dbClient'
 dotenv.config()
 
 // max 15 chars
-export const shortname = 'external'
+let name = 'external'
+if (process.env.SECRET_LIST) name = process.env.SECRET_LIST
+
+export const shortname = name
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
   const builder = await dbClient.getLatestPostsForTag(
