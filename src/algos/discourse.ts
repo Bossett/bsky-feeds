@@ -50,7 +50,7 @@ export class manager extends AlgoManager {
       shortname,
       this.threshold,
       'discourse_posts',
-      300, // top 300 only
+      100, // top 100 only
     )
 
     const discourse_posts = await dbClient.getCollection('discourse_posts')
