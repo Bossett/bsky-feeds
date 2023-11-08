@@ -22,7 +22,7 @@ export default function (server: Server, ctx: AppContext) {
     }
 
     const cacheAge = algos[feedUri.rkey].manager.cacheAge(params)
-    if (cacheAge > 0) {
+    if (cacheAge.valueOf() > 0) {
       res.setHeader('Cache-Control', `public, max-age=${cacheAge}`)
     } else {
       res.setHeader('Cache-Control', `no-cache`)
