@@ -53,7 +53,16 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
     await Promise.all(this.algoManagers.map((manager) => manager.ready()))
 
-    const ops = await getOpsByType(evt)
+    const ops = await (async () => {
+      try {
+        return await getOpsByType(evt)
+      } catch (e) {
+        console.log(`core: error decoding ops ${e.message}`)
+        return undefined
+      }
+    })()
+
+    if (!ops) return
 
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
 
