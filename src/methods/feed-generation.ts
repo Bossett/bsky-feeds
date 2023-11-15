@@ -4,13 +4,14 @@ import { AppContext } from '../config'
 import algos from '../algos'
 import { validateAuth } from '../auth'
 import { AtUri } from '@atproto/syntax'
+import moize from 'moize'
 
 export default function (server: Server, ctx: AppContext) {
   server.app.bsky.feed.getFeedSkeleton(async ({ params, req, res }) => {
     const feedUri = new AtUri(params.feed)
     const algo = algos[feedUri.rkey].handler
     if (
-      feedUri.hostname !== ctx.cfg.publisherDid ||
+      //feedUri.hostname !== ctx.cfg.publisherDid ||
       feedUri.collection !== 'app.bsky.feed.generator' ||
       !algo
     ) {
@@ -21,7 +22,7 @@ export default function (server: Server, ctx: AppContext) {
     }
 
     const cacheAge = algos[feedUri.rkey].manager.cacheAge(params)
-    if (cacheAge > 0) {
+    if (cacheAge.valueOf() > 0) {
       res.setHeader('Cache-Control', `public, max-age=${cacheAge}`)
     } else {
       res.setHeader('Cache-Control', `no-cache`)
@@ -37,7 +38,13 @@ export default function (server: Server, ctx: AppContext) {
      * )
      */
 
-    const body = await algo(ctx, params)
+    const algoHandlerMoized = moize(algo, {
+      isPromise: true,
+      maxAge: 30, // 30 seconds
+      isShallowEqual: true,
+    })
+
+    const body = await algoHandlerMoized(ctx, params)
     return {
       encoding: 'application/json',
       body: body,

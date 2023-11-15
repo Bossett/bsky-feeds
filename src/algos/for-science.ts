@@ -23,6 +23,13 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
     post: row.uri,
   }))
 
+  if (feed.length > 3) {
+    feed.pop()
+    feed.splice(1, 0, {
+      post: 'at://did:plc:hu2obebw3nhfj667522dahfg/app.bsky.feed.post/3kdqsp2krwq2m',
+    })
+  }
+
   let cursor: string | undefined
   const last = builder.at(-1)
   if (last) {

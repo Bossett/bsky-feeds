@@ -27,6 +27,8 @@
     "publishSalesforce": "ts-node scripts/publishSalesforce.ts",
     "publishFediverse": "ts-node scripts/publishFediverse.ts",
     "publishPAXAus": "ts-node scripts/publishPAXAus.ts",
+    "publishExternal": "ts-node scripts/publishExternal.ts",
+    "addSelfToList": "ts-node scripts/addSelfToList.ts",
     "start": "ts-node src/index.ts",
     "build": "tsc"
   },
@@ -34,13 +36,13 @@
     "@atproto/api": "^0.6.14",
     "@atproto/identity": "^0.2.1",
     "@atproto/lexicon": "^0.2.1",
-    "@atproto/repo": "^0.2.0",
+    "@atproto/repo": "^0.3.2",
     "@atproto/syntax": "^0.1.1",
     "@atproto/xrpc-server": "^0.3.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "moize": "^6.1.6",
-    "mongodb": "^6.1.0",
+    "mongodb": "^6.2.0",
     "multiformats": "9.9.0",
     "node-fetch-native": "^1.4.0",
     "p-ratelimit": "^1.0.1",
@@ -49,7 +51,7 @@
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.4",
     "@types/express": "^4.17.18",
-    "@types/node": "^20.6.5",
+    "@types/node": "^18.18.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   }

@@ -1,16 +1,17 @@
 import { QueryParams } from '../lexicon/types/app/bsky/feed/getFeedSkeleton'
 import { AppContext } from '../config'
 import { AlgoManager } from '../addn/algoManager'
-import { BskyAgent } from '@atproto/api'
 import dotenv from 'dotenv'
 import { Post } from '../db/schema'
 import dbClient from '../db/dbClient'
-import getUserDetails from '../addn/getUserDetails'
 
 dotenv.config()
 
 // max 15 chars
-export const shortname = 'dads'
+let name = 'external'
+if (process.env.SECRET_NAME) name = process.env.SECRET_NAME
+
+export const shortname = name
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
   const builder = await dbClient.getLatestPostsForTag(
@@ -37,38 +38,38 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 
 export class manager extends AlgoManager {
   public name: string = shortname
-  public re = /(?=.*\b(father|dad)\b)/ims
+  public follows: string[] = []
+
+  async updateList() {
+    if (process.env.SECRET_LIST) {
+      try {
+        const response = await fetch(`${process.env.SECRET_LIST}`)
+        const text = await response.text()
+        this.follows = text
+          .split('\n')
+          .filter((item: string) => item.startsWith('did:plc:'))
+      } catch {}
+    }
+  }
 
   public async periodicTask() {
+    this.updateList()
+
     await this.db.removeTagFromOldPosts(
       this.name,
-      new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
+      new Date().getTime() - 7 * 24 * 60 * 60 * 1000, //7 days
     )
   }
 
   public async filter_post(post: Post): Promise<Boolean> {
     if (post.replyRoot !== null) return false
+    if (this.follows.length === 0) this.updateList()
 
-    let return_value: Boolean | undefined = undefined
-
-    let match = false
-
-    const details = await getUserDetails(post.author, this.agent)
-
-    if (!details || !details.displayName || !details.description) return false
-
-    if (
-      `${details.description} ${details.displayName}`.match(this.re) !== null
-    ) {
-      match = true
+    if (this.agent === null) {
+      await this.start()
     }
+    if (this.agent === null) return false
 
-    if (match) {
-      return_value = true
-    } else {
-      return_value = false
-    }
-
-    return return_value
+    return this.follows.includes(post.author)
   }
 }

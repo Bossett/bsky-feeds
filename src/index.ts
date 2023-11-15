@@ -13,7 +13,7 @@ const run = async () => {
       maybeStr(process.env.FEEDGEN_MONGODB_CONNECTION_STRING) ?? '',
     subscriptionEndpoint:
       maybeStr(process.env.FEEDGEN_SUBSCRIPTION_ENDPOINT) ??
-      'wss://bsky.social',
+      'wss://bsky.network',
     publisherDid:
       maybeStr(process.env.FEEDGEN_PUBLISHER_DID) ?? 'did:example:alice',
     hostname,
