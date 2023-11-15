@@ -20,6 +20,7 @@ import * as elusive from './elusive'
 import * as keyboards from './keyboards'
 import * as overheard from './overheard'
 import * as paxaus from './paxaus'
+import * as external from './externalList'
 
 type AlgoHandler = (ctx: AppContext, params: QueryParams) => Promise<AlgoOutput>
 
@@ -47,6 +48,10 @@ const algos = {
   [paxaus.shortname]: {
     handler: <AlgoHandler>paxaus.handler,
     manager: paxaus.manager,
+  },
+  [external.shortname]: {
+    handler: <AlgoHandler>external.handler,
+    manager: external.manager,
   },
 }
 

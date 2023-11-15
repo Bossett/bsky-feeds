@@ -28,16 +28,20 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const handle = `${process.env.FEEDGEN_HANDLE}`
     const password = `${process.env.FEEDGEN_PASSWORD}`
 
-    agent.login({ identifier: handle, password: password }).then(() => {
+    agent.login({ identifier: handle, password: password }).then(async () => {
       batchUpdate(agent, 5 * 60 * 1000)
 
       Object.keys(algos).forEach((algo) => {
         this.algoManagers.push(new algos[algo].manager(db, agent))
       })
 
-      this.algoManagers.forEach(async (algo) => {
-        if (await algo._start()) console.log(`${algo.name}: Started`)
+      const startPromises = this.algoManagers.map(async (algo) => {
+        if (await algo._start()) {
+          console.log(`${algo.name}: Started`)
+        }
       })
+
+      await Promise.all(startPromises)
     })
   }
 
@@ -45,54 +49,53 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
   public intervalId: NodeJS.Timer
 
   async handleEvent(evt: RepoEvent) {
-    for (let i = 0; i < this.algoManagers.length; i++) {
-      await this.algoManagers[i].ready()
-    }
-
-    dotenv.config()
     if (!isCommit(evt)) return
-    const ops = await getOpsByType(evt)
+
+    await Promise.all(this.algoManagers.map((manager) => manager.ready()))
+
+    const ops = await (async () => {
+      try {
+        return await getOpsByType(evt)
+      } catch (e) {
+        console.log(`core: error decoding ops ${e.message}`)
+        return undefined
+      }
+    })()
+
+    if (!ops) return
 
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
 
-    const postsCreated: Post[] = ops.posts.creates.flatMap((create) => {
-      const post: Post = {
-        _id: null,
-        uri: create.uri,
-        cid: create.cid,
-        author: create.author,
-        text: create.record?.text,
-        replyParent: create.record?.reply?.parent.uri ?? null,
-        replyRoot: create.record?.reply?.root.uri ?? null,
-        indexedAt: new Date().getTime(),
-        algoTags: null,
-        embed: create.record?.embed,
-        tags: Array.isArray(create.record?.tags) ? create.record?.tags : [],
-      }
+    // Transform posts in parallel
+    const postsCreated = ops.posts.creates.map((create) => ({
+      _id: null,
+      uri: create.uri,
+      cid: create.cid,
+      author: create.author,
+      text: create.record?.text,
+      replyParent: create.record?.reply?.parent.uri ?? null,
+      replyRoot: create.record?.reply?.root.uri ?? null,
+      indexedAt: new Date().getTime(),
+      algoTags: null,
+      embed: create.record?.embed,
+      tags: Array.isArray(create.record?.tags) ? create.record?.tags : [],
+    }))
 
-      return [post]
-    })
-
-    const postsToCreate: Post[] = []
-
-    for (let post_i = 0; post_i < postsCreated.length; post_i++) {
-      const post = postsCreated[post_i]
-      const algoTags: string[] = []
-      let include = false
-
-      for (let i = 0; i < this.algoManagers.length; i++) {
-        let includeAlgo = false
+    const postsToCreatePromises = postsCreated.map(async (post) => {
+      const algoTagsPromises = this.algoManagers.map(async (manager) => {
         try {
-          includeAlgo = await this.algoManagers[i].filter_post(post)
+          const includeAlgo = await manager.filter_post(post)
+          return includeAlgo ? manager.name : null
         } catch (err) {
-          console.error(`${this.algoManagers[i].name}: filter failed`, err)
-          includeAlgo = false
+          console.error(`${manager.name}: filter failed`, err)
+          return null
         }
-        if (includeAlgo) algoTags.push(`${this.algoManagers[i].name}`)
-        include = include || includeAlgo
-      }
+      })
 
-      if (!include) continue
+      const algoTagsResults = await Promise.all(algoTagsPromises)
+      const algoTags = algoTagsResults.filter((tag) => tag !== null)
+
+      if (algoTags.length === 0) return null
 
       const hash = crypto
         .createHash('shake256', { outputLength: 12 })
@@ -100,11 +103,16 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         .digest('hex')
         .toString()
 
-      post._id = hash
-      post.algoTags = [...algoTags]
+      return {
+        ...post,
+        _id: hash,
+        algoTags: algoTags,
+      }
+    })
 
-      postsToCreate.push(post)
-    }
+    const postsToCreate = (await Promise.all(postsToCreatePromises)).filter(
+      (post) => post !== null,
+    )
 
     if (postsToDelete.length > 0) {
       await this.db.deleteManyURI('post', postsToDelete)
@@ -112,7 +120,8 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
     if (postsToCreate.length > 0) {
       postsToCreate.forEach(async (to_insert) => {
-        await this.db.replaceOneURI('post', to_insert.uri, to_insert)
+        if (to_insert)
+          await this.db.replaceOneURI('post', to_insert.uri, to_insert)
       })
     }
   }

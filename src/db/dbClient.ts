@@ -150,14 +150,17 @@ class dbSingleton {
       .findOneAndReplace(
         { service: service },
         { service: service, cursor: cursor },
+        { upsert: true },
       )
   }
 
   async getSubStateCursor(service: string) {
-    return await this.client
+    const res = await this.client
       ?.db()
       .collection('sub_state')
       .findOne({ service: service })
+    if (res === null) return { service: service, cursor: 0 }
+    return res
   }
 
   async getLatestPostsForTag(
