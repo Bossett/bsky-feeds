@@ -62,6 +62,8 @@ export class manager extends AlgoManager {
     'Alberto Fernandez',
     'Milei',
     'Cyberciruja',
+    'Massa',
+    '#Elecciones2023',
   ]
 
   public matchPatterns: RegExp[] = [
