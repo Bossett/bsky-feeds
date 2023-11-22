@@ -52,7 +52,6 @@ export class manager extends AlgoManager {
     'Argentinian',
     'Argentinians',
     'Buenos Aires',
-    'San Martín',
     'Malvinas',
     'Maradona',
     'Maradonian',
@@ -62,7 +61,6 @@ export class manager extends AlgoManager {
     'Alberto Fernandez',
     'Milei',
     'Cyberciruja',
-    'Massa',
     '#Elecciones2023',
   ]
 
