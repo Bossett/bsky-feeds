@@ -56,6 +56,7 @@ export class manager extends AlgoManager {
     'Punta del Este',
     'Paysandú',
     'Artigas',
+    'yorugua',
   ]
 
   public matchPatterns: RegExp[] = [
