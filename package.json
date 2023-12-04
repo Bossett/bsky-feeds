@@ -31,7 +31,7 @@
     "@atproto/api": "^0.6.14",
     "@atproto/identity": "^0.2.1",
     "@atproto/lexicon": "^0.2.1",
-    "@atproto/repo": "^0.3.2",
+    "@atproto/repo": "^0.3.6",
     "@atproto/syntax": "^0.1.1",
     "@atproto/xrpc-server": "^0.3.0",
     "dotenv": "^16.3.1",
