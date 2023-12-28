@@ -16,7 +16,7 @@
 	],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "sudo apt update && sudo apt install -y xdg-utils gnupg2 && yarn install",
+	"postCreateCommand": "yarn install",
 	"customizations": {
 		"vscode": {
 			"extensions": [
