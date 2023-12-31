@@ -57,8 +57,8 @@ export class manager extends AlgoManager {
     'montevideo',
     'Montevideano',
     'Montevideana',
-    'montevideano'
-    'montevideana'
+    'montevideano',
+    'montevideana',
     'Charrua',
     'Charrúa',
     'charrua',
