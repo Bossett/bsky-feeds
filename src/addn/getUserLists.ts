@@ -10,18 +10,17 @@ export const getUserLists = async (
   const user_lists: { name: string; atURL: string }[] = []
 
   do {
-    const lists = await agent.api.com.atproto.repo.listRecords({
-      repo: `${did}`,
-      collection: 'app.bsky.graph.list',
+    const lists: any = await agent.api.app.bsky.graph.getLists({
+      actor: `${did}`,
       limit: 100,
       cursor: current_cursor,
     })
 
-    lists.data.records.forEach((list: any) => {
-      if (list.value) {
-        user_lists.push({ name: list.value.name, atURL: list.uri })
-      }
+    lists.data.lists.forEach((list: any) => {
+      user_lists.push({ name: list.name, atURL: list.uri })
     })
+
+    current_cursor = lists.data.cursor
   } while (total_retrieved >= 100)
 
   return user_lists
