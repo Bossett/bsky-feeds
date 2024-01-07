@@ -4,6 +4,7 @@ import { AlgoManager } from '../addn/algoManager'
 import { BskyAgent } from '@atproto/api'
 import dotenv from 'dotenv'
 import getListMembers from '../addn/getListMembers'
+import getUserLists from '../addn/getUserLists'
 import getPostsForUser from '../addn/getPostsForUser'
 import resoveDIDToHandle from '../addn/resolveDIDToHandle'
 import { Post } from '../db/schema'
@@ -58,6 +59,29 @@ export class manager extends AlgoManager {
     dotenv.config()
 
     const lists: string[] = `${process.env.SCIENCE_LISTS}`.split('|')
+
+    if (process.env.SCIENCE_RECURSE === 'true') {
+      const list_owners: string[] = []
+
+      for (const list of lists) {
+        const members = await getListMembers(list, this.agent)
+        members.forEach((member) => {
+          if (!list_owners.includes(member)) list_owners.push(member)
+        })
+      }
+
+      for (const owner of list_owners) {
+        const owner_lists = await getUserLists(owner, this.agent)
+        owner_lists.forEach((list) => {
+          if (list.name.includes(`${process.env.SCIENCE_SYMBOL}`)) {
+            lists.push(list.atURL)
+          }
+        })
+      }
+    }
+
+    console.log(`${this.name}: Watching ${lists.length} lists`)
+
     const list_members: string[] = []
 
     for (let i = 0; i < lists.length; i++) {
