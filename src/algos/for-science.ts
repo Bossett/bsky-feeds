@@ -72,8 +72,12 @@ export class manager extends AlgoManager {
 
       for (const owner of list_owners) {
         const owner_lists = await getUserLists(owner, this.agent)
+        const owner_name = await resoveDIDToHandle(owner, this.agent)
         owner_lists.forEach((list) => {
           if (list.name.includes(`${process.env.SCIENCE_SYMBOL}`)) {
+            console.log(
+              `${this.name}: Adding ${list.name} (${owner_name}) to lists`,
+            )
             lists.push(list.atURL)
           }
         })
