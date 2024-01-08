@@ -13,14 +13,14 @@ dotenv.config()
 export const shortname = 'cats'
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
-  const builder = await dbClient.getLatestPostsForTag(
-    shortname,
-    params.limit,
-    params.cursor,
-    true,
-    false,
-    true,
-  )
+  const builder = await dbClient.getLatestPostsForTag({
+    tag: shortname,
+    limit: params.limit,
+    cursor: params.cursor,
+    imagesOnly: true,
+    nsfwOnly: false,
+    excludeNSFW: true,
+  })
 
   let feed = builder.map((row) => ({
     post: row.uri,
