@@ -11,11 +11,11 @@ dotenv.config()
 export const shortname = 'paxaus'
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
-  const builder = await dbClient.getLatestPostsForTag(
-    shortname,
-    params.limit,
-    params.cursor,
-  )
+  const builder = await dbClient.getLatestPostsForTag({
+    tag: shortname,
+    limit: params.limit,
+    cursor: params.cursor,
+  })
 
   let feed = builder.map((row) => ({
     post: row.uri,

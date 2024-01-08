@@ -13,12 +13,12 @@ dotenv.config()
 export const shortname = 'dads-media'
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
-  const builder = await dbClient.getLatestPostsForTag(
-    'dads',
-    params.limit,
-    params.cursor,
-    true,
-  )
+  const builder = await dbClient.getLatestPostsForTag({
+    tag: 'dads',
+    limit: params.limit,
+    cursor: params.cursor,
+    imagesOnly: true,
+  })
 
   const feed = builder.map((row) => ({
     post: row.uri,
