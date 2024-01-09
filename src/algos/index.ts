@@ -74,6 +74,7 @@ const algos = {
     manager: external.manager,
   },
   ['aaaolsp7e26zo']: {
+    // originally a skyfeed feed, so re-using the key
     handler: <AlgoHandler>twelveWords.handler,
     manager: twelveWords.manager,
   },
