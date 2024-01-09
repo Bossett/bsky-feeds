@@ -73,7 +73,7 @@ const algos = {
     handler: <AlgoHandler>external.handler,
     manager: external.manager,
   },
-  [twelveWords.shortname]: {
+  ['aaaolsp7e26zo']: {
     handler: <AlgoHandler>twelveWords.handler,
     manager: twelveWords.manager,
   },
