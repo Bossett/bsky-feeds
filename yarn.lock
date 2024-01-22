@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@atproto/api@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.7.4.tgz#0dd6e725c88d1f941c57670dc82b60fde10f4ec6"
-  integrity sha512-7DBy6/OcXemzCPzA0dx52LLYRABBs8bq9Docs3is+WRgEx5/Pd1kHSAlCHIaBhsym8fZ3/U4Fks/5FSHkSm4yQ==
+"@atproto/api@^0.9.2":
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.9.2.tgz#acb70a0c0f658eb13b3ee759c700486de820c49e"
+  integrity sha512-Z1dJM3BER8XsXjw6b6WtbFB1/sf/JXHIGR6tmuOB1AZ1/CLAmBpRN/OAZYz3GD0EHnkzlnjOh9B6FJVfdLKXUQ==
   dependencies:
     "@atproto/common-web" "^0.2.3"
     "@atproto/lexicon" "^0.3.1"
@@ -16,17 +16,7 @@
     typed-emitter "^2.1.0"
     zod "^3.21.4"
 
-"@atproto/common-web@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@atproto/common-web/-/common-web-0.2.1.tgz#97412cb241321fc6c56a2b8c0b2416b3240caf50"
-  integrity sha512-5AoDKkKz7JhXSiicjhPihA/MJMlSuTQ9Aed9fflPuoTuT6C3aXbxaUZEcqqipSwlCfGpOzPmJmWJjMWWsYr2ew==
-  dependencies:
-    graphemer "^1.4.0"
-    multiformats "^9.9.0"
-    uint8arrays "3.0.0"
-    zod "^3.21.4"
-
-"@atproto/common-web@^0.2.3":
+"@atproto/common-web@^0.2.1", "@atproto/common-web@^0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@atproto/common-web/-/common-web-0.2.3.tgz#c44c1e177ae8309d5116347d49850209e8e478cc"
   integrity sha512-k9VKGYUqjsRlI3wS31XyCbeb2U7ddS4X/eFgzos2CE5rIbk/uQGyKH+0Jcn1JIwRkvI1BemyNuUVrS8Ok3wiuw==
@@ -106,14 +96,7 @@
     uint8arrays "3.0.0"
     zod "^3.21.4"
 
-"@atproto/syntax@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@atproto/syntax/-/syntax-0.1.2.tgz#417366d36b53ecf29d9d1f6e35179b1f3feef95b"
-  integrity sha512-n6VSuccMGouwftCvZBq9WNwI0qYCMOH/lTHSV+/dT232lX7pIrqisOlErUSBoOJ49B1Wxy1DjeeBS26ap9SsGQ==
-  dependencies:
-    "@atproto/common-web" "^0.2.1"
-
-"@atproto/syntax@^0.1.5":
+"@atproto/syntax@^0.1.2", "@atproto/syntax@^0.1.5":
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/@atproto/syntax/-/syntax-0.1.5.tgz#85b6488a33da3b864e8ac22a61b5586b271206ee"
   integrity sha512-pbY5lOnThoAbsmrdbN9LC/dNmckfqODJiX9zjW2t3BIHYFeGBc6w9bK3Vre8A0Hg8yWkQpv6gaBLu+ykgi2DJQ==
