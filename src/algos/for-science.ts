@@ -58,7 +58,10 @@ export class manager extends AlgoManager {
   public async periodicTask() {
     dotenv.config()
 
-    if (this.authorList === undefined) await this.start()
+    if (this.authorList === undefined) {
+      console.log(`${this.name}: Initialising authors from database`)
+      await this.start()
+    }
 
     const lists: string[] = `${process.env.SCIENCE_LISTS}`.split('|')
 
