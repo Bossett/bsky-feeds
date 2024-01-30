@@ -13,7 +13,7 @@ export const setListMembers = async (
 
   const list_did = `${list.split('/').at(2)}`
 
-  while (total_retrieved > 0) {
+  do {
     const list_members = await limit(() =>
       agent.com.atproto.repo.listRecords({
         repo: list_did,
@@ -31,7 +31,7 @@ export const setListMembers = async (
         members.push(member)
       }
     })
-  }
+  } while (current_cursor !== undefined)
 
   const users_to_add = dids.filter((member) => {
     return !online_list_members.includes(member)

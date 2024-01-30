@@ -9,7 +9,7 @@ export const getListMembers = async (
   let current_cursor: string | undefined = undefined
   let members: string[] = []
 
-  while (total_retrieved > 0) {
+  do {
     const list_members = await limit(() =>
       agent.api.app.bsky.graph.getList({
         list: `${list}`,
@@ -22,7 +22,7 @@ export const getListMembers = async (
     list_members.data.items.forEach((member) => {
       members.push(member.subject.did)
     })
-  }
+  } while (current_cursor !== undefined)
 
   return members
 }

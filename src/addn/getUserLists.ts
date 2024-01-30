@@ -24,7 +24,7 @@ export const getUserLists = async (
     })
 
     current_cursor = lists.data.cursor
-  } while (total_retrieved >= 100)
+  } while (current_cursor !== undefined)
 
   return user_lists
 }
