@@ -24,7 +24,7 @@ export const getUserLists = async (
     })
 
     current_cursor = lists.data.cursor
-  } while (current_cursor !== undefined)
+  } while (current_cursor !== undefined && current_cursor !== '')
 
   return user_lists
 }

@@ -45,6 +45,7 @@ export default function (server: Server, ctx: AppContext) {
     })
 
     const body = await algoHandlerMoized(ctx, params)
+    if (body.feed.length < params.limit) body.cursor = undefined
     return {
       encoding: 'application/json',
       body: body,

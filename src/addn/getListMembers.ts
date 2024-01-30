@@ -22,7 +22,7 @@ export const getListMembers = async (
     list_members.data.items.forEach((member) => {
       members.push(member.subject.did)
     })
-  } while (current_cursor !== undefined)
+  } while (current_cursor !== undefined && current_cursor !== '')
 
   return members
 }

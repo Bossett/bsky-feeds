@@ -31,7 +31,7 @@ export const setListMembers = async (
         members.push(member)
       }
     })
-  } while (current_cursor !== undefined)
+  } while (current_cursor !== undefined && current_cursor !== '')
 
   const users_to_add = dids.filter((member) => {
     return !online_list_members.includes(member)
