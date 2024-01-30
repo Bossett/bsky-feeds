@@ -53,10 +53,13 @@ export class manager extends AlgoManager {
       this.author_collection,
       'did',
     )
+    console.log(this.authorList)
   }
 
   public async periodicTask() {
     dotenv.config()
+
+    await this.start()
 
     const lists: string[] = `${process.env.SCIENCE_LISTS}`.split('|')
 
