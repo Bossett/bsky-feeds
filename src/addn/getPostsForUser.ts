@@ -4,6 +4,7 @@ import { Post } from '../db/schema'
 
 import crypto from 'crypto'
 import resolveDIDToHandle from './resolveDIDToHandle'
+import limit from './rateLimit'
 
 export const getPostsForUser = async (
   author: string,
@@ -17,10 +18,12 @@ export const getPostsForUser = async (
     `Getting posts for ${await resolveDIDToHandle(author, agent)}... `,
   )
 
-  let author_feed = await agent.api.app.bsky.feed.getAuthorFeed({
-    actor: author,
-    limit: 100,
-  })
+  let author_feed = await limit(() =>
+    agent.api.app.bsky.feed.getAuthorFeed({
+      actor: author,
+      limit: 100,
+    }),
+  )
 
   while (author_feed.data.feed.length !== 0) {
     const author_posts = author_feed.data.feed
@@ -51,11 +54,13 @@ export const getPostsForUser = async (
 
       posts.push(post)
     }
-    author_feed = await agent.api.app.bsky.feed.getAuthorFeed({
-      actor: author,
-      limit: 100,
-      cursor: author_feed.data.cursor,
-    })
+    author_feed = await limit(() =>
+      agent.api.app.bsky.feed.getAuthorFeed({
+        actor: author,
+        limit: 100,
+        cursor: author_feed.data.cursor,
+      }),
+    )
   }
 
   return posts

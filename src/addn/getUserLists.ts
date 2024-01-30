@@ -1,4 +1,5 @@
 import { BskyAgent } from '@atproto/api'
+import limit from './rateLimit'
 
 export const getUserLists = async (
   did: string,
@@ -10,11 +11,13 @@ export const getUserLists = async (
   const user_lists: { name: string; atURL: string }[] = []
 
   do {
-    const lists: any = await agent.api.app.bsky.graph.getLists({
-      actor: `${did}`,
-      limit: 100,
-      cursor: current_cursor,
-    })
+    const lists: any = await limit(() =>
+      agent.api.app.bsky.graph.getLists({
+        actor: `${did}`,
+        limit: 100,
+        cursor: current_cursor,
+      }),
+    )
 
     lists.data.lists.forEach((list: any) => {
       user_lists.push({ name: list.name, atURL: list.uri })

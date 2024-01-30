@@ -3,6 +3,7 @@ import { AppContext } from '../config'
 import { AlgoManager } from '../addn/algoManager'
 import { Post } from '../db/schema'
 import dbClient from '../db/dbClient'
+import limit from '../addn/rateLimit'
 
 // max 15 chars
 export const shortname = 'discourse'
@@ -72,10 +73,12 @@ export class manager extends AlgoManager {
         updated++
 
         try {
-          const post = await this.agent.getPostThread({
-            uri: discourse_posts[i]._id.toString(),
-            depth: 1,
-          })
+          const post = await limit(() =>
+            this.agent.getPostThread({
+              uri: discourse_posts[i]._id.toString(),
+              depth: 1,
+            }),
+          )
           const likeCount = Number.parseInt(
             (<any>post.data.thread.post)?.likeCount,
           )

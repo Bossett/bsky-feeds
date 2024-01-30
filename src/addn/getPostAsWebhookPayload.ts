@@ -1,13 +1,16 @@
 import { BskyAgent } from '@atproto/api'
+import limit from './rateLimit'
 
 export const getPostAsWebhookPayload = async (
   post_uri: string,
   agent: BskyAgent,
   additional_fields: any[] = [],
 ) => {
-  const post_detail = await agent.app.bsky.feed.getPosts({
-    uris: [post_uri],
-  })
+  const post_detail = await limit(() =>
+    agent.app.bsky.feed.getPosts({
+      uris: [post_uri],
+    }),
+  )
 
   if (!post_detail.data.posts[0]) return
 

@@ -1,4 +1,5 @@
 import { BskyAgent } from '@atproto/api'
+import limit from './rateLimit'
 
 export const setListMembers = async (
   list: string,
@@ -13,12 +14,14 @@ export const setListMembers = async (
   const list_did = `${list.split('/').at(2)}`
 
   while (total_retrieved > 0) {
-    const list_members = await agent.com.atproto.repo.listRecords({
-      repo: list_did,
-      collection: 'app.bsky.graph.listitem',
-      limit: 100,
-      cursor: current_cursor,
-    })
+    const list_members = await limit(() =>
+      agent.com.atproto.repo.listRecords({
+        repo: list_did,
+        collection: 'app.bsky.graph.listitem',
+        limit: 100,
+        cursor: current_cursor,
+      }),
+    )
     total_retrieved = list_members.data.records.length
     current_cursor = list_members.data.cursor
 
@@ -68,10 +71,12 @@ export const setListMembers = async (
 
   for (let i = 0; i < writes.length; i += chunkSize) {
     const chunk = writes.slice(i, i + chunkSize)
-    const res = await agent.com.atproto.repo.applyWrites({
-      repo: list_did,
-      writes: chunk,
-    })
+    const res = await limit(() =>
+      agent.com.atproto.repo.applyWrites({
+        repo: list_did,
+        writes: chunk,
+      }),
+    )
   }
 
   return { users_added: [...users_to_add], users_removed: [...users_to_remove] }

@@ -1,13 +1,16 @@
 import { BskyAgent } from '@atproto/api'
+import limit from './rateLimit'
 
 export const resolveHandleToDID = async (
   author: string,
   agent: BskyAgent,
 ): Promise<string> => {
   return (
-    await agent.com.atproto.identity.resolveHandle({
-      handle: author,
-    })
+    await limit(() =>
+      agent.com.atproto.identity.resolveHandle({
+        handle: author,
+      }),
+    )
   ).data.did
 }
 
