@@ -91,8 +91,6 @@ export class manager extends AlgoManager {
           )
           likes = 0
         }
-
-        await new Promise((resolve) => setTimeout(resolve, 1000)) // Wait 1s
       }
 
       const record = {
