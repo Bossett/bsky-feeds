@@ -14,7 +14,7 @@ export const _getUserFollows = async (user: string, agent: BskyAgent) => {
   }
 
   let cursor: string | undefined = undefined
-  while (true) {
+  do {
     const res: any = await limit(() =>
       agent.api.app.bsky.graph.getFollows({
         actor: user_did,
@@ -22,14 +22,12 @@ export const _getUserFollows = async (user: string, agent: BskyAgent) => {
       }),
     )
 
-    if (res.data.follows.length === 0) break
-
     cursor = res.data.cursor
 
     res.data.follows.forEach((follow) => {
       follows.push(`${follow.did}`)
     })
-  }
+  } while (cursor !== undefined && cursor !== '')
 
   return follows
 }

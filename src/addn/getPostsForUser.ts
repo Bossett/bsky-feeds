@@ -25,7 +25,7 @@ export const getPostsForUser = async (
     }),
   )
 
-  while (author_feed.data.feed.length !== 0) {
+  do {
     const author_posts = author_feed.data.feed
     while (author_posts.length > 0) {
       const post_create = author_posts.pop()
@@ -61,7 +61,10 @@ export const getPostsForUser = async (
         cursor: author_feed.data.cursor,
       }),
     )
-  }
+  } while (
+    author_feed.data.cursor !== undefined &&
+    author_feed.data.cursor !== ''
+  )
 
   return posts
 }
