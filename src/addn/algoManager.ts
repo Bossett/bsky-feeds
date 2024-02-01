@@ -47,7 +47,11 @@ export class AlgoManager {
     if (!this.periodicIntervalId) {
       this.periodicIntervalId = setInterval(() => {
         console.log(`${this.name}: running ${task_inverval_mins}m task`)
-        this.periodicTask()
+        try {
+          this.periodicTask()
+        } catch (e) {
+          console.log(`${this.name}: error running periodic task ${e.message}`)
+        }
       }, task_inverval_mins * 60 * 1000)
     }
 
