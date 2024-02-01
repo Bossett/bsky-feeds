@@ -7,12 +7,19 @@ const _limit = pRateLimit({
   maxDelay: 30 * 1000,
 })
 
-const limit = async <T>(fn: () => Promise<T>): Promise<T> => {
+const limit = async <T>(fn: () => Promise<T>, retries = 3): Promise<T> => {
   try {
     return await _limit(fn)
   } catch (error) {
-    console.log(`error in limited call:\n${fn.toString()}\n${error}`)
-    throw error
+    if (retries > 0) {
+      console.log(`retrying limited call:\n${fn.toString()}`)
+      const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
+      await delay(10000)
+      return await limit(fn, retries - 1)
+    } else {
+      console.log(`error in limited call:\n${fn.toString()}\n${error}`)
+      throw error
+    }
   }
 }
 
