@@ -1,4 +1,4 @@
-FROM node:18.18.2
+FROM node:21.6.1
 WORKDIR /app
 COPY . .
 RUN yarn install
