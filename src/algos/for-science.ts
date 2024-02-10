@@ -27,7 +27,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
   if (feed.length > 3) {
     feed.pop()
     feed.splice(1, 0, {
-      post: 'at://did:plc:hu2obebw3nhfj667522dahfg/app.bsky.feed.post/3kimrv22kmm2i',
+      post: 'at://did:plc:hu2obebw3nhfj667522dahfg/app.bsky.feed.post/3kl33otd6ob2s',
     })
   }
 
