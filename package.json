@@ -35,19 +35,20 @@
     "@atproto/repo": "^0.3.6",
     "@atproto/syntax": "^0.1.5",
     "@atproto/xrpc-server": "^0.4.2",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "moize": "^6.1.6",
     "mongodb": "^6.3.0",
     "multiformats": "^9.9.0",
     "node-fetch-native": "^1.6.1",
     "p-ratelimit": "^1.0.1",
-    "semver": "^7.5.4"
+    "semver": "^7.6.0",
+    "follow-redirects": "1.15.5"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^18.18.2",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.2.2"
   }
 }

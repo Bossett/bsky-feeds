@@ -14,3 +14,6 @@ updates:
     schedule:
       interval: 'weekly'
     versioning-strategy: 'increase'
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
