@@ -40,7 +40,7 @@
     "moize": "^6.1.6",
     "mongodb": "^6.3.0",
     "multiformats": "^9.9.0",
-    "node-fetch-native": "^1.6.1",
+    "node-fetch-native": "^1.6.2",
     "p-ratelimit": "^1.0.1",
     "semver": "^7.6.0",
     "follow-redirects": "1.15.5"
