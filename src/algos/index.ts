@@ -8,18 +8,7 @@ import * as argentina from './argentina'
 import * as riodelaplata from './riodelaplata'
 import * as salesforce from './salesforce'
 import * as fediverse from './fediverse'
-import * as forScience from './for-science'
-import * as ausPol from './auspol'
-import * as dads from './dads'
-import * as dadsMedia from './dads-media'
-import * as EighteenPlusND from './18-plus-nd'
-import * as ND from './nd'
-import * as discourse from './discourse'
-import * as cats from './cats'
-import * as elusive from './elusive'
-import * as keyboards from './keyboards'
-import * as overheard from './overheard'
-import * as paxaus from './paxaus'
+
 import * as external from './externalList'
 
 type AlgoHandler = (ctx: AppContext, params: QueryParams) => Promise<AlgoOutput>
@@ -44,10 +33,6 @@ const algos = {
   [fediverse.shortname]: {
     handler: <AlgoHandler>fediverse.handler,
     manager: fediverse.manager,
-  },
-  [paxaus.shortname]: {
-    handler: <AlgoHandler>paxaus.handler,
-    manager: paxaus.manager,
   },
   [external.shortname]: {
     handler: <AlgoHandler>external.handler,
