@@ -1,44 +1,37 @@
-# Bossett's little feed collection
+# @adrian.uy's feed collection
+
+Forked from  [Bossett's little feed collection](https://github.com/Bossett/bsky-feeds)
 
 This code was originally a fork of https://github.com/bluesky-social/feed-generator - and you can look there for more information about the mechanics of feed generation. In particular - for questions about 'how to publish the feed' from the script in the scripts folder.
 
 # Hosting
 
-I have put together a guide that tracks how I host the tool - you can find it at https://bossett.io/setting-up-bossetts-bluesky-feed-generator/. It walks you through setup of the app on [Digital Ocean](https://m.do.co/c/a838c8f1e33a).
+Bossett's guide that tracks how I host the tool - you can find it at https://bossett.io/setting-up-bossetts-bluesky-feed-generator/. It walks you through setup of the app on [Digital Ocean](https://m.do.co/c/a838c8f1e33a).
 
 # Feeds
 
-## Science Feed
+## Uruguay Feed
 
-Watches for 🧪 posted by people on a set of watchlists (e.g. https://bsky.app/profile/did:plc:jfhpnnst6flqway4eaeqzj2a/lists/3jx3w32axax2f)
+Feed at https://bsky.app/profile/did:plc:jupasj2qzpxnulq2xa7evmmh/feed/uruguay
 
-Feed at https://bsky.app/profile/did:plc:jfhpnnst6flqway4eaeqzj2a/feed/for-science
+## #Argentina Feed
 
-## #auspol Feed
+Feed at https://bsky.app/profile/did:plc:jupasj2qzpxnulq2xa7evmmh/feed/argentina
 
-Watches for case-insensitive 'auspol', putes them in the feed and adds those posters to a list (e.g. https://bsky.app/profile/did:plc:jfhpnnst6flqway4eaeqzj2a/lists/3jzy2aybxwz2f).
+## Rio de la Plata
 
-Intended to aid discovery of new auspol posters, as well as provide the feed function.
+Feed at https://bsky.app/profile/did:plc:jupasj2qzpxnulq2xa7evmmh/feed/riodelaplata
 
-Feed at https://bsky.app/profile/did:plc:jfhpnnst6flqway4eaeqzj2a/feed/auspol
+## Fediverse
 
-## What's Dad
+Feed at https://bsky.app/profile/did:plc:jupasj2qzpxnulq2xa7evmmh/feed/fediverse
 
-A proof-of-concept feed suggested by [@sweetbee.vip](https://bsky.app/profile/did:plc:lcytlkvzs3wslcgbk7i3ygak). Uses data from a user's bio in order to populate them into a feed.
+## Salesforce
 
-## 18+ Neurodivergent
+Feed at https://bsky.app/profile/did:plc:jupasj2qzpxnulq2xa7evmmh/feed/salesforce
 
-A feed idea from [@frecksandframes.bsky.social](https://bsky.app/profile/did:plc:4pxzo7tv3u7pu6dot5umuxyt). Works like the What's Dad feed, but pulls terms related to both Neurodivergence and 18+. Check the file [src/algos/18-plus-nd.ts](src/algos/18-plus-nd.ts) for the matching expression to see which terms are being matched for each category.
 
-## Discourse
-
-The one that may get me in trouble. Suggested by [@xed.bsky.social](https://bsky.app/profile/did:plc:wi4iwszo4q5536vhkaso5cvv), this ranks posts from the last few days by number of replies (and replies-of-replies). Does not count self-replies, and does not count posts past the # of likes.
-
-Strongly considering how this will evolve over time, but adjustments to:
-
-1. Let people opt-out (by following a specific account)
-2. Use the likes:replies ratio to 'discount' replies by a % to keep dogpiles out
-3. Adjust the timing to reduce how long things stay topical
+# From Bossett's README
 
 # Usage
 
@@ -59,10 +52,3 @@ The tool is built to have each algorithm self-contained within a file in [src/al
 Where there's a match, the post will be stored in the database, tagged for the algorithm that matched. This can be used later in the handler function to identify posts that the algorithm should return.
 
 Feeds will have periodicTask called every X minutes from the environment setting in FEEDGEN_TASK_INTEVAL_MINS - this is for things like list updates, or time consuming tasks that shouldn't happen interactively.
-
-## Major TODOs
-
-- TODO: Rename environment variables, etc. to make settings more generic
-- TODO: Cache header in feed-generation.ts
-- TODO: List for exclusion, header catching
-- TODO: Pin function
