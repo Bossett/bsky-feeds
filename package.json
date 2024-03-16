@@ -43,7 +43,7 @@
     "node-fetch-native": "^1.6.1",
     "p-ratelimit": "^1.0.1",
     "semver": "^7.6.0",
-    "follow-redirects": "1.15.5"
+    "follow-redirects": "1.15.6"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
