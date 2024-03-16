@@ -6,27 +6,23 @@
   "repository": "git@github.com:bossett/bsky-feeds.git",
   "author": "Bossett <bossettg@bossett.io>",
   "license": "MIT",
-  "engines": {
-    "node": "^18.16.0"
-  },
   "scripts": {
-    "publishKeyboards": "ts-node scripts/publishKeyboards.ts",
-    "publishCats": "ts-node scripts/publishCats.ts",
-    "publishScience": "ts-node scripts/publishFeedGen.ts",
-    "publishAuspol": "ts-node scripts/publishAuspol.ts",
-    "publishDads": "ts-node scripts/publishDads.ts",
-    "publishDadsMedia": "ts-node scripts/publishDadsMedia.ts",
-    "publish18plusND": "ts-node scripts/publish18plusND.ts",
-    "publishND": "ts-node scripts/publishND.ts",
-    "publishDiscourse": "ts-node scripts/publishDiscourse.ts",
-    "publishElusive": "ts-node scripts/publishElusive.ts",
-    "publishOverheard": "ts-node scripts/publishOverheard.ts",
-    "publishPAXAus": "ts-node scripts/publishPAXAus.ts",
-    "publishExternal": "ts-node scripts/publishExternal.ts",
-    "publishWords": "ts-node scripts/publishWords.ts",
-    "addSelfToList": "ts-node scripts/addSelfToList.ts",
-    "start": "ts-node src/index.ts",
-    "build": "tsc"
+    "publishKeyboards": "tsx scripts/publishKeyboards.ts",
+    "publishCats": "tsx scripts/publishCats.ts",
+    "publishScience": "tsx scripts/publishFeedGen.ts",
+    "publishAuspol": "tsx scripts/publishAuspol.ts",
+    "publishDads": "tsx scripts/publishDads.ts",
+    "publishDadsMedia": "tsx scripts/publishDadsMedia.ts",
+    "publish18plusND": "tsx scripts/publish18plusND.ts",
+    "publishND": "tsx scripts/publishND.ts",
+    "publishDiscourse": "tsx scripts/publishDiscourse.ts",
+    "publishElusive": "tsx scripts/publishElusive.ts",
+    "publishOverheard": "tsx scripts/publishOverheard.ts",
+    "publishPAXAus": "tsx scripts/publishPAXAus.ts",
+    "publishExternal": "tsx scripts/publishExternal.ts",
+    "publishWords": "tsx scripts/publishWords.ts",
+    "addSelfToList": "tsx scripts/addSelfToList.ts",
+    "start": "tsx ./src/index.ts"
   },
   "dependencies": {
     "@atproto/api": "^0.9.2",
@@ -47,8 +43,8 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/node": "^18.18.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.2.2"
+    "@types/node": "^20.11.28",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.2"
   }
 }
