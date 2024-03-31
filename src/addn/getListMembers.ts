@@ -1,4 +1,5 @@
 import { BskyAgent } from '@atproto/api'
+import limit from './rateLimit'
 
 export const getListMembers = async (
   list: string,
@@ -8,18 +9,20 @@ export const getListMembers = async (
   let current_cursor: string | undefined = undefined
   let members: string[] = []
 
-  while (total_retrieved > 0) {
-    const list_members = await agent.api.app.bsky.graph.getList({
-      list: `${list}`,
-      limit: 100,
-      cursor: current_cursor,
-    })
+  do {
+    const list_members = await limit(() =>
+      agent.api.app.bsky.graph.getList({
+        list: `${list}`,
+        limit: 100,
+        cursor: current_cursor,
+      }),
+    )
     total_retrieved = list_members.data.items.length
     current_cursor = list_members.data.cursor
     list_members.data.items.forEach((member) => {
       members.push(member.subject.did)
     })
-  }
+  } while (current_cursor !== undefined && current_cursor !== '')
 
   return members
 }

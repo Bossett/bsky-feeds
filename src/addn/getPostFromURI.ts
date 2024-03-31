@@ -1,4 +1,5 @@
 import { BskyAgent } from '@atproto/api'
+import limit from './rateLimit'
 
 import { Post } from '../db/schema'
 
@@ -12,11 +13,13 @@ export const getPostFromURI = async (
 
   if (!repo || !collection || !rkey) return undefined
 
-  const response = await agent.com.atproto.repo.getRecord({
-    repo,
-    collection,
-    rkey,
-  })
+  const response = await limit(() =>
+    agent.com.atproto.repo.getRecord({
+      repo,
+      collection,
+      rkey,
+    }),
+  )
 
   if (!response.success) return undefined
 

@@ -1,16 +1,10 @@
 import { BskyAgent } from '@atproto/api'
 import resolveHandleToDID from './resolveHandleToDID'
 import moize from 'moize'
-import { pRateLimit } from 'p-ratelimit'
 
 import { ProfileViewDetailed } from '../lexicon/types/app/bsky/actor/defs'
 
-const limit = pRateLimit({
-  interval: 300 * 1000,
-  rate: 2000,
-  concurrency: 10,
-  maxDelay: 30 * 1000,
-})
+import limit from './rateLimit'
 
 interface Resolver {
   resolve: (value: any) => void

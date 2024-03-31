@@ -1,4 +1,11 @@
-import { Document, Filter, MongoClient, ObjectId, WithoutId } from 'mongodb'
+import {
+  Document,
+  Filter,
+  MongoClient,
+  ObjectId,
+  WithoutId,
+  SortDirection,
+} from 'mongodb'
 import dotenv from 'dotenv'
 import { InvalidRequestError } from '@atproto/xrpc-server'
 
@@ -163,14 +170,23 @@ class dbSingleton {
     return res
   }
 
-  async getLatestPostsForTag(
-    tag: string,
+  async getLatestPostsForTag({
+    tag,
     limit = 50,
-    cursor: string | undefined = undefined,
-    imagesOnly: Boolean = false,
-    nsfwOnly: Boolean = false,
-    excludeNSFW: Boolean = false,
-  ) {
+    cursor = undefined,
+    imagesOnly = false,
+    nsfwOnly = false,
+    excludeNSFW = false,
+    sortOrder = -1,
+  }: {
+    tag: string
+    limit?: number
+    cursor?: string | undefined
+    imagesOnly?: Boolean
+    nsfwOnly?: Boolean
+    excludeNSFW?: Boolean
+    sortOrder?: SortDirection
+  }) {
     let query: { indexedAt?: any; cid?: any; algoTags: string } = {
       algoTags: tag,
     }
@@ -206,7 +222,7 @@ class dbSingleton {
       ?.db()
       .collection('post')
       .find(query)
-      .sort({ indexedAt: -1, cid: -1 })
+      .sort({ indexedAt: sortOrder, cid: -1 })
       .limit(limit)
       .toArray()
 

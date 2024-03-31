@@ -1,4 +1,5 @@
 import dbClient from '../db/dbClient'
+import limit from './rateLimit'
 
 export default async function batchUpdate(agent, interval) {
   let firstRun = true
@@ -23,7 +24,15 @@ export default async function batchUpdate(agent, interval) {
       const chunk = unlabelledPosts.slice(i, i + chunkSize).flatMap((item) => {
         return [item.uri]
       })
-      const res = await agent.app.bsky.feed.getPosts({ uris: chunk })
+
+      let res: any
+
+      try {
+        res = await limit(() => agent.app.bsky.feed.getPosts({ uris: chunk }))
+      } catch (e) {
+        console.log('core: Error fetching posts, skipping chunk...')
+        continue
+      }
 
       const posts = res.data.posts
 

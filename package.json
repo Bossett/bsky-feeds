@@ -6,9 +6,6 @@
   "repository": "git@github.com:bossett/bsky-feeds.git",
   "author": "Bossett <bossettg@bossett.io>",
   "license": "MIT",
-  "engines": {
-    "node": "^18.16.0"
-  },
   "scripts": {
     "publishKeyboards": "ts-node scripts/publishKeyboards.ts",
     "publishCats": "ts-node scripts/publishCats.ts",
@@ -33,26 +30,26 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@atproto/api": "^0.6.14",
-    "@atproto/identity": "^0.2.1",
-    "@atproto/lexicon": "^0.2.1",
-    "@atproto/repo": "^0.3.2",
-    "@atproto/syntax": "^0.1.1",
-    "@atproto/xrpc-server": "^0.3.0",
-    "dotenv": "^16.3.1",
+    "@atproto/api": "^0.11.2",
+    "@atproto/identity": "^0.3.2",
+    "@atproto/lexicon": "^0.3.1",
+    "@atproto/repo": "^0.3.6",
+    "@atproto/syntax": "^0.1.5",
+    "@atproto/xrpc-server": "^0.4.2",
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "moize": "^6.1.6",
-    "mongodb": "^6.2.0",
-    "multiformats": "9.9.0",
-    "node-fetch-native": "^1.4.0",
+    "mongodb": "^6.3.0",
+    "multiformats": "^9.9.0",
+    "node-fetch-native": "^1.6.2",
     "p-ratelimit": "^1.0.1",
-    "semver": "^7.5.4"
+    "semver": "^7.6.0",
+    "follow-redirects": "1.15.6"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.4",
-    "@types/express": "^4.17.18",
-    "@types/node": "^18.18.2",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.28",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.2"
   }
 }
