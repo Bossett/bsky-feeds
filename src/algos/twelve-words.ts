@@ -8,19 +8,17 @@ import dbClient from '../db/dbClient'
 dotenv.config()
 
 // max 15 chars
-let name = 'external'
-if (process.env.SECRET_NAME) name = process.env.SECRET_NAME
-
-export const shortname = name
+export const shortname = 'twelve-words'
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
   const builder = await dbClient.getLatestPostsForTag({
     tag: shortname,
     limit: params.limit,
     cursor: params.cursor,
+    sortOrder: -1,
   })
 
-  const feed = builder.map((row) => ({
+  let feed = builder.map((row) => ({
     post: row.uri,
   }))
 
@@ -38,38 +36,46 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 
 export class manager extends AlgoManager {
   public name: string = shortname
-  public follows: string[] = []
 
-  async updateList() {
-    if (process.env.SECRET_LIST) {
-      try {
-        const response = await fetch(`${process.env.SECRET_LIST}`)
-        const text = await response.text()
-        this.follows = text
-          .split('\n')
-          .filter((item: string) => item.startsWith('did:plc:'))
-      } catch {}
-    }
-  }
+  public re = new RegExp(
+    `^.*\\btransition (stories|story) in 12 words\\b.*$`,
+    'ims',
+  )
 
   public async periodicTask() {
-    this.updateList()
-
-    await this.db.removeTagFromOldPosts(
-      this.name,
-      new Date().getTime() - 7 * 24 * 60 * 60 * 1000, //7 days
-    )
+    return
   }
 
   public async filter_post(post: Post): Promise<Boolean> {
     if (post.replyRoot !== null) return false
-    if (this.follows.length === 0) this.updateList()
-
     if (this.agent === null) {
       await this.start()
     }
     if (this.agent === null) return false
 
-    return this.follows.includes(post.author)
+    if (post.replyParent !== null || post.replyRoot !== null) return false
+
+    let match = false
+
+    let matchString = ''
+
+    if (post.embed?.images) {
+      const imagesArr = post.embed.images
+      imagesArr.forEach((image) => {
+        matchString = `${matchString} ${image.alt}`.replace('\n', ' ')
+      })
+    }
+
+    if (post.tags) {
+      matchString = `${post.tags.join(' ')} ${matchString}`
+    }
+
+    matchString = `${post.text} ${matchString}`.replace('\n', ' ')
+
+    if (matchString.match(this.re) !== null) {
+      match = true
+    }
+
+    return match
   }
 }

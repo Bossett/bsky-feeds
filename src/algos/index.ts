@@ -10,6 +10,7 @@ import * as salesforce from './salesforce'
 import * as fediverse from './fediverse'
 
 import * as external from './externalList'
+import * as twelveWords from './twelve-words'
 
 type AlgoHandler = (ctx: AppContext, params: QueryParams) => Promise<AlgoOutput>
 
@@ -37,6 +38,11 @@ const algos = {
   [external.shortname]: {
     handler: <AlgoHandler>external.handler,
     manager: external.manager,
+  },
+  ['aaaolsp7e26zo']: {
+    // originally a skyfeed feed, so re-using the key
+    handler: <AlgoHandler>twelveWords.handler,
+    manager: twelveWords.manager,
   },
 }
 

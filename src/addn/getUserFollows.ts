@@ -1,6 +1,7 @@
 import { BskyAgent } from '@atproto/api'
 import resolveHandleToDID from './resolveHandleToDID'
 import moize from 'moize'
+import limit from './rateLimit'
 
 export const _getUserFollows = async (user: string, agent: BskyAgent) => {
   let user_did = ''
@@ -13,20 +14,20 @@ export const _getUserFollows = async (user: string, agent: BskyAgent) => {
   }
 
   let cursor: string | undefined = undefined
-  while (true) {
-    const res: any = await agent.api.app.bsky.graph.getFollows({
-      actor: user_did,
-      cursor: cursor,
-    })
-
-    if (res.data.follows.length === 0) break
+  do {
+    const res: any = await limit(() =>
+      agent.api.app.bsky.graph.getFollows({
+        actor: user_did,
+        cursor: cursor,
+      }),
+    )
 
     cursor = res.data.cursor
 
     res.data.follows.forEach((follow) => {
       follows.push(`${follow.did}`)
     })
-  }
+  } while (cursor !== undefined && cursor !== '')
 
   return follows
 }

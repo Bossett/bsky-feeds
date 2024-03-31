@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "lib": [
-      "ESNext",
+      "ES2022",
     ],
     "outDir": "dist",
-    "module": "Node16",
-    "target": "es2017",
+    "module": "ESNext",
+    "target": "ESNext",
     "esModuleInterop": true,
-    "moduleResolution": "Node16",
+    "moduleResolution": "Node",
     "alwaysStrict": true,
     "allowUnreachableCode": false,
     "strictNullChecks": true,

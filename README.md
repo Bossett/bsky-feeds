@@ -52,3 +52,5 @@ The tool is built to have each algorithm self-contained within a file in [src/al
 Where there's a match, the post will be stored in the database, tagged for the algorithm that matched. This can be used later in the handler function to identify posts that the algorithm should return.
 
 Feeds will have periodicTask called every X minutes from the environment setting in FEEDGEN_TASK_INTEVAL_MINS - this is for things like list updates, or time consuming tasks that shouldn't happen interactively.
+
+## Migration to SQLite
