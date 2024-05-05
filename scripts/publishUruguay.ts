@@ -25,7 +25,7 @@ const run = async () => {
 
   // (Optional) A description of your feed
   // Ex: Top trending content from the whole network
-  const description = 'Feed de la República Oriental del Uruguay'
+  const description = 'Feed sobre la República Oriental del Uruguay. '
 
   // (Optional) The path to an image to be used as your feed's avatar
   // Ex: ~/path/to/avatar.jpeg

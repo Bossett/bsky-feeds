@@ -74,6 +74,7 @@ export class manager extends AlgoManager {
   public matchPatterns: RegExp[] = [
     /(^|[\s\W])Uruguay($|[\W\s])/im,
     /(^|[\s\W])Montevideo($|[\W\s])/im,
+    /(?!uruguaiana\*w)(?:urugua|uruguash|montevid|charrua|🇺🇾|punta del este|yorugua|U R U G U A Y|eleccionesuy|udelar|Jose Mujica|José Mujica|Pepe Mujica|Carolina Cosse|caroco|Yamandu Orsi|Yamandú Orsi|Álvaro Delgado|Alvaro Delgado|Batlle|Lacalle Pou|peñarol|Parque Rodó|Parque Rodo|chivito)\w*/gi,
   ]
 
   // Include Uruguayan users here to always include their posts
