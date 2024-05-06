@@ -1,19 +1,21 @@
 {
   "compilerOptions": {
     "lib": [
-      "ES2022",
+      "ESNext",
     ],
     "outDir": "dist",
-    "module": "ESNext",
-    "target": "ESNext",
+    "module": "Node16",
+    "target": "es2017",
     "esModuleInterop": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "Node16",
     "alwaysStrict": true,
     "allowUnreachableCode": false,
     "strictNullChecks": true,
     "skipLibCheck": true
   },
-  "include": ["./src/**/*.ts"],
+  "include": [
+    "./src/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
