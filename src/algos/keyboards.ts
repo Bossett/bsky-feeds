@@ -59,7 +59,6 @@ export class manager extends AlgoManager {
     'cherry mx',
     '(cherry|mx) reds',
     'choc switch',
-    'clacky',
     'clickbar',
     'clicky switch',
     'colemak dh',
@@ -116,7 +115,7 @@ export class manager extends AlgoManager {
     'mysellfwrdd',
     'mx switch',
     'näppäimistö',
-    'nixie',
+    'nixies',
     'norbauer',
     'novelkeys',
     'olkb',
@@ -138,7 +137,6 @@ export class manager extends AlgoManager {
     'switch mod',
     'switch opener',
     'switch pads',
-    'switch plate',
     'tactile switch',
     'taeha',
     'tape mod',
@@ -148,7 +146,6 @@ export class manager extends AlgoManager {
     'tgr 910',
     'tgr jane',
     'theremingoat',
-    'thock(y)?',
     'tkl',
     'topre',
     'unicomp',
@@ -193,10 +190,7 @@ export class manager extends AlgoManager {
 
     matchString = `${post.text} ${matchString}`.replace('\n', ' ')
 
-    if (
-      matchString.match(this.re) !== null ||
-      matchString.match('⌨️') !== null
-    ) {
+    if (matchString.match(this.re) !== null) {
       match = true
     }
 
