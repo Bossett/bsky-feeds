@@ -6,6 +6,7 @@ import {
 import * as uruguay from './uruguay'
 import * as argentina from './argentina'
 import * as riodelaplata from './riodelaplata'
+import * as brasil from './brasil'
 import * as salesforce from './salesforce'
 import * as fediverse from './fediverse'
 
@@ -26,6 +27,10 @@ const algos = {
   [riodelaplata.shortname]: {
     handler: <AlgoHandler>riodelaplata.handler,
     manager: riodelaplata.manager,
+  },
+  [brasil.shortname]: {
+    handler: <AlgoHandler>brasil.handler,
+    manager: brasil.manager,
   },
   [salesforce.shortname]: {
     handler: <AlgoHandler>salesforce.handler,
