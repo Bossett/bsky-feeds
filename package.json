@@ -1,10 +1,10 @@
 {
-  "name": "bossett-bsky-feeds",
+  "name": "djpeluca-bsky-feeds",
   "version": "2.1.0",
   "description": "basic bsky feedgen",
   "main": "index.js",
-  "repository": "git@github.com:bossett/bsky-feeds.git",
-  "author": "Bossett <bossettg@bossett.io>",
+  "repository": "git@github.com:djpeluca/bsky-feeds.git",
+  "author": "djpeluca <djpeluca@protonmail.com>",
   "license": "MIT",
   "scripts": {
     "publishKeyboards": "ts-node scripts/publishKeyboards.ts",
