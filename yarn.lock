@@ -15,7 +15,7 @@
     multiformats "^9.9.0"
     tlds "^1.234.0"
 
-"@atproto/common-web@^0.2.3", "@atproto/common-web@^0.2.4":
+"@atproto/common-web@^0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@atproto/common-web/-/common-web-0.2.4.tgz#a77e0a7f8f025115b3db4f7c530b934b10ab3d82"
   integrity sha512-6+DOhQcTklFmeiSkZRx6iFeqi4OFtGl4yEDGATk00q4tEcPoPvyOBtYHN6+G9lrfJIfx5RfmggamvXlJv1PxxA==
