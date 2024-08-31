@@ -125,13 +125,6 @@
     uint8arrays "3.0.0"
     zod "^3.23.8"
 
-"@atproto/syntax@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@atproto/syntax/-/syntax-0.1.5.tgz#85b6488a33da3b864e8ac22a61b5586b271206ee"
-  integrity sha512-pbY5lOnThoAbsmrdbN9LC/dNmckfqODJiX9zjW2t3BIHYFeGBc6w9bK3Vre8A0Hg8yWkQpv6gaBLu+ykgi2DJQ==
-  dependencies:
-    "@atproto/common-web" "^0.2.3"
-
 "@atproto/syntax@^0.2.1":
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@atproto/syntax/-/syntax-0.2.1.tgz#3abcb050c122e7ce80fc25b49cd7d86c63dc6c2e"
