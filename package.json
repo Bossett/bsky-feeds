@@ -20,6 +20,7 @@
     "publishOverheard": "ts-node scripts/publishOverheard.ts",
     "publishArgentina": "ts-node scripts/publishArgentina.ts",
     "publishUruguay": "ts-node scripts/publishUruguay.ts",
+    "publishBrasil": "ts-node scripts/publishBrasil.ts",
     "publishRiodelaPlata": "ts-node scripts/publishRiodelaPlata.ts",
     "publishSalesforce": "ts-node scripts/publishSalesforce.ts",
     "publishFediverse": "ts-node scripts/publishFediverse.ts",
