@@ -15,7 +15,7 @@ class dbSingleton {
   client: MongoClient | null = null
 
   constructor(connection_string: string) {
-    this.client = new MongoClient(connection_string)
+    this.client = new MongoClient(connection_string, { enableUtf8Validation: false })
     this.init()
   }
 
