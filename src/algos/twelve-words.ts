@@ -37,10 +37,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 export class manager extends AlgoManager {
   public name: string = shortname
 
-  public re = new RegExp(
-    `^.*\\btransition (stories|story) in 12 words\\b.*$`,
-    'ims',
-  )
+  public re = new RegExp(`^.*\\btransition\\b.*\\b12 words\\b.*$`, 'ims')
 
   public async periodicTask() {
     return
