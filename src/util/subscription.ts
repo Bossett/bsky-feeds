@@ -81,6 +81,15 @@ export const getOpsByType = async (evt: Commit): Promise<OperationsByType> => {
     const uri = `at://${evt.repo}/${op.path}`
     const [collection] = op.path.split('/')
 
+    if (
+      [
+        'app.bsky.feed.repost',
+        'app.bsky.graph.follow',
+        'app.bsky.feed.like',
+      ].includes(collection)
+    )
+      continue
+
     if (op.action === 'update') continue // updates not supported yet
 
     if (op.action === 'create') {
