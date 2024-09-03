@@ -13,6 +13,12 @@ import {
 } from '../lexicon/types/com/atproto/sync/subscribeRepos'
 import { Database } from '../db'
 
+const ignoredRecords = new Set([
+  'app.bsky.feed.repost',
+  'app.bsky.graph.follow',
+  'app.bsky.feed.like',
+])
+
 export abstract class FirehoseSubscriptionBase {
   public sub: Subscription<RepoEvent>
 
@@ -81,14 +87,7 @@ export const getOpsByType = async (evt: Commit): Promise<OperationsByType> => {
     const uri = `at://${evt.repo}/${op.path}`
     const [collection] = op.path.split('/')
 
-    if (
-      [
-        'app.bsky.feed.repost',
-        'app.bsky.graph.follow',
-        'app.bsky.feed.like',
-      ].includes(collection)
-    )
-      continue
+    if (ignoredRecords.has(collection)) continue
 
     if (op.action === 'update') continue // updates not supported yet
 
