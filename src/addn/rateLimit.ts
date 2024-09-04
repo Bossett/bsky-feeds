@@ -1,8 +1,8 @@
 import { pRateLimit } from 'p-ratelimit'
 
 const _limit = pRateLimit({
-  interval: 300 * 1000,
-  rate: 2000,
+  interval: undefined,
+  rate: undefined,
   concurrency: 64,
   maxDelay: undefined,
 })
