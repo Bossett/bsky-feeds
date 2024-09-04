@@ -48,6 +48,8 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
   public authorList: string[]
   public intervalId: NodeJS.Timer
 
+  private runningEvents = 0
+
   async handleEvent(evt: RepoEvent) {
     if (!isCommit(evt)) return
 
@@ -63,6 +65,14 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     })()
 
     if (!ops) return
+
+    const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
+
+    while (this.runningEvents > 128) {
+      await delay(1000)
+    }
+
+    this.runningEvents++
 
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
 
@@ -124,5 +134,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
           await this.db.replaceOneURI('post', to_insert.uri, to_insert)
       })
     }
+
+    this.runningEvents--
   }
 }
