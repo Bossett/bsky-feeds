@@ -28,21 +28,21 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const handle = `${process.env.FEEDGEN_HANDLE}`
     const password = `${process.env.FEEDGEN_PASSWORD}`
 
-    agent.login({ identifier: handle, password: password }).then(async () => {
-      batchUpdate(agent, 5 * 60 * 1000)
+    //agent.login({ identifier: handle, password: password }).then(async () => {
+    batchUpdate(agent, 5 * 60 * 1000)
 
-      Object.keys(algos).forEach((algo) => {
-        this.algoManagers.push(new algos[algo].manager(db, agent))
-      })
-
-      const startPromises = this.algoManagers.map(async (algo) => {
-        if (await algo._start()) {
-          console.log(`${algo.name}: Started`)
-        }
-      })
-
-      await Promise.all(startPromises)
+    Object.keys(algos).forEach((algo) => {
+      this.algoManagers.push(new algos[algo].manager(db, agent))
     })
+
+    const startPromises = this.algoManagers.map(async (algo) => {
+      if (await algo._start()) {
+        console.log(`${algo.name}: Started`)
+      }
+    })
+
+    /*await */ Promise.all(startPromises)
+    //})
   }
 
   public authorList: string[]
