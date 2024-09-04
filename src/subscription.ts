@@ -48,8 +48,6 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
   public authorList: string[]
   public intervalId: NodeJS.Timer
 
-  private runningEvents = 0
-
   async handleEvent(evt: RepoEvent) {
     if (!isCommit(evt)) return
 

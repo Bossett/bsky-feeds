@@ -15,15 +15,6 @@ import { Database } from '../db'
 
 const includedRecords = new Set(['app.bsky.feed.post'])
 
-import { pRateLimit } from 'p-ratelimit'
-
-const eventLimit = pRateLimit({
-  interval: undefined,
-  rate: undefined,
-  concurrency: 128,
-  maxDelay: undefined,
-})
-
 export abstract class FirehoseSubscriptionBase {
   public sub: Subscription<RepoEvent>
 
@@ -41,6 +32,10 @@ export abstract class FirehoseSubscriptionBase {
   abstract handleEvent(evt: RepoEvent): Promise<void>
 
   async run(subscriptionReconnectDelay: number) {
+    const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
+
+    let runningEvents = 0
+
     try {
       for await (const evt of this.sub) {
         const commit = evt as Commit
@@ -50,11 +45,12 @@ export abstract class FirehoseSubscriptionBase {
             const [collection] = commit.ops[0].path.split('/')
 
             if (includedRecords.has(collection)) {
-              try {
-                await eventLimit(async () => this.handleEvent(evt)) // no longer awaiting this
-              } catch (err) {
-                console.error('repo subscription could not handle message', err)
-              }
+              while (runningEvents > 128) delay(1000)
+
+              runningEvents++
+              this.handleEvent(evt).finally(() => runningEvents--)
+
+              // no longer awaiting this
             }
             // update stored cursor every 100 events or so
             if (isCommit(evt) && evt.seq % 100 === 0) {
