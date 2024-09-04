@@ -44,17 +44,20 @@ export abstract class FirehoseSubscriptionBase {
         const commit = evt as Commit
 
         if (Array.isArray(commit.ops) && commit.ops.length > 0) {
-          const [collection] = commit.ops[0].path.split('/')
-          if (includedRecords.has(collection)) {
-            try {
-              this.handleEvent(evt) // no longer awaiting this
-            } catch (err) {
-              console.error('repo subscription could not handle message', err)
+          if (commit.blocks) {
+            const [collection] = commit.ops[0].path.split('/')
+
+            if (includedRecords.has(collection)) {
+              try {
+                this.handleEvent(evt) // no longer awaiting this
+              } catch (err) {
+                console.error('repo subscription could not handle message', err)
+              }
             }
-          }
-          // update stored cursor every 100 events or so
-          if (isCommit(evt) && evt.seq % 100 === 0) {
-            await this.updateCursor(evt.seq)
+            // update stored cursor every 100 events or so
+            if (isCommit(evt) && evt.seq % 100 === 0) {
+              await this.updateCursor(evt.seq)
+            }
           }
         }
       }
