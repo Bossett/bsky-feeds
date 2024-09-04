@@ -52,11 +52,10 @@ export abstract class FirehoseSubscriptionBase {
               console.error('repo subscription could not handle message', err)
             }
           }
-        }
-
-        // update stored cursor every 20 events or so
-        if (isCommit(evt) && evt.seq % 20 === 0) {
-          await this.updateCursor(evt.seq)
+          // update stored cursor every 100 events or so
+          if (isCommit(evt) && evt.seq % 100 === 0) {
+            await this.updateCursor(evt.seq)
+          }
         }
       }
     } catch (err) {
