@@ -41,11 +41,19 @@ export abstract class FirehoseSubscriptionBase {
   async run(subscriptionReconnectDelay: number) {
     try {
       for await (const evt of this.sub) {
-        try {
-          this.handleEvent(evt) // no longer awaiting this
-        } catch (err) {
-          console.error('repo subscription could not handle message', err)
+        const commit = evt as Commit
+
+        if (Array.isArray(commit.ops) && commit.ops.length > 0) {
+          const [collection] = commit.ops[0].path.split('/')
+          if (includedRecords.has(collection)) {
+            try {
+              this.handleEvent(evt) // no longer awaiting this
+            } catch (err) {
+              console.error('repo subscription could not handle message', err)
+            }
+          }
         }
+
         // update stored cursor every 20 events or so
         if (isCommit(evt) && evt.seq % 20 === 0) {
           await this.updateCursor(evt.seq)
