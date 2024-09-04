@@ -13,6 +13,8 @@ import {
 } from '../lexicon/types/com/atproto/sync/subscribeRepos'
 import { Database } from '../db'
 
+import { Mutex } from 'async-mutex'
+
 const includedRecords = new Set(['app.bsky.feed.post'])
 
 export abstract class FirehoseSubscriptionBase {
@@ -33,6 +35,7 @@ export abstract class FirehoseSubscriptionBase {
 
   async run(subscriptionReconnectDelay: number) {
     const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
+    const mutex = new Mutex()
 
     let runningEvents = 0
 
@@ -47,8 +50,15 @@ export abstract class FirehoseSubscriptionBase {
             if (includedRecords.has(collection)) {
               while (runningEvents > 128) delay(1000)
 
-              runningEvents++
-              this.handleEvent(evt).finally(() => runningEvents--)
+              await mutex.runExclusive(async () => {
+                runningEvents++
+              })
+
+              this.handleEvent(evt).finally(async () => {
+                await mutex.runExclusive(async () => {
+                  runningEvents--
+                })
+              })
 
               // no longer awaiting this
             }
