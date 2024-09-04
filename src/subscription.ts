@@ -66,14 +66,6 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
     if (!ops) return
 
-    const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
-
-    while (this.runningEvents > 128) {
-      await delay(1000)
-    }
-
-    this.runningEvents++
-
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
 
     // Transform posts in parallel
@@ -134,7 +126,5 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
           await this.db.replaceOneURI('post', to_insert.uri, to_insert)
       })
     }
-
-    this.runningEvents--
   }
 }

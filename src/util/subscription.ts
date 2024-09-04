@@ -15,6 +15,15 @@ import { Database } from '../db'
 
 const includedRecords = new Set(['app.bsky.feed.post'])
 
+import { pRateLimit } from 'p-ratelimit'
+
+const eventLimit = pRateLimit({
+  interval: undefined,
+  rate: undefined,
+  concurrency: 128,
+  maxDelay: undefined,
+})
+
 export abstract class FirehoseSubscriptionBase {
   public sub: Subscription<RepoEvent>
 
@@ -42,7 +51,7 @@ export abstract class FirehoseSubscriptionBase {
 
             if (includedRecords.has(collection)) {
               try {
-                this.handleEvent(evt) // no longer awaiting this
+                await eventLimit(async () => this.handleEvent(evt)) // no longer awaiting this
               } catch (err) {
                 console.error('repo subscription could not handle message', err)
               }
