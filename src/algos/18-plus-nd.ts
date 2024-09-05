@@ -1,13 +1,14 @@
 import { QueryParams } from '../lexicon/types/app/bsky/feed/getFeedSkeleton'
 import { AppContext } from '../config'
 import { AlgoManager } from '../addn/algoManager'
-import { BskyAgent } from '@atproto/api'
 import dotenv from 'dotenv'
 import { Post } from '../db/schema'
 import dbClient from '../db/dbClient'
 import getUserDetails from '../addn/getUserDetails'
 
 dotenv.config()
+
+const relevantUsers = new Set<string>()
 
 // max 15 chars
 export const shortname = '18-plus-nd'
@@ -41,6 +42,7 @@ export class manager extends AlgoManager {
     /(?=.*(🔞|18\+|nsfw|mdni|minors dni))(?=.*\b(autistic|autism|nd|neurodivergent|adhd|audhd|autigender|bpd|neurodistinct|neurodiverse)\b)/ims
 
   public async periodicTask() {
+    relevantUsers.clear()
     await this.db.removeTagFromOldPosts(
       this.name,
       new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
@@ -58,6 +60,10 @@ export class manager extends AlgoManager {
 
     let match = false
 
+    if (relevantUsers.has(post.author)) {
+      return true
+    }
+
     const details = await getUserDetails(post.author, this.agent)
 
     if (!details || !details.displayName || !details.description) return false
@@ -65,6 +71,7 @@ export class manager extends AlgoManager {
     if (
       `${details.displayName} ${details.description}`.match(this.re) !== null
     ) {
+      relevantUsers.add(post.author)
       match = true
     }
 

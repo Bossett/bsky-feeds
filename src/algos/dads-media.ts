@@ -1,11 +1,9 @@
 import { QueryParams } from '../lexicon/types/app/bsky/feed/getFeedSkeleton'
 import { AppContext } from '../config'
 import { AlgoManager } from '../addn/algoManager'
-import { BskyAgent } from '@atproto/api'
 import dotenv from 'dotenv'
 import { Post } from '../db/schema'
 import dbClient from '../db/dbClient'
-import getUserDetails from '../addn/getUserDetails'
 
 dotenv.config()
 
