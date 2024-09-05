@@ -10,6 +10,7 @@ import getUserDetails from '../addn/getUserDetails'
 dotenv.config()
 
 const relevantUsers = new Set<string>()
+const nonRelevantUsers = new Set<string>()
 
 // max 15 chars
 export const shortname = 'dads'
@@ -43,6 +44,7 @@ export class manager extends AlgoManager {
 
   public async periodicTask() {
     relevantUsers.clear()
+    nonRelevantUsers.clear()
     await this.db.removeTagFromOldPosts(
       this.name,
       new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
@@ -60,6 +62,10 @@ export class manager extends AlgoManager {
       return true
     }
 
+    if (nonRelevantUsers.has(post.author)) {
+      return false
+    }
+
     const details = await getUserDetails(post.author, this.agent)
 
     if (!details || !details.displayName || !details.description) return false
@@ -69,6 +75,8 @@ export class manager extends AlgoManager {
     ) {
       relevantUsers.add(post.author)
       match = true
+    } else {
+      nonRelevantUsers.add(post.author)
     }
 
     if (match) {
