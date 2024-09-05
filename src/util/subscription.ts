@@ -48,7 +48,9 @@ export abstract class FirehoseSubscriptionBase {
             const [collection] = commit.ops[0].path.split('/')
 
             if (includedRecords.has(collection)) {
-              while (runningEvents > 1024) await delay(1000)
+              while (runningEvents > 2048) {
+                await delay(100)
+              }
 
               await mutex.runExclusive(async () => {
                 runningEvents++
