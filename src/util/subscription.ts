@@ -49,7 +49,7 @@ export abstract class FirehoseSubscriptionBase {
             const [collection] = commit.ops[0].path.split('/')
 
             if (includedRecords.has(collection)) {
-              while (runningEvents > 96) {
+              while (runningEvents > 32) {
                 await delay(10)
               }
 
