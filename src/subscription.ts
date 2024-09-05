@@ -53,14 +53,13 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
     await Promise.all(this.algoManagers.map((manager) => manager.ready()))
 
-    const ops = await (async () => {
-      try {
-        return await getOpsByType(evt)
-      } catch (e) {
-        console.log(`core: error decoding ops ${e.message}`)
-        return undefined
-      }
-    })()
+    let ops: any
+    try {
+      ops = await getOpsByType(evt)
+    } catch (e) {
+      console.log(`core: error decoding ops ${e.message}`)
+      return
+    }
 
     if (!ops) return
 
@@ -114,15 +113,20 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       (post) => post !== null,
     )
 
+    const dbOperations: Promise<any>[] = []
+
     if (postsToDelete.length > 0) {
-      await this.db.deleteManyURI('post', postsToDelete)
+      dbOperations.push(this.db.deleteManyURI('post', postsToDelete))
     }
 
     if (postsToCreate.length > 0) {
       postsToCreate.forEach(async (to_insert) => {
         if (to_insert)
-          await this.db.replaceOneURI('post', to_insert.uri, to_insert)
+          dbOperations.push(
+            this.db.replaceOneURI('post', to_insert.uri, to_insert),
+          )
       })
     }
+    await Promise.all(dbOperations)
   }
 }
