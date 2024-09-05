@@ -92,7 +92,7 @@ export const _getUserDetails = async (
           isBatchExecutionInProgress = true
           executeBatch(agent)
         }
-      }, 1000)
+      }, 5000)
     }
   })
 }
