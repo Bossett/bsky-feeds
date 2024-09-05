@@ -97,12 +97,28 @@ export const _getUserDetails = async (
   })
 }
 
-const getUserDetails = moize(_getUserDetails, {
-  isPromise: true,
-  maxAge: 1000 * 60 * 60 * 3, // three hours
-  updateExpire: true,
-  isShallowEqual: true,
-  maxArgs: 1,
-})
+const userDetailsMap = new Map<string, ProfileViewDetailed>()
+const userExpiryMap = new Map<string, number>()
+const expiryTime = 1000 * 60 * 60 * 3
+
+const getUserDetails = async (
+  user: string,
+  agent: BskyAgent,
+): Promise<ProfileViewDetailed> => {
+  const now = Date.now()
+  const expiry = userExpiryMap.get(user)
+
+  const isValid = expiry && expiry > now
+
+  if (isValid && userDetailsMap.has(user)) {
+    return userDetailsMap.get(user)!
+  }
+
+  userExpiryMap.delete(user)
+  const userDetails = await _getUserDetails(user, agent)
+  userDetailsMap.set(user, userDetails)
+  userExpiryMap.set(user, Date.now() + expiryTime)
+  return userDetails
+}
 
 export default getUserDetails
