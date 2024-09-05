@@ -27,23 +27,22 @@ const executeBatch = async (agent: BskyAgent) => {
   resolvers = []
 
   try {
-    let res: any
     let resultsMap: { [k: string]: any } = {}
 
+    const promises: Promise<any>[] = []
     for (let i = 0; i < currentBatch.length; i += maxRequestChunk) {
       const chunk = currentBatch.slice(i, i + maxRequestChunk)
-
-      try {
-        res = await limit(() =>
+      promises.push(
+        limit(() =>
           agent.app.bsky.actor.getProfiles({
             actors: chunk,
           }),
-        )
-      } catch (error) {
-        console.log(`core: error during getProfiles ${error.message}`)
-        throw error
-      }
+        ),
+      )
+    }
 
+    const responses = await Promise.all(promises)
+    responses.forEach((res) => {
       resultsMap = {
         ...Object.fromEntries(
           res.data.profiles.map((record: ProfileViewDetailed) => [
@@ -53,7 +52,8 @@ const executeBatch = async (agent: BskyAgent) => {
         ),
         ...resultsMap,
       }
-    }
+    })
+
     currentResolvers.forEach(({ resolve, user_did }) => {
       resolve(resultsMap[user_did])
     })
