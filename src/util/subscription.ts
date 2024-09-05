@@ -31,6 +31,7 @@ export abstract class FirehoseSubscriptionBase {
       validate: (value: unknown) => {
         return value as RepoEvent
       },
+      heartbeatIntervalMs: 30000,
     })
   }
 
