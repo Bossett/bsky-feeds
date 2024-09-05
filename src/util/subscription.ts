@@ -15,6 +15,31 @@ import { Database } from '../db'
 
 const includedRecords = new Set(['app.bsky.feed.post'])
 
+class Semaphore {
+  private tasks: (() => void)[] = []
+  private counter: number
+
+  constructor(maxConcurrent: number) {
+    this.counter = maxConcurrent
+  }
+
+  async acquire() {
+    if (this.counter > 0) {
+      this.counter--
+      return
+    }
+    await new Promise<void>((resolve) => this.tasks.push(resolve))
+  }
+
+  release() {
+    this.counter++
+    if (this.tasks.length > 0) {
+      const nextTask = this.tasks.shift()
+      if (nextTask) nextTask()
+    }
+  }
+}
+
 export abstract class FirehoseSubscriptionBase {
   public sub: Subscription<RepoEvent>
 
@@ -33,6 +58,9 @@ export abstract class FirehoseSubscriptionBase {
   abstract handleEvent(evt: RepoEvent): Promise<void>
 
   async run(subscriptionReconnectDelay: number) {
+    const maxConcurrentEvents = 128
+    const semaphore = new Semaphore(maxConcurrentEvents)
+
     let handledEvents = 0
     try {
       for await (const evt of this.sub) {
@@ -44,9 +72,16 @@ export abstract class FirehoseSubscriptionBase {
 
             if (includedRecords.has(collection)) {
               handledEvents++
-              this.handleEvent(evt).catch((err) => {
-                console.log(`err in handleEvent ${err}`)
-              }) // no longer awaiting this
+              await semaphore
+                .acquire()
+                .then(() => {
+                  this.handleEvent(evt).catch((err) => {
+                    console.log(`err in handleEvent ${err}`)
+                  }) // no longer awaiting this
+                })
+                .finally(() => {
+                  semaphore.release()
+                })
             }
           }
         }
