@@ -92,7 +92,7 @@ export const _getUserDetails = async (
           isBatchExecutionInProgress = true
           executeBatch(agent)
         }
-      }, 5000)
+      }, 500)
     }
   })
 }
@@ -100,6 +100,7 @@ export const _getUserDetails = async (
 const getUserDetails = moize(_getUserDetails, {
   isPromise: true,
   maxAge: 1000 * 60 * 60 * 3, // three hours
+  updateExpire: true,
   isShallowEqual: true,
   maxArgs: 1,
 })
