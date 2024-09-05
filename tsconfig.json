@@ -3,7 +3,7 @@
     "lib": [
       "ES2022",
     ],
-    "outDir": "dist",
+    "outDir": "./dist",
     "module": "ESNext",
     "target": "ESNext",
     "esModuleInterop": true,
@@ -13,8 +13,12 @@
     "strictNullChecks": true,
     "skipLibCheck": true
   },
+  "tsc-alias": {
+    "resolveFullPaths": true,
+    "verbose": false
+  },
   "include": ["./src/**/*.ts"],
   "exclude": [
-    "node_modules"
+    "node_modules", "dist"
   ]
 }
