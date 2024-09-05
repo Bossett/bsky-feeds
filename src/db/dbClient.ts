@@ -12,11 +12,21 @@ import { InvalidRequestError } from '@atproto/xrpc-server'
 dotenv.config()
 
 class dbSingleton {
+  private static instance: dbSingleton | null = null
   client: MongoClient | null = null
 
   constructor(connection_string: string) {
     this.client = new MongoClient(connection_string)
     this.init()
+  }
+
+  static getInstance(): dbSingleton {
+    if (dbSingleton.instance === null) {
+      dbSingleton.instance = new dbSingleton(
+        `${process.env.FEEDGEN_MONGODB_CONNECTION_STRING}`,
+      )
+    }
+    return dbSingleton.instance
   }
 
   async init() {
@@ -332,8 +342,6 @@ class dbSingleton {
   }
 }
 
-const dbClient = new dbSingleton(
-  `${process.env.FEEDGEN_MONGODB_CONNECTION_STRING}`,
-)
+const dbClient = dbSingleton.getInstance()
 
 export default dbClient
