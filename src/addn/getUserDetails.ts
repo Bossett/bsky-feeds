@@ -17,7 +17,7 @@ let timer: NodeJS.Timeout | null = null
 let resolvers: Resolver[] = []
 
 let isBatchExecutionInProgress = false
-let maxRequestChunk = 30
+let maxRequestChunk = 25
 
 const executeBatch = async (agent: BskyAgent) => {
   const currentBatch = batch
