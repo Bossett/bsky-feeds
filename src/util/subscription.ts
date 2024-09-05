@@ -64,8 +64,8 @@ export abstract class FirehoseSubscriptionBase {
 
               // no longer awaiting this
             }
-            // update stored cursor every 100 events or so
-            if (isCommit(evt) && evt.seq % 100 === 0) {
+            // update stored cursor every 1000 events or so
+            if (isCommit(evt) && evt.seq % 1000 === 0) {
               await this.updateCursor(evt.seq)
             }
           }
