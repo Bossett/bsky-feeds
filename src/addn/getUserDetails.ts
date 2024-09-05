@@ -102,6 +102,7 @@ const getUserDetails = moize(_getUserDetails, {
   maxAge: 1000 * 60 * 60 * 3, // three hours
   updateExpire: true,
   isShallowEqual: true,
+  maxArgs: 1,
 })
 
 export default getUserDetails
