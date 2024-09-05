@@ -16,6 +16,7 @@ import { Database } from '../db'
 import { Mutex } from 'async-mutex'
 
 const includedRecords = new Set(['app.bsky.feed.post'])
+let runningEvents = 0
 
 export abstract class FirehoseSubscriptionBase {
   public sub: Subscription<RepoEvent>
@@ -37,7 +38,7 @@ export abstract class FirehoseSubscriptionBase {
     const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
     const mutex = new Mutex()
 
-    let runningEvents = 0
+    await mutex.runExclusive(() => (runningEvents = 0))
 
     try {
       for await (const evt of this.sub) {
@@ -58,7 +59,7 @@ export abstract class FirehoseSubscriptionBase {
 
               this.handleEvent(evt).finally(async () => {
                 await mutex.runExclusive(async () => {
-                  runningEvents--
+                  if (runningEvents > 0) runningEvents--
                 })
               })
 
