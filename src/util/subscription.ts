@@ -58,7 +58,7 @@ export abstract class FirehoseSubscriptionBase {
   abstract handleEvent(evt: RepoEvent): Promise<void>
 
   async run(subscriptionReconnectDelay: number) {
-    const maxConcurrentEvents = 128
+    const maxConcurrentEvents = 32
     const semaphore = new Semaphore(maxConcurrentEvents)
 
     let handledEvents = 0
@@ -72,16 +72,15 @@ export abstract class FirehoseSubscriptionBase {
 
             if (includedRecords.has(collection)) {
               handledEvents++
-              await semaphore
-                .acquire()
-                .then(() => {
-                  this.handleEvent(evt).catch((err) => {
+              await semaphore.acquire().then(() => {
+                this.handleEvent(evt) // no longer awaiting this
+                  .catch((err) => {
                     console.log(`err in handleEvent ${err}`)
-                  }) // no longer awaiting this
-                })
-                .finally(() => {
-                  semaphore.release()
-                })
+                  })
+                  .finally(() => {
+                    semaphore.release()
+                  })
+              })
             }
           }
         }
