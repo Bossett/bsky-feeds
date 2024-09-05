@@ -33,6 +33,7 @@ export abstract class FirehoseSubscriptionBase {
   abstract handleEvent(evt: RepoEvent): Promise<void>
 
   async run(subscriptionReconnectDelay: number) {
+    let handledEvents = 0
     try {
       for await (const evt of this.sub) {
         const commit = evt as Commit
@@ -42,15 +43,18 @@ export abstract class FirehoseSubscriptionBase {
             const [collection] = commit.ops[0].path.split('/')
 
             if (includedRecords.has(collection)) {
+              handledEvents++
               this.handleEvent(evt).catch((err) => {
                 console.log(`err in handleEvent ${err}`)
               }) // no longer awaiting this
             }
-            // update stored cursor every 1000 events or so
-            if (isCommit(evt) && evt.seq % 1000 === 0) {
-              await this.updateCursor(evt.seq)
-            }
           }
+        }
+        // update stored cursor every 1000 events or so
+        if (handledEvents > 1000 && Number.isInteger(commit.seq)) {
+          this.updateCursor(commit.seq).then(() => {
+            handledEvents = 0
+          })
         }
       }
     } catch (err) {
