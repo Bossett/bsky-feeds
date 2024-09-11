@@ -184,7 +184,7 @@ class dbSingleton {
     tag,
     limit = 50,
     cursor = undefined,
-    imagesOnly = false,
+    mediaOnly = false,
     nsfwOnly = false,
     excludeNSFW = false,
     sortOrder = -1,
@@ -192,7 +192,7 @@ class dbSingleton {
     tag: string
     limit?: number
     cursor?: string | undefined
-    imagesOnly?: Boolean
+    mediaOnly?: Boolean
     nsfwOnly?: Boolean
     excludeNSFW?: Boolean
     sortOrder?: SortDirection
@@ -201,8 +201,11 @@ class dbSingleton {
       algoTags: tag,
     }
 
-    if (imagesOnly) {
-      query['embed.images'] = { $ne: null }
+    if (mediaOnly) {
+      query['$or'] = [
+        { 'embed.images': { $ne: null } },
+        { 'embed.video': { $ne: null } },
+      ]
     }
     if (nsfwOnly) {
       query['labels'] = {

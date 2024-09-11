@@ -15,7 +15,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
     tag: 'dads',
     limit: params.limit,
     cursor: params.cursor,
-    imagesOnly: true,
+    mediaOnly: true,
   })
 
   const feed = builder.map((row) => ({
