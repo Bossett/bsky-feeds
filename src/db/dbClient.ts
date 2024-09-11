@@ -192,32 +192,41 @@ class dbSingleton {
     tag: string
     limit?: number
     cursor?: string | undefined
-    mediaOnly?: Boolean
-    nsfwOnly?: Boolean
-    excludeNSFW?: Boolean
+    mediaOnly?: boolean
+    nsfwOnly?: boolean
+    excludeNSFW?: boolean
     sortOrder?: SortDirection
   }) {
-    let query: { indexedAt?: any; cid?: any; algoTags: string } = {
-      algoTags: tag,
-    }
+    let query: { indexedAt?: any; cid?: any; algoTags: string; $and?: any[] } =
+      {
+        algoTags: tag,
+      }
+
+    const conditions: any[] = []
 
     if (mediaOnly) {
-      query['$or'] = [
-        { 'embed.images': { $ne: null } },
-        { 'embed.video': { $ne: null } },
-      ]
+      conditions.push({
+        $or: [
+          { 'embed.images': { $ne: null } },
+          { 'embed.video': { $ne: null } },
+        ],
+      })
     }
     if (nsfwOnly) {
-      query['labels'] = {
-        $in: ['porn', 'nudity', 'sexual', 'underwear'],
-        $ne: null,
-      }
+      conditions.push({
+        labels: {
+          $in: ['porn', 'nudity', 'sexual', 'underwear'],
+          $ne: null,
+        },
+      })
     }
     if (excludeNSFW) {
-      query['labels'] = {
-        $nin: ['porn', 'nudity', 'sexual', 'underwear'],
-        $ne: null,
-      }
+      conditions.push({
+        labels: {
+          $nin: ['porn', 'nudity', 'sexual', 'underwear'],
+          $ne: null,
+        },
+      })
     }
 
     if (cursor !== undefined) {
@@ -229,6 +238,10 @@ class dbSingleton {
 
       query['indexedAt'] = { $lte: timeStr }
       query['cid'] = { $ne: cid }
+    }
+
+    if (conditions.length > 0) {
+      query.$and = conditions
     }
 
     const results = this.client
