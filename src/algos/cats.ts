@@ -76,6 +76,10 @@ export class manager extends AlgoManager {
       })
     }
 
+    if (post.embed?.alt) {
+      matchString = `${matchString} ${post.embed.alt}`.replace('\n', ' ')
+    }
+
     if (post.tags) {
       matchString = `${post.tags.join(' ')} ${matchString}`
     }

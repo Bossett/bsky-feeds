@@ -192,6 +192,10 @@ export class manager extends AlgoManager {
       })
     }
 
+    if (post.embed?.alt) {
+      matchString = `${matchString} ${post.embed.alt}`.replace('\n', ' ')
+    }
+
     matchString = `${post.text} ${matchString}`.replace('\n', ' ')
 
     if (matchString.match(this.re) !== null) {
