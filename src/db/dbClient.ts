@@ -276,7 +276,10 @@ class dbSingleton {
       ?.db()
       .collection('post')
       .find({
-        $or: [{ 'embed.images': { $ne: null }, 'embed.video': { $ne: null } }],
+        $or: [
+          { 'embed.images': { $ne: null } },
+          { 'embed.video': { $ne: null } },
+        ],
         labels: null,
         indexedAt: { $lt: new Date().getTime() - lagTime },
       })
