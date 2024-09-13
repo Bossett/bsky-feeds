@@ -9,7 +9,7 @@ export default async function batchUpdate(agent, interval) {
 
     console.log('core: Updating Labels...')
 
-    const unlabelledPosts = await dbClient.getUnlabelledPostsWithImages(
+    const unlabelledPosts = await dbClient.getUnlabelledPostsWithMedia(
       300,
       interval,
     )
