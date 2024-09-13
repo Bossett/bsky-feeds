@@ -196,6 +196,12 @@ export class manager extends AlgoManager {
       matchString = `${matchString} ${post.embed.alt}`.replace('\n', ' ')
     }
 
+    if (post.embed?.media?.alt) {
+      matchString = `${matchString} ${post.embed?.media?.alt}`.replace(
+        '\n',
+        ' ',
+      )
+    }
     matchString = `${post.text} ${matchString}`.replace('\n', ' ')
 
     if (matchString.match(this.re) !== null) {

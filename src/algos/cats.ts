@@ -80,6 +80,13 @@ export class manager extends AlgoManager {
       matchString = `${matchString} ${post.embed.alt}`.replace('\n', ' ')
     }
 
+    if (post.embed?.media?.alt) {
+      matchString = `${matchString} ${post.embed?.media?.alt}`.replace(
+        '\n',
+        ' ',
+      )
+    }
+
     if (post.tags) {
       matchString = `${post.tags.join(' ')} ${matchString}`
     }
