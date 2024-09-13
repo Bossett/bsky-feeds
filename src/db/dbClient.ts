@@ -209,6 +209,7 @@ class dbSingleton {
         $or: [
           { 'embed.images': { $ne: null } },
           { 'embed.video': { $ne: null } },
+          { 'embed.media': { $ne: null } },
         ],
       })
     }
@@ -279,6 +280,7 @@ class dbSingleton {
         $or: [
           { 'embed.images': { $ne: null } },
           { 'embed.video': { $ne: null } },
+          { 'embed.media': { $ne: null } },
         ],
         labels: null,
         indexedAt: { $lt: new Date().getTime() - lagTime },
