@@ -91,12 +91,22 @@ export class manager extends AlgoManager {
 
     console.log(`${this.name}: Watching ${lists.length} lists`)
 
-    const list_members: string[] = []
+    let list_members: string[] = []
 
     for (let i = 0; i < lists.length; i++) {
       const members = await getListMembers(lists[i], this.agent)
       members.forEach((member) => {
         if (!list_members.includes(member)) list_members.push(member)
+      })
+    }
+
+    if (process.env.BLOCKLIST) {
+      const blocked_members: string[] = await getListMembers(
+        process.env.BLOCKLIST,
+        this.agent,
+      )
+      list_members = list_members.filter((member) => {
+        return !blocked_members.includes(member)
       })
     }
 
