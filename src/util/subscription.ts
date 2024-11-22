@@ -58,7 +58,7 @@ export abstract class FirehoseSubscriptionBase {
   abstract handleEvent(evt: RepoEvent): Promise<void>
 
   async run(subscriptionReconnectDelay: number) {
-    const maxConcurrentEvents = 64
+    const maxConcurrentEvents = 32
     const semaphore = new Semaphore(maxConcurrentEvents)
 
     let handledEvents = 0
