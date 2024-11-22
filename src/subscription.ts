@@ -107,6 +107,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         ...post,
         _id: hash,
         algoTags: algoTags,
+        earliestCreatedIndexedAt: Math.min(post.createdAt, post.indexedAt),
       }
     })
 

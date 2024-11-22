@@ -249,7 +249,12 @@ class dbSingleton {
       ?.db()
       .collection('post')
       .find(query)
-      .sort({ indexedAt: sortOrder, cid: -1 })
+      .sort({
+        earliestCreatedIndexedAt: sortOrder,
+        createdAt: sortOrder,
+        indexedAt: sortOrder,
+        cid: -1,
+      })
       .limit(limit)
       .toArray()
 
