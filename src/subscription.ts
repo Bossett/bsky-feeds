@@ -75,6 +75,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       replyParent: create.record?.reply?.parent.uri ?? null,
       replyRoot: create.record?.reply?.root.uri ?? null,
       indexedAt: new Date().getTime(),
+      createdAt: new Date(create.record?.createdAt).getTime(),
       algoTags: null,
       embed: create.record?.embed,
       tags: Array.isArray(create.record?.tags) ? create.record?.tags : [],
