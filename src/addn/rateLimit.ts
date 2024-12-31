@@ -3,7 +3,7 @@ import { pRateLimit } from 'p-ratelimit'
 const _limit = pRateLimit({
   interval: undefined,
   rate: undefined,
-  concurrency: 192,
+  concurrency: undefined,
   maxDelay: undefined,
 })
 

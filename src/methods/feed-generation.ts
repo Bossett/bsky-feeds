@@ -43,6 +43,8 @@ export default function (server: Server, ctx: AppContext) {
 
     const cacheKey = JSON.stringify(params)
 
+    console.log(cacheKey)
+
     if (algoCache.has(cacheKey)) {
       const cached = algoCache.get(cacheKey)!
       if (cached.date > Date.now() - 1000 * 60 * 10) {
