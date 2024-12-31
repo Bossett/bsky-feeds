@@ -45,10 +45,11 @@ export default function (server: Server, ctx: AppContext) {
 
     if (algoCache.has(cacheKey)) {
       const cached = algoCache.get(cacheKey)!
-      if (cached.date > Date.now() - 1000 * 60 * 10) {
+      if (cached.date > Date.now() - 1000 * cacheAge.valueOf()) {
         body = cached.output
+      } else {
+        algoCache.delete(cacheKey)
       }
-      algoCache.delete(cacheKey)
     }
 
     if (body === undefined) {
