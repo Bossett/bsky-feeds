@@ -8,8 +8,7 @@ export const getUserFollows = async (user: string, agent: BskyAgent) => {
   if (followCache.has(user)) {
     if (followCache.get(user)!.date > Date.now() - 1000 * 60 * 10) {
       return followCache.get(user)!.follows
-    }
-    followCache.delete(user)
+    } else followCache.delete(user)
   }
 
   let user_did = ''
@@ -38,7 +37,7 @@ export const getUserFollows = async (user: string, agent: BskyAgent) => {
   } while (cursor !== undefined && cursor !== '')
 
   followCache.set(user, { date: Date.now(), follows })
-  return follows
+  return followCache.get(user)!.follows
 }
 
 export default getUserFollows
