@@ -69,7 +69,7 @@ export abstract class FirehoseSubscriptionBase {
         })
       }
 
-      if (posts.creates.length > 0 || posts.deletes.length > 0) {
+      if (posts.creates.length + posts.deletes.length > 0) {
         this.handleEvent(posts)
       }
     })

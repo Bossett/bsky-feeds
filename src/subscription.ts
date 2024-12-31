@@ -83,6 +83,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
                 return includeAlgo ? manager.name : null
               } catch (err) {
                 console.error(`${manager.name}: filter failed`, err)
+                console.error(post)
                 return null
               }
             }),
