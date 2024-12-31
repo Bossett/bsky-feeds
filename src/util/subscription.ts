@@ -1,4 +1,3 @@
-import { Subscription } from '@atproto/xrpc-server'
 import { cborToLexRecord, readCar } from '@atproto/repo'
 import { BlobRef } from '@atproto/lexicon'
 import { ids, lexicons } from '../lexicon/lexicons'
@@ -6,15 +5,15 @@ import { Record as PostRecord } from '../lexicon/types/app/bsky/feed/post'
 import { Record as RepostRecord } from '../lexicon/types/app/bsky/feed/repost'
 import { Record as LikeRecord } from '../lexicon/types/app/bsky/feed/like'
 import { Record as FollowRecord } from '../lexicon/types/app/bsky/graph/follow'
-import {
-  Commit,
-  OutputSchema as RepoEvent,
-  isCommit,
-} from '../lexicon/types/com/atproto/sync/subscribeRepos'
+import { Commit } from '../lexicon/types/com/atproto/sync/subscribeRepos'
 import { Database } from '../db'
 
-import { Jetstream, CommitType, CommitCreate } from '@skyware/jetstream'
+import { Jetstream, CommitType } from '@skyware/jetstream'
 import WebSocket from 'ws'
+
+import { Semaphore } from 'async-mutex'
+
+const semaphore = new Semaphore(48)
 
 const includedRecords = new Set(['app.bsky.feed.post'])
 
@@ -26,8 +25,8 @@ export abstract class FirehoseSubscriptionBase {
   abstract handleEvent(evt: any): Promise<void>
 
   async run(subscriptionReconnectDelay: number) {
-    let handledEvents = 0
     let lastSuccessfulCursor = (await this.getCursor()).cursor
+    const eventQueue: any[] = []
 
     this.jetstream = new Jetstream({
       wantedCollections: Array.from(includedRecords.values()),
@@ -38,6 +37,10 @@ export abstract class FirehoseSubscriptionBase {
     this.jetstream.start()
 
     this.jetstream.on('commit', (event) => {
+      eventQueue.push(event)
+    })
+
+    const processEvent = async (event: any) => {
       const posts = {
         cursor: event.time_us,
         creates: [] as {
@@ -63,18 +66,41 @@ export abstract class FirehoseSubscriptionBase {
         })
       }
 
-      if (handledEvents >= 1000) {
-        if (lastSuccessfulCursor) this.updateCursor(lastSuccessfulCursor)
-        handledEvents = 0
-      }
+      return posts
+    }
 
-      if (posts.creates.length + posts.deletes.length > 0) {
-        this.handleEvent(posts).then(() => {
-          lastSuccessfulCursor = posts.cursor
-          handledEvents++
-        })
+    const processQueue = async () => {
+      let handledEvents = 0
+      let lastSuccessfulCursor = null
+
+      while (true) {
+        while (eventQueue.length === 0) {
+          await new Promise((resolve) => setTimeout(resolve, 1000))
+        }
+
+        const event = eventQueue.shift()
+        const posts = await processEvent(event)
+        if (handledEvents >= 1000) {
+          if (lastSuccessfulCursor) this.updateCursor(lastSuccessfulCursor)
+          handledEvents = 0
+        }
+
+        if (posts.creates.length + posts.deletes.length > 0) {
+          await semaphore.acquire().then(async ([value, release]) => {
+            this.handleEvent(posts)
+              .then(() => {
+                lastSuccessfulCursor = posts.cursor
+                handledEvents++
+              })
+              .finally(() => {
+                release()
+              })
+          })
+        }
       }
-    })
+    }
+
+    processQueue()
   }
 
   async updateCursor(cursor: number) {

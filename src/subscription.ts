@@ -1,9 +1,4 @@
-import {
-  OutputSchema as RepoEvent,
-  isCommit,
-} from './lexicon/types/com/atproto/sync/subscribeRepos'
-import { FirehoseSubscriptionBase, getOpsByType } from './util/subscription'
-import dotenv from 'dotenv'
+import { FirehoseSubscriptionBase } from './util/subscription'
 
 import algos from './algos'
 import batchUpdate from './addn/batchUpdate'
@@ -11,7 +6,6 @@ import batchUpdate from './addn/batchUpdate'
 import { Database } from './db'
 
 import crypto from 'crypto'
-import { Post } from './db/schema'
 import { BskyAgent } from '@atproto/api'
 
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
@@ -28,11 +22,6 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
     const agent = new BskyAgent({ service: 'https://public.api.bsky.app' })
 
-    dotenv.config()
-    const handle = `${process.env.FEEDGEN_HANDLE}`
-    const password = `${process.env.FEEDGEN_PASSWORD}`
-
-    //agent.login({ identifier: handle, password: password }).then(async () => {
     batchUpdate(agent, 5 * 60 * 1000)
 
     Object.keys(algos).forEach((algo) => {
