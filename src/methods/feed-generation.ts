@@ -3,7 +3,9 @@ import { Server } from '../lexicon'
 import { AppContext } from '../config'
 import algos from '../algos'
 import { AtUri } from '@atproto/syntax'
-import moize from 'moize'
+import { OutputSchema as AlgoOutput } from '../lexicon/types/app/bsky/feed/getFeedSkeleton'
+
+const algoCache = new Map<string, { date: number; output: AlgoOutput }>()
 
 export default function (server: Server, ctx: AppContext) {
   server.app.bsky.feed.getFeedSkeleton(async ({ params, req, res }) => {
@@ -37,13 +39,22 @@ export default function (server: Server, ctx: AppContext) {
      * )
      */
 
-    const algoHandlerMoized = moize(algo, {
-      isPromise: true,
-      maxAge: 300,
-      isShallowEqual: true,
-    })
+    let body: AlgoOutput | undefined = undefined
 
-    const body = await algoHandlerMoized(ctx, params)
+    const cacheKey = JSON.stringify(params)
+
+    if (algoCache.has(cacheKey)) {
+      const cached = algoCache.get(cacheKey)!
+      if (cached.date > Date.now() - 1000 * 60 * 10) {
+        body = cached.output
+      }
+      algoCache.delete(cacheKey)
+    }
+
+    if (body === undefined) {
+      body = await algo(ctx, params)
+      algoCache.set(cacheKey, { date: Date.now(), output: body })
+    }
     if (body.feed.length < params.limit) body.cursor = undefined
 
     return {
