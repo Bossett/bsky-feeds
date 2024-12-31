@@ -189,8 +189,6 @@ export class manager extends AlgoManager {
     }
     if (this.agent === null) return false
 
-    let match = false
-
     let matchString = ''
 
     if (post.embed?.images) {
@@ -213,9 +211,9 @@ export class manager extends AlgoManager {
     matchString = `${post.text} ${matchString}`.replace('\n', ' ')
 
     if (matchString.match(this.re) !== null) {
-      match = true
+      return true
     }
 
-    return match
+    return false
   }
 }

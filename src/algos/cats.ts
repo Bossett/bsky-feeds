@@ -75,7 +75,6 @@ export class manager extends AlgoManager {
 
     if (this.agent === null) return false
 
-    let match = false
     let matchParts: string[] = []
 
     if (post.embed?.images) {
@@ -101,9 +100,9 @@ export class manager extends AlgoManager {
     const matchString = matchParts.join(' ')
 
     if (matchString.match(this.re) !== null) {
-      match = true
+      return true
     }
 
-    return match
+    return false
   }
 }

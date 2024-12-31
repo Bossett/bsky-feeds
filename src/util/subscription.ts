@@ -13,102 +13,66 @@ import {
 } from '../lexicon/types/com/atproto/sync/subscribeRepos'
 import { Database } from '../db'
 
+import { Jetstream, CommitType, CommitCreate } from '@skyware/jetstream'
+import WebSocket from 'ws'
+
 const includedRecords = new Set(['app.bsky.feed.post'])
 
-class Semaphore {
-  private tasks: (() => void)[] = []
-  private counter: number
-
-  constructor(maxConcurrent: number) {
-    this.counter = maxConcurrent
-  }
-
-  async acquire() {
-    if (this.counter > 0) {
-      this.counter--
-      return
-    }
-    await new Promise<void>((resolve) => this.tasks.push(resolve))
-  }
-
-  release() {
-    this.counter++
-    if (this.tasks.length > 0) {
-      const nextTask = this.tasks.shift()
-      if (nextTask) nextTask()
-    }
-  }
-}
-
 export abstract class FirehoseSubscriptionBase {
-  public sub: Subscription<RepoEvent>
-  private eventQueue: RepoEvent[] = []
-  private semaphore: Semaphore
+  public jetstream: Jetstream
 
-  constructor(public db: Database, public service: string) {
-    this.sub = new Subscription({
-      service: service,
-      method: ids.ComAtprotoSyncSubscribeRepos,
-      getParams: () => this.getCursor(),
-      validate: (value: unknown) => {
-        return value as RepoEvent
-      },
-      heartbeatIntervalMs: 30000,
-    })
-    this.semaphore = new Semaphore(8)
-  }
+  constructor(public db: Database, public service: string) {}
 
-  abstract handleEvent(evt: RepoEvent): Promise<void>
+  abstract handleEvent(evt: any): Promise<void>
 
   async run(subscriptionReconnectDelay: number) {
     let handledEvents = 0
-    try {
-      for await (const evt of this.sub) {
-        const commit = evt as Commit
 
-        if (Array.isArray(commit.ops) && commit.ops.length > 0) {
-          if (commit.blocks) {
-            const [collection] = commit.ops[0].path.split('/')
+    this.jetstream = new Jetstream({
+      wantedCollections: Array.from(includedRecords.values()),
+      ws: WebSocket,
+      ...(await this.getCursor()),
+    })
 
-            if (includedRecords.has(collection)) {
-              handledEvents++
-              this.eventQueue.push(evt)
-              if (this.eventQueue.length >= 10) {
-                await this.processEventQueue()
-              }
-            }
-          }
-        }
-        // update stored cursor every 1000 events or so
-        if (handledEvents > 1000 && Number.isInteger(commit.seq)) {
-          this.updateCursor(commit.seq).then(() => {
-            handledEvents = 0
-          })
-        }
+    this.jetstream.start()
+
+    this.jetstream.on('commit', (event) => {
+      const posts = {
+        cursor: event.time_us,
+        creates: [] as {
+          uri: string
+          cid: string
+          author: string
+          record: any
+        }[],
+        deletes: [] as { uri: string }[],
       }
-    } catch (err) {
-      console.error('repo subscription errored', err)
-      setTimeout(
-        () => this.run(subscriptionReconnectDelay),
-        subscriptionReconnectDelay,
-      )
-    }
-  }
 
-  private async processEventQueue() {
-    const eventsToProcess = this.eventQueue.splice(0, 10)
-    await Promise.all(
-      eventsToProcess.map(async (evt) => {
-        await this.semaphore.acquire()
-        this.handleEvent(evt)
-          .catch((err) => {
-            console.log(`err in handleEvent ${err}`)
-          })
-          .finally(() => {
-            this.semaphore.release()
-          })
-      }),
-    )
+      if (event.commit.operation === CommitType.Create) {
+        posts.creates.push({
+          uri: `at://${event.did}/${event.commit.collection}/${event.commit.rkey}`,
+          cid: event.commit.cid,
+          author: event.did,
+          record: event.commit.record,
+        })
+      }
+      if (event.commit.operation === CommitType.Delete) {
+        posts.deletes.push({
+          uri: `at://${event.did}/${event.commit.collection}/${event.commit.rkey}`,
+        })
+      }
+
+      handledEvents++
+      if (handledEvents >= 1000) {
+        this.updateCursor(posts.cursor).then(() => {
+          handledEvents = 0
+        })
+      }
+
+      if (posts.creates.length > 0 || posts.deletes.length > 0) {
+        this.handleEvent(posts)
+      }
+    })
   }
 
   async updateCursor(cursor: number) {

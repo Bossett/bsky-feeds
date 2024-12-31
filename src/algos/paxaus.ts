@@ -4,6 +4,8 @@ import { AlgoManager } from '../addn/algoManager'
 import dotenv from 'dotenv'
 import { Post } from '../db/schema'
 import dbClient from '../db/dbClient'
+import { Database } from '../db'
+import { BskyAgent } from '@atproto/api'
 
 dotenv.config()
 
@@ -38,10 +40,16 @@ export class manager extends AlgoManager {
 
   public matchTerms: string[] = ['pax aus', 'paxaus', 'pax australia']
 
-  public re = new RegExp(
-    `^.*\\b(${this.matchTerms.join('|')})(es|s)?\\b.*$`,
-    'ims',
-  )
+  public re: RegExp
+
+  constructor(db: Database, agent: BskyAgent) {
+    super(db, agent)
+
+    this.re = new RegExp(
+      `^.*\\b(${this.matchTerms.join('|')})(es|s)?\\b.*$`,
+      'ims',
+    )
+  }
 
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(

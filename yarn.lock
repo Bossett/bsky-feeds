@@ -2,6 +2,16 @@
 # yarn lockfile v1
 
 
+"@atcute/bluesky@^1.0.6":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@atcute/bluesky/-/bluesky-1.0.11.tgz#0db494f4228a3a660ab4084f0a2e813fa9eef6f9"
+  integrity sha512-j4wLJIzKWh0gmQZ7s5svhEVRThlzqyfstbM0qM/H1Y+ZIQESx5HtVu+390zAWzZoEKZYSyTM9+ctY39OiEGDQw==
+
+"@atcute/client@^2.0.6":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@atcute/client/-/client-2.0.6.tgz#5a2cc0e879c1b897e2770613c50836f5866f5800"
+  integrity sha512-mhdqEicGUx0s5HTFOLpz91rcLS9j/g63de0nmAqv7blhU3j+xBf4le54qr2YIXNfnReZI7EwLYLX/YIBez4LGA==
+
 "@atproto/api@^0.13.5":
   version "0.13.6"
   resolved "https://registry.yarnpkg.com/@atproto/api/-/api-0.13.6.tgz#2500e9d7143e6718089632300c42ce50149f8cd5"
@@ -318,6 +328,14 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
+
+"@skyware/jetstream@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@skyware/jetstream/-/jetstream-0.2.1.tgz#23caa9601c919092ef92b0f67729b923e00fc25b"
+  integrity sha512-qmQkBnMYG3+XBTLUDUKTWMS0QpwCFSZh66fvQRn+xEqUQ2CXB2ELo4El0tgVvdT4+glk4nfzVG45L6Op9VURow==
+  dependencies:
+    "@atcute/bluesky" "^1.0.6"
+    partysocket "^1.0.2"
 
 "@types/body-parser@*":
   version "1.19.5"
@@ -727,6 +745,11 @@ event-target-shim@^5.0.0:
   resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
+event-target-shim@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-6.0.2.tgz#ea5348c3618ee8b62ff1d344f01908ee2b8a2b71"
+  integrity sha512-8q3LsZjRezbFZ2PN+uP+Q7pnHUMmAOziU2vA2OwoFaKIXxlxl38IylhSSgUorWu/rf4er67w0ikBqjBFk/pomA==
+
 events@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
@@ -1122,6 +1145,13 @@ parseurl@~1.3.3:
   resolved "https://registry.yarnpkg.com/parseurl/-/parseurl-1.3.3.tgz#9da19e7bee8d12dff0513ed5b76957793bc2e8d4"
   integrity sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==
 
+partysocket@^1.0.2:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/partysocket/-/partysocket-1.0.3.tgz#58cf1494d44900a7377592683d171fddd3d9c543"
+  integrity sha512-7sSojS4oCRK1Fe1h+Sa0Za5dwOf+M9VksQlynD8yqwGpLvnO4oxx9ppmOSeh6CJTMbF5gbnvUQKMK525QSBdBw==
+  dependencies:
+    event-target-shim "^6.0.2"
+
 path-to-regexp@0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
@@ -1502,7 +1532,7 @@ whatwg-url@^13.0.0:
     tr46 "^4.1.1"
     webidl-conversions "^7.0.0"
 
-ws@^8.12.0:
+ws@^8.12.0, ws@^8.18.0:
   version "8.18.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.18.0.tgz#0d7505a6eafe2b0e712d232b42279f53bc289bbc"
   integrity sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==

@@ -4,6 +4,8 @@ import { AlgoManager } from '../addn/algoManager'
 import dotenv from 'dotenv'
 import { Post } from '../db/schema'
 import dbClient from '../db/dbClient'
+import { Database } from '../db'
+import { BskyAgent } from '@atproto/api'
 
 dotenv.config()
 
@@ -37,7 +39,13 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 export class manager extends AlgoManager {
   public name: string = shortname
 
-  public re = new RegExp(`^.*\\btransition\\b.*\\b12 words\\b.*$`, 'ims')
+  public re: RegExp
+
+  constructor(db: Database, agent: BskyAgent) {
+    super(db, agent)
+
+    this.re = new RegExp(`^.*\\btransition\\b.*\\b12 words\\b.*$`, 'ims')
+  }
 
   public async periodicTask() {
     return

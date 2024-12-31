@@ -3,7 +3,7 @@ import { pRateLimit } from 'p-ratelimit'
 const _limit = pRateLimit({
   interval: undefined,
   rate: undefined,
-  concurrency: undefined,
+  concurrency: 96,
   maxDelay: undefined,
 })
 
@@ -12,7 +12,7 @@ const limit = async <T>(fn: () => Promise<T>, retries = 3): Promise<T> => {
     return await _limit(fn)
   } catch (error) {
     if (retries > 0) {
-      console.log(`retrying limited call:\n${fn.toString()}`)
+      console.log(`${error} - retrying limited call:\n${fn.toString()}`)
       const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
       await delay(3000)
       return await limit(fn, retries - 1)

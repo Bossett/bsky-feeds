@@ -54,25 +54,11 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
   public authorList: string[]
   public intervalId: NodeJS.Timer
 
-  async handleEvent(evt: RepoEvent) {
-    if (!isCommit(evt)) return
-
-    await Promise.all(this.algoManagers.map((manager) => manager.ready()))
-
-    let ops: any
-    try {
-      ops = await getOpsByType(evt)
-    } catch (e) {
-      console.log(`core: error decoding ops ${e.message}`)
-      return
-    }
-
-    if (!ops) return
-
-    const postsToDelete = ops.posts.deletes.map((del) => del.uri)
+  async handleEvent(posts) {
+    const postsToDelete = posts.deletes.map((del) => del.uri)
 
     // Transform posts in parallel
-    const postsCreated = ops.posts.creates.map((create) => ({
+    const postsCreated = posts.creates.map((create) => ({
       _id: null,
       uri: create.uri,
       cid: create.cid,
@@ -142,6 +128,6 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       })
     }
 
-    Promise.all(dbOperations)
+    await Promise.all(dbOperations)
   }
 }
