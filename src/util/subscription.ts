@@ -13,7 +13,7 @@ import WebSocket from 'ws'
 
 import { Semaphore } from 'async-mutex'
 
-const semaphore = new Semaphore(48)
+const semaphore = new Semaphore(24)
 
 const includedRecords = new Set(['app.bsky.feed.post'])
 
