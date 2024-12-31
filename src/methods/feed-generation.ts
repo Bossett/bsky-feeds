@@ -39,7 +39,7 @@ export default function (server: Server, ctx: AppContext) {
 
     const algoHandlerMoized = moize(algo, {
       isPromise: true,
-      maxAge: 30, // 30 seconds
+      maxAge: 300,
       isShallowEqual: true,
     })
 

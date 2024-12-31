@@ -1,6 +1,5 @@
 import { BskyAgent } from '@atproto/api'
 import resolveHandleToDID from './resolveHandleToDID'
-import moize from 'moize'
 
 import { ProfileViewDetailed } from '../lexicon/types/app/bsky/actor/defs'
 
