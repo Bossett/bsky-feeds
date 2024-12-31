@@ -22,7 +22,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
     this.algoManagers = []
 
-    const agent = new BskyAgent({ service: 'https://api.bsky.app' })
+    const agent = new BskyAgent({ service: 'https://public.api.bsky.app' })
 
     dotenv.config()
     const handle = `${process.env.FEEDGEN_HANDLE}`
