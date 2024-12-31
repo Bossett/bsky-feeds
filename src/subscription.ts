@@ -63,7 +63,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       uri: create.uri,
       cid: create.cid,
       author: create.author,
-      text: create.record?.text,
+      text: `${create.record?.text}`,
       replyParent: create.record?.reply?.parent.uri ?? null,
       replyRoot: create.record?.reply?.root.uri ?? null,
       indexedAt: new Date().getTime(),
