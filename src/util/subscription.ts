@@ -55,7 +55,7 @@ export abstract class FirehoseSubscriptionBase {
       },
       heartbeatIntervalMs: 30000,
     })
-    this.semaphore = new Semaphore(16)
+    this.semaphore = new Semaphore(8)
   }
 
   abstract handleEvent(evt: RepoEvent): Promise<void>
