@@ -20,6 +20,10 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
   constructor(db: Database, subscriptionEndpoint: string) {
     super(db, subscriptionEndpoint)
 
+    this._constructor(db, subscriptionEndpoint)
+  }
+
+  async _constructor(db: Database, subscriptionEndpoint: string) {
     this.algoManagers = []
 
     const agent = new BskyAgent({ service: 'https://public.api.bsky.app' })
@@ -35,14 +39,15 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       this.algoManagers.push(new algos[algo].manager(db, agent))
     })
 
-    const startPromises = this.algoManagers.map(async (algo) => {
-      if (await algo._start()) {
-        console.log(`${algo.name}: Started`)
+    const startAlgosSequentially = async () => {
+      for (const algo of this.algoManagers) {
+        if (await algo._start()) {
+          console.log(`${algo.name}: Started`)
+        }
       }
-    })
+    }
 
-    /*await */ Promise.all(startPromises)
-    //})
+    startAlgosSequentially()
   }
 
   public authorList: string[]
