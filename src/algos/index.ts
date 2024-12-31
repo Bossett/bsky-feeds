@@ -45,10 +45,10 @@ const algos = {
     handler: <AlgoHandler>ND.handler,
     manager: ND.manager,
   },
-  [discourse.shortname]: {
-    handler: <AlgoHandler>discourse.handler,
-    manager: discourse.manager,
-  },
+  //  [discourse.shortname]: {
+  //    handler: <AlgoHandler>discourse.handler,
+  //    manager: discourse.manager,
+  //  },
   [elusive.shortname]: {
     handler: <AlgoHandler>elusive.handler,
     manager: elusive.manager,
