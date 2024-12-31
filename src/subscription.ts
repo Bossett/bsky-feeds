@@ -39,15 +39,16 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       this.algoManagers.push(new algos[algo].manager(db, agent))
     })
 
-    const startAlgosSequentially = async () => {
-      for (const algo of this.algoManagers) {
+    const startAlgosConcurrently = async () => {
+      const startPromises = this.algoManagers.map(async (algo) => {
         if (await algo._start()) {
           console.log(`${algo.name}: Started`)
         }
-      }
+      })
+      await Promise.all(startPromises)
     }
 
-    startAlgosSequentially()
+    startAlgosConcurrently()
   }
 
   public authorList: string[]
@@ -87,32 +88,38 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     }))
 
     const postsToCreatePromises = postsCreated.map(async (post) => {
-      const algoTagsPromises = this.algoManagers.map(async (manager) => {
-        try {
-          const includeAlgo = await manager.filter_post(post)
-          return includeAlgo ? manager.name : null
-        } catch (err) {
-          console.error(`${manager.name}: filter failed`, err)
-          return null
+      try {
+        const algoTags = (
+          await Promise.all(
+            this.algoManagers.map(async (manager) => {
+              try {
+                const includeAlgo = await manager.filter_post(post)
+                return includeAlgo ? manager.name : null
+              } catch (err) {
+                console.error(`${manager.name}: filter failed`, err)
+                return null
+              }
+            }),
+          )
+        ).filter((tag) => tag !== null)
+
+        if (algoTags.length === 0) return null
+
+        const hash = crypto
+          .createHash('shake256', { outputLength: 12 })
+          .update(post.uri)
+          .digest('hex')
+          .toString()
+
+        return {
+          ...post,
+          _id: hash,
+          algoTags,
+          earliestCreatedIndexedAt: Math.min(post.createdAt, post.indexedAt),
         }
-      })
-
-      const algoTagsResults = await Promise.all(algoTagsPromises)
-      const algoTags = algoTagsResults.filter((tag) => tag !== null)
-
-      if (algoTags.length === 0) return null
-
-      const hash = crypto
-        .createHash('shake256', { outputLength: 12 })
-        .update(post.uri)
-        .digest('hex')
-        .toString()
-
-      return {
-        ...post,
-        _id: hash,
-        algoTags: algoTags,
-        earliestCreatedIndexedAt: Math.min(post.createdAt, post.indexedAt),
+      } catch (err) {
+        console.error('Post processing failed', err)
+        return null
       }
     })
 
@@ -134,6 +141,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
           )
       })
     }
+
     await Promise.all(dbOperations)
   }
 }

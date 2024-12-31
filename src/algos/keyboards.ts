@@ -5,6 +5,9 @@ import dotenv from 'dotenv'
 import { Post } from '../db/schema'
 import dbClient from '../db/dbClient'
 
+import { BskyAgent } from '@atproto/api'
+import { Database } from '../db'
+
 dotenv.config()
 
 // max 15 chars
@@ -159,12 +162,17 @@ export class manager extends AlgoManager {
     'ZMK',
   ]
 
-  public re = new RegExp(
-    `^(?!.*\\b((swiss|french|italian|austrian) alps|mountain(s)?|dice)\\b).*\\b(${this.matchTerms.join(
-      '|',
-    )})(es|s)?\\b.*$`,
-    'ims',
-  )
+  public re: RegExp
+
+  constructor(db: Database, agent: BskyAgent) {
+    super(db, agent)
+    this.re = new RegExp(
+      `^(?!.*\\b((swiss|french|italian|austrian) alps|mountain(s)?|dice)\\b).*\\b(${this.matchTerms.join(
+        '|',
+      )})(es|s)?\\b.*$`,
+      'ims',
+    )
+  }
 
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(

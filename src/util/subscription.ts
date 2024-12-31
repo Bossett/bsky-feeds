@@ -42,6 +42,8 @@ class Semaphore {
 
 export abstract class FirehoseSubscriptionBase {
   public sub: Subscription<RepoEvent>
+  private eventQueue: RepoEvent[] = []
+  private semaphore: Semaphore
 
   constructor(public db: Database, public service: string) {
     this.sub = new Subscription({
@@ -53,14 +55,12 @@ export abstract class FirehoseSubscriptionBase {
       },
       heartbeatIntervalMs: 30000,
     })
+    this.semaphore = new Semaphore(64)
   }
 
   abstract handleEvent(evt: RepoEvent): Promise<void>
 
   async run(subscriptionReconnectDelay: number) {
-    const maxConcurrentEvents = 16
-    const semaphore = new Semaphore(maxConcurrentEvents)
-
     let handledEvents = 0
     try {
       for await (const evt of this.sub) {
@@ -72,15 +72,10 @@ export abstract class FirehoseSubscriptionBase {
 
             if (includedRecords.has(collection)) {
               handledEvents++
-              await semaphore.acquire().then(() => {
-                this.handleEvent(evt) // no longer awaiting this
-                  .catch((err) => {
-                    console.log(`err in handleEvent ${err}`)
-                  })
-                  .finally(() => {
-                    semaphore.release()
-                  })
-              })
+              this.eventQueue.push(evt)
+              if (this.eventQueue.length >= 10) {
+                await this.processEventQueue()
+              }
             }
           }
         }
@@ -98,6 +93,22 @@ export abstract class FirehoseSubscriptionBase {
         subscriptionReconnectDelay,
       )
     }
+  }
+
+  private async processEventQueue() {
+    const eventsToProcess = this.eventQueue.splice(0, 10)
+    await Promise.all(
+      eventsToProcess.map(async (evt) => {
+        await this.semaphore.acquire()
+        this.handleEvent(evt)
+          .catch((err) => {
+            console.log(`err in handleEvent ${err}`)
+          })
+          .finally(() => {
+            this.semaphore.release()
+          })
+      }),
+    )
   }
 
   async updateCursor(cursor: number) {

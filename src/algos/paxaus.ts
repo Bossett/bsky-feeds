@@ -58,32 +58,29 @@ export class manager extends AlgoManager {
     if (this.agent === null) return false
 
     let match = false
-
-    let matchString = ''
+    let matchParts: string[] = []
 
     if (post.embed?.images) {
-      const imagesArr = post.embed.images
-      imagesArr.forEach((image) => {
-        matchString = `${matchString} ${image.alt}`.replace('\n', ' ')
+      post.embed.images.forEach((image) => {
+        matchParts.push(image.alt.replace('\n', ' '))
       })
     }
 
     if (post.embed?.alt) {
-      matchString = `${matchString} ${post.embed.alt}`.replace('\n', ' ')
+      matchParts.push(post.embed.alt.replace('\n', ' '))
     }
 
     if (post.embed?.media?.alt) {
-      matchString = `${matchString} ${post.embed?.media?.alt}`.replace(
-        '\n',
-        ' ',
-      )
+      matchParts.push(post.embed.media.alt.replace('\n', ' '))
     }
 
     if (post.tags) {
-      matchString = `${post.tags.join(' ')} ${matchString}`
+      matchParts.push(post.tags.join(' '))
     }
 
-    matchString = `${post.text} ${matchString}`.replace('\n', ' ')
+    matchParts.push(post.text.replace('\n', ' '))
+
+    const matchString = matchParts.join(' ')
 
     if (matchString.match(this.re) !== null) {
       match = true

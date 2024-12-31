@@ -4,6 +4,8 @@ import { AlgoManager } from '../addn/algoManager'
 import dotenv from 'dotenv'
 import { Post } from '../db/schema'
 import dbClient from '../db/dbClient'
+import { Database } from '../db'
+import { BskyAgent } from '@atproto/api'
 
 dotenv.config()
 
@@ -38,8 +40,15 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
 
 export class manager extends AlgoManager {
   public name: string = shortname
-  public re =
-    /^(?!.*((\b(cat( |-)girl|cat( |-)ears|cat( |-)suit|fursona|nsfw|cat-like|furryart|doja|dojacat|anthro|anthropomorphic)\b)|#furry|#furryart|fursuit)).*\b(cat|cats|catsofbluesky|kitty|kitten|kitties)\b.*$/ims
+  public re: RegExp
+
+  constructor(db: Database, agent: BskyAgent) {
+    super(db, agent)
+
+    this.re = new RegExp(
+      /^(?!.*((\b(cat( |-)girl|cat( |-)ears|cat( |-)suit|fursona|nsfw|cat-like|furryart|doja|dojacat|anthro|anthropomorphic)\b)|#furry|#furryart|fursuit)).*\b(cat|cats|catsofbluesky|kitty|kitten|kitties)\b.*$/ims,
+    )
+  }
 
   public async periodicTask() {
     await this.db.removeTagFromOldPosts(
@@ -57,41 +66,39 @@ export class manager extends AlgoManager {
       ].includes(post.author)
     )
       return false
+
     if (post.replyRoot !== null) return false
+
     if (this.agent === null) {
       await this.start()
     }
+
     if (this.agent === null) return false
 
-    let return_value: Boolean | undefined = undefined
-
     let match = false
-
-    let matchString = ''
+    let matchParts: string[] = []
 
     if (post.embed?.images) {
-      const imagesArr = post.embed.images
-      imagesArr.forEach((image) => {
-        matchString = `${matchString} ${image.alt}`.replace('\n', ' ')
+      post.embed.images.forEach((image) => {
+        matchParts.push(image.alt.replace('\n', ' '))
       })
     }
 
     if (post.embed?.alt) {
-      matchString = `${matchString} ${post.embed.alt}`.replace('\n', ' ')
+      matchParts.push(post.embed.alt.replace('\n', ' '))
     }
 
     if (post.embed?.media?.alt) {
-      matchString = `${matchString} ${post.embed?.media?.alt}`.replace(
-        '\n',
-        ' ',
-      )
+      matchParts.push(post.embed.media.alt.replace('\n', ' '))
     }
 
     if (post.tags) {
-      matchString = `${post.tags.join(' ')} ${matchString}`
+      matchParts.push(post.tags.join(' '))
     }
 
-    matchString = `${post.text} ${matchString}`.replace('\n', ' ')
+    matchParts.push(post.text.replace('\n', ' '))
+
+    const matchString = matchParts.join(' ')
 
     if (matchString.match(this.re) !== null) {
       match = true
