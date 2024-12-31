@@ -1,9 +1,17 @@
 import { BskyAgent } from '@atproto/api'
 import resolveHandleToDID from './resolveHandleToDID'
-import moize from 'moize'
 import limit from './rateLimit'
 
-export const _getUserFollows = async (user: string, agent: BskyAgent) => {
+const followCache = new Map<string, { date: number; follows: string[] }>()
+
+export const getUserFollows = async (user: string, agent: BskyAgent) => {
+  if (followCache.has(user)) {
+    if (followCache.get(user)!.date > Date.now() - 1000 * 60 * 10) {
+      return followCache.get(user)!.follows
+    }
+    followCache.delete(user)
+  }
+
   let user_did = ''
   const follows: string[] = []
 
@@ -29,12 +37,8 @@ export const _getUserFollows = async (user: string, agent: BskyAgent) => {
     })
   } while (cursor !== undefined && cursor !== '')
 
+  followCache.set(user, { date: Date.now(), follows })
   return follows
 }
-
-export const getUserFollows = moize(_getUserFollows, {
-  isPromise: true,
-  maxAge: 1000 * 60 * 10, // 10 minutes
-})
 
 export default getUserFollows
