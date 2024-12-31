@@ -27,11 +27,12 @@ export abstract class FirehoseSubscriptionBase {
 
   async run(subscriptionReconnectDelay: number) {
     let handledEvents = 0
+    let lastSuccessfulCursor = (await this.getCursor()).cursor
 
     this.jetstream = new Jetstream({
       wantedCollections: Array.from(includedRecords.values()),
       ws: WebSocket,
-      ...(await this.getCursor()),
+      cursor: lastSuccessfulCursor,
     })
 
     this.jetstream.start()
@@ -62,15 +63,16 @@ export abstract class FirehoseSubscriptionBase {
         })
       }
 
-      handledEvents++
       if (handledEvents >= 1000) {
-        this.updateCursor(posts.cursor).then(() => {
-          handledEvents = 0
-        })
+        if (lastSuccessfulCursor) this.updateCursor(lastSuccessfulCursor)
+        handledEvents = 0
       }
 
       if (posts.creates.length + posts.deletes.length > 0) {
-        this.handleEvent(posts)
+        this.handleEvent(posts).then(() => {
+          lastSuccessfulCursor = posts.cursor
+          handledEvents++
+        })
       }
     })
   }
