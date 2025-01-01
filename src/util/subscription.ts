@@ -13,7 +13,7 @@ import WebSocket from 'ws'
 
 import { Semaphore } from 'async-mutex'
 
-const semaphore = new Semaphore(16)
+const semaphore = new Semaphore(128)
 
 const includedRecords = new Set(['app.bsky.feed.post'])
 
@@ -38,7 +38,7 @@ export abstract class FirehoseSubscriptionBase {
     this.jetstream.on('commit', (event) => {
       eventQueue.push(event)
       if (
-        eventQueue.length > 1000 &&
+        eventQueue.length > 10000 &&
         this.jetstream.ws?.readyState === WebSocket.OPEN
       ) {
         console.log('core: queue too large, closing jetstream...')
