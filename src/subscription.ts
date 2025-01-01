@@ -44,6 +44,8 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
   public intervalId: NodeJS.Timer
 
   async handleEvent(posts) {
+    if (posts.creates.length === 0 && posts.deletes.length === 0) return
+
     const postsToDelete = posts.deletes.map((del) => del.uri)
 
     // Transform posts in parallel
