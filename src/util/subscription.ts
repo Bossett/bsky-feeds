@@ -36,7 +36,6 @@ export abstract class FirehoseSubscriptionBase {
     })
 
     this.jetstream.on('commit', (event) => {
-      console.log('got event')
       eventQueue.push(event)
       if (
         eventQueue.length > 1000 &&
@@ -105,7 +104,6 @@ export abstract class FirehoseSubscriptionBase {
           }
 
           await semaphore.acquire().then(async ([value, release]) => {
-            console.log('handling event')
             this.handleEvent(posts)
               .then(() => {
                 lastSuccessfulCursor = posts.cursor
