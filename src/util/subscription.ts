@@ -38,7 +38,7 @@ export abstract class FirehoseSubscriptionBase {
     this.jetstream.on('commit', (event) => {
       eventQueue.push(event)
       if (
-        eventQueue.length > 10000 &&
+        eventQueue.length > 100000 &&
         this.jetstream.ws?.readyState === WebSocket.OPEN
       ) {
         console.log('core: queue too large, closing jetstream...')
