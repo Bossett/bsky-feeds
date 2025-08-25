@@ -54,9 +54,24 @@ export default function (server: Server, ctx: AppContext) {
 
     if (body === undefined) {
       body = await algo(ctx, params)
-      algoCache.set(cacheKey, { date: Date.now(), output: body })
+      // Only add to cache if body is defined
+      if (body) {
+        algoCache.set(cacheKey, { date: Date.now(), output: body })
+      }
     }
-    if (body.feed.length < params.limit) body.cursor = undefined
+
+    // Ensure body is defined before accessing its properties
+    if (body && body.feed.length < params.limit) {
+      body.cursor = undefined
+    }
+
+    // Ensure we never return undefined for body
+    if (!body) {
+      throw new InvalidRequestError(
+        'Failed to generate feed',
+        'FeedGenerationError',
+      )
+    }
 
     return {
       encoding: 'application/json',
